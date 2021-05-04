@@ -16,7 +16,7 @@ import java.util.Scanner;
  * common superclass for all servlets
  * groups all auxiliary common methods used in all servlets
  */
-public abstract class ParkhausServlet extends HttpServlet {
+public abstract class ParkhausServletJava extends HttpServlet {
 
     /* abstract methods, to be defined in subclasses */
     abstract String NAME(); // each ParkhausServlet should have a name, e.g. "Level1"
@@ -75,6 +75,8 @@ public abstract class ParkhausServlet extends HttpServlet {
                 CarIF newCar = new Car( params );
                 cars().add( newCar );
                 System.out.println( "enter," + newCar );
+                getContext().setAttribute("total_car_count"+NAME(), getTotalCars()+1 );
+                System.out.println(getTotalCars());
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );
                 break;
@@ -87,13 +89,20 @@ public abstract class ParkhausServlet extends HttpServlet {
                         float price = (float)new Scanner( priceString ).useDelimiter("\\D+").nextInt();
                         price /= 100.0f;  // like Integer.parseInt( priceString ) / 100.0f;
                         // store new sum in ServletContext
-                        getContext().setAttribute("sum"+NAME(), getPersistentSum() + price );
+                        getContext().setAttribute("sum"+NAME(), price );
+                    System.out.println("Der aktuelle Name ist: " + NAME());
                     }
                 }
                 System.out.println( "leave," + oldCar );
+                System.out.println( getContext().getAttribute("sum"+NAME()) );
+                System.out.println( getPersistentSum() );
                 break;
             case "invalid": case "occupied":
+                getContext().setAttribute("total_car_count"+NAME(), getTotalCars()-1 );
                 System.out.println( body );
+                break;
+            case "Total":
+                System.out.println( getPersistentSum() );
                 break;
             default:
                 System.out.println( body );
@@ -137,8 +146,14 @@ public abstract class ParkhausServlet extends HttpServlet {
      * @return the sum of parking fees of all cars stored so far
      */
     Float getPersistentSum(){
-        Float sum = (Float)getContext().getAttribute("sum");
+        Float sum = (Float)getContext().getAttribute("sum"+NAME());
+        System.out.println("Log aus getPersistentSum: aktuelle Summe: " + sum);
         return sum == null ?  0.0f : sum;
+    }
+
+    Integer getTotalCars(){
+        Integer total_car_count = (Integer)getContext().getAttribute("total_car_count"+NAME());
+        return total_car_count == null ?  0 : total_car_count;
     }
 
     /**

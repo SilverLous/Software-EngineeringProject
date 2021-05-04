@@ -55,7 +55,8 @@
                          client_categories='["any","Family"]'
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Family":0.5}'
-                         max="11">
+                         max="11"
+                         extra_buttons='["Total"]'>
     </ccm-parkhaus-10-0-0>
 </div>
 <div class="box lightgreen">

@@ -1,15 +1,9 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 @WebServlet(name = "level1Servlet", value = "/level1-servlet")
-public class Level1Servlet extends ParkhausServlet {
+public class Level1Servlet extends ParkhausServletJava {
 
     @Override
     String NAME(){
