@@ -15,7 +15,7 @@ import java.util.*
  * common superclass for all servlets
  * groups all auxiliary common methods used in all servlets
  */
-abstract class ParkhausServlet : HttpServlet() {
+public abstract class ParkhausServlet : HttpServlet() {
     /* abstract methods, to be defined in subclasses */
     abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
