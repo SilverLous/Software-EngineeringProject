@@ -21,6 +21,9 @@ public abstract class ParkhausServlet : HttpServlet() {
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
     abstract fun config(): String? // configuration of a single parking level
 
+    //persistentSum: Summe der Parkgebühren aller Autos
+    //totalCars: Counter, wie viele Autos jemals im Parkhaus waren
+
     /**
      * HTTP GET
      */
