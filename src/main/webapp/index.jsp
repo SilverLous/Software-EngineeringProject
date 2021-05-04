@@ -41,7 +41,7 @@
 </head>
 <body>
 <div class="box center grey-background">
-    <h1>Parkhaus Team89</h1>
+    <h1>Parkhaus Team 7</h1>
 </div>
 <div class="box lightblue">
     <h2><a href="kasse.jsp">Kasse</a></h2>
@@ -56,7 +56,7 @@
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Family":0.5}'
                          max="11"
-                         extra_buttons='["Total"]'>
+                         extra_buttons='["Average","Sum"]'>
     </ccm-parkhaus-10-0-0>
 </div>
 <div class="box lightgreen">
@@ -70,7 +70,8 @@
                          random_start="2"
                          json_format="true"
                          debug="true"
-                         max="12">
+                         max="12"
+                         extra_buttons='["Average","Sum"]'>
     </ccm-parkhaus-10-0-0>
 
 </div>

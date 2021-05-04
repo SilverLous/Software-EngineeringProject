@@ -10,11 +10,13 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * common superclass for all servlets
  * groups all auxiliary common methods used in all servlets
  */
+
 public abstract class ParkhausServlet : HttpServlet() {
     /* abstract methods, to be defined in subclasses */
     abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
@@ -31,17 +33,36 @@ public abstract class ParkhausServlet : HttpServlet() {
     public override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
         response.contentType = "text/html"
         val out = response.writer
+        // val == final
+        // var == variable
         val cmd = request.getParameter("cmd")
-        println(cmd + " requested: " + request.queryString)
-        when (cmd) {
-            "config" ->                 // Overwrite Parkhaus config parameters
+        println("$cmd + requested: $request.queryString")
+
+        when (cmd.toLowerCase()) {
+            "config" ->
+                // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
-            "sum" -> out.println(persistentSum)
+            "sum" -> out.println("$persistentSum €")
             "cars" -> {
+                // TODO: Send list of cars stored on the server to the client.
+                // Cars are separated by comma.
+                // Values of a single car are separated by slash.
+                // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
+                // For example:
+                // out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2"); // TODO replace by real list of cars
+
             }
             "chart" -> {
+                // TODO send chart infos as JSON object to client
+                // http://json-b.net/docs/user-guide.html
             }
+
+            "average" -> {
+                println(persistentAvg);
+                out.println("$persistentAvg Autos");
+            }
+
             else -> println("Invalid Command: " + request.queryString)
         }
     }
@@ -55,7 +76,10 @@ public abstract class ParkhausServlet : HttpServlet() {
         response.contentType = "text/html"
         val out = response.writer
         println(body)
-        val params = body.split(",".toRegex()).toTypedArray()
+
+        // toTypedArray() needed because return type is List not array as in original
+        val params = body.split(",").toTypedArray()
+
         val event = params[0]
         when (event) {
             "enter" -> {
@@ -63,8 +87,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 cars().add(newCar)
                 println("enter,$newCar")
                 println("HELLO FROM KOOOOOTLIN")
-                context.setAttribute("total_car_count" + NAME(), totalCars + 1)
+                context.setAttribute("totalCarCount" + NAME(), totalCars + 1)
                 println(totalCars)
+                // re-direct car to another parking lot
+                // out.println( locator( newCar ) );
             }
             "leave" -> {
                 val oldCar = cars()[0]
@@ -75,7 +101,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                         var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
                         price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
                         // store new sum in ServletContext
-                        context.setAttribute("sum" + NAME(), price)
+                        context.setAttribute("sum" + NAME(), persistentSum + price)
                         println("Der aktuelle Name ist: " + NAME())
                     }
                 }
@@ -83,12 +109,18 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
             }
-            "invalid", "occupied" -> println(body)
-            "Total" -> println(persistentSum)
+
+
+            "invalid", "occupied" -> {
+                context.setAttribute("totalCarCount" + NAME(), totalCars - 1)
+                println(body)
+            }
+
             else -> println(body)
         }
     }
     // auxiliary methods used in HTTP request processing
+
     /**
      * @return the servlet context
      */
@@ -99,7 +131,6 @@ public abstract class ParkhausServlet : HttpServlet() {
      * TODO: replace this by your own function
      * @return the number of the free parking lot to which the next incoming car will be directed
      */
-
     internal fun locator(car: CarIF): Int {
         // numbers of parking lots start at 1, not zero
         print(car)
@@ -108,14 +139,31 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     /**
      * @return the list of all cars stored in the servlet context so far
-     */
-    @SuppressWarnings("unchecked")
-    internal fun cars(): MutableList<CarIF> {
-        if (context.getAttribute("cars" + NAME()) == null) {
-            context.setAttribute("cars" + NAME(), ArrayList<Car>())
+
+    //@SuppressWarnings("unchecked")
+    internal var cars: ArrayList<CarIF>
+        get() {
+            /*if (context.getAttribute("cars" + NAME()) == null) {
+                context.setAttribute("cars" + NAME(), ArrayList<Car>())
+            }*/
+            return (context.getAttribute("cars" + NAME()) as ArrayList<CarIF>?) ?: ArrayList<CarIF>();
         }
-        return context.getAttribute("cars" + NAME()) as MutableList<CarIF>
+        set(value) {
+            //TODO possible validation
+            context.setAttribute("cars" + NAME(), value);
+        }
+     */
+
+    /**
+     * @return the list of all cars stored in the servlet context so far
+     */
+    private fun cars(): ArrayList<CarIF> {
+        if (context.getAttribute("cars" + NAME()) == null) {
+            context.setAttribute("cars" + NAME(), java.util.ArrayList<Car>())
+        }
+        return context.getAttribute("cars" + NAME()) as ArrayList<CarIF>
     }
+
 
     /**
      * TODO: replace this by your own function
@@ -123,16 +171,20 @@ public abstract class ParkhausServlet : HttpServlet() {
      */
     val persistentSum: Float
         get() {
-            val sum = context.getAttribute("sum" + NAME()) as Float
+            val sum = context.getAttribute("sum" + NAME()) as Float?
             println("Log aus getPersistentSum: aktuelle Summe: $sum")
+            // instead of return sum == null ?  0.0f : sum;
             return sum ?: 0.0f
         }
 
     val totalCars: Int
         get() {
-            val total_car_count = context.getAttribute("total_car_count" + NAME()) as Int
-            return total_car_count ?: 0
+            val totalCarCount = context.getAttribute("totalCarCount" + NAME()) as Int?
+            return totalCarCount ?: 0
         }
+
+    val persistentAvg: Float
+        get() = persistentSum / (totalCars - (cars().size - 1)) // Average nur über die bereits ausgefahrenen machen LUKAS!
 
     /**
      * @param request the HTTP POST request

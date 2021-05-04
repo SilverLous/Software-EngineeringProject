@@ -2,9 +2,9 @@ package de.hbrs.team7.se1_starter_repo;
 
 import java.util.Arrays;
 
-public class Car implements CarIF {
+public class CarJava implements CarIFJava {
     String[] params;
-    public Car( String[] params ){
+    public CarJava( String[] params ){
         this.params = params;
     }
 
