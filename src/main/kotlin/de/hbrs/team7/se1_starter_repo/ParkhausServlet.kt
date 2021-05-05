@@ -23,6 +23,7 @@ public abstract class ParkhausServlet : HttpServlet() {
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
     abstract fun config(): String? // configuration of a single parking level
 
+
     /*Kontextvariablen:
     persistentSum: Summe der Parkgebühren aller Autos
     totalCars: Counter, wie viele Autos jemals im Parkhaus waren
@@ -35,13 +36,21 @@ public abstract class ParkhausServlet : HttpServlet() {
         }
     }
 
-        init {
-            super.init()
-            print("Hello from the other side\n")
-            setInitContext("carsHaveLeft",0)
-            print(context.getAttribute("carsHaveLeft"))
-        }
 
+    override fun init() {
+        super.init()
+        print("Hello from the other side\n")
+        setInitContext("carsHaveLeft" + NAME(),0)
+        setInitContext("totalCarCount" + NAME(),0)
+        setInitContext("sum" + NAME(), 0f)
+
+        println(context.getAttribute("carsHaveLeft" + NAME()))
+        kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
+        kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
+        kotlin.assert(context.getAttribute("sum" + NAME()) == 0f)
+
+
+    }
         /**
          * HTTP GET
          */
@@ -52,7 +61,7 @@ public abstract class ParkhausServlet : HttpServlet() {
             // val == final
             // var == variable
             val cmd = request.getParameter("cmd")
-            println("$cmd + requested: $request.queryString")
+            println("$cmd + requested:" +  request.queryString)
 
             when (cmd.toLowerCase()) {
                 "config" ->
@@ -75,8 +84,9 @@ public abstract class ParkhausServlet : HttpServlet() {
                 }
 
                 "average" -> {
+                    println("persistentAvg");
                     println(persistentAvg);
-                    out.println("$persistentAvg € über $context.getAttr");
+                    out.println("$persistentAvg € über //TODO add cars");
                 }
 
                 else -> println("Invalid Command: " + request.queryString)
@@ -123,7 +133,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                         if (context.getAttribute("carsHaveLeft") == null) {
                             context.setAttribute("carsHaveLeft", 1)
                         } else {
-                            context.setAttribute("carsHaveLeft", context.getAttribute("carsHaveLeft") as Int + 1)
+                            context.setAttribute("carsHaveLeft", context.getAttribute("carsHaveLeft" + NAME()) as Int + 1)
                         }
                     }
                     println("leave,$oldCar")
@@ -207,7 +217,7 @@ public abstract class ParkhausServlet : HttpServlet() {
 
         val persistentAvg: Float
         //get() = persistentSum / (totalCars - (cars().size - 1)) // Average nur über die bereits ausgefahrenen machen LUKAS!
-        get() = persistentSum / (context.getAttribute("carsHaveLeft") as Int)
+        get() = persistentSum / (context.getAttribute("carsHaveLeft" + NAME()) as Int)
 
 
 
