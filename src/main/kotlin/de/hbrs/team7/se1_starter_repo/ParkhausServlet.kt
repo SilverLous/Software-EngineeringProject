@@ -25,6 +25,7 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     //persistentSum: Summe der Parkgebühren aller Autos
     //totalCars: Counter, wie viele Autos jemals im Parkhaus waren
+    //carsHaveLeft: Autos, die das Parkhaus verlassen haben
 
     /**
      * HTTP GET
@@ -60,7 +61,7 @@ public abstract class ParkhausServlet : HttpServlet() {
 
             "average" -> {
                 println(persistentAvg);
-                out.println("$persistentAvg Autos");
+                out.println("$persistentAvg € über ${context.getAttribute("carsHaveLeft")} Autos");
             }
 
             else -> println("Invalid Command: " + request.queryString)
@@ -104,10 +105,16 @@ public abstract class ParkhausServlet : HttpServlet() {
                         context.setAttribute("sum" + NAME(), persistentSum + price)
                         println("Der aktuelle Name ist: " + NAME())
                     }
+                    if (context.getAttribute("carsHaveLeft") == null) {
+                        context.setAttribute("carsHaveLeft", 1)
+                    } else {
+                        context.setAttribute("carsHaveLeft", context.getAttribute("carsHaveLeft") as Int + 1)
+                    }
                 }
                 println("leave,$oldCar")
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
+                println(persistentAvg)
             }
 
 
@@ -142,16 +149,16 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     //@SuppressWarnings("unchecked")
     internal var cars: ArrayList<CarIF>
-        get() {
-            /*if (context.getAttribute("cars" + NAME()) == null) {
-                context.setAttribute("cars" + NAME(), ArrayList<Car>())
-            }*/
-            return (context.getAttribute("cars" + NAME()) as ArrayList<CarIF>?) ?: ArrayList<CarIF>();
-        }
-        set(value) {
-            //TODO possible validation
-            context.setAttribute("cars" + NAME(), value);
-        }
+    get() {
+    /*if (context.getAttribute("cars" + NAME()) == null) {
+    context.setAttribute("cars" + NAME(), ArrayList<Car>())
+    }*/
+    return (context.getAttribute("cars" + NAME()) as ArrayList<CarIF>?) ?: ArrayList<CarIF>();
+    }
+    set(value) {
+    //TODO possible validation
+    context.setAttribute("cars" + NAME(), value);
+    }
      */
 
     /**
@@ -184,35 +191,39 @@ public abstract class ParkhausServlet : HttpServlet() {
         }
 
     val persistentAvg: Float
-        get() = persistentSum / (totalCars - (cars().size - 1)) // Average nur über die bereits ausgefahrenen machen LUKAS!
+        //get() = persistentSum / (totalCars - (cars().size - 1)) // Average nur über die bereits ausgefahrenen machen LUKAS!
+        get() = persistentSum / (context.getAttribute("carsHaveLeft") as Int)
 
-    /**
-     * @param request the HTTP POST request
-     * @return the body of the request
-     */
-    @Throws(IOException::class)
-    fun getBody(request: HttpServletRequest): String {
-        val stringBuilder = StringBuilder()
-        var bufferedReader: BufferedReader? = null
-        try {
-            val inputStream: InputStream? = request.inputStream
-            if (inputStream != null) {
-                bufferedReader = BufferedReader(InputStreamReader(inputStream))
-                val charBuffer = CharArray(128)
-                var bytesRead = -1
-                while (bufferedReader.read(charBuffer).also { bytesRead = it } > 0) {
-                    stringBuilder.append(charBuffer, 0, bytesRead)
+
+
+            /**
+             * @param request the HTTP POST request
+             * @return the body of the request
+             */
+            @Throws(IOException::class)
+            fun getBody(request: HttpServletRequest): String {
+                val stringBuilder = StringBuilder()
+                var bufferedReader: BufferedReader? = null
+                try {
+                    val inputStream: InputStream? = request.inputStream
+                    if (inputStream != null) {
+                        bufferedReader = BufferedReader(InputStreamReader(inputStream))
+                        val charBuffer = CharArray(128)
+                        var bytesRead = -1
+                        while (bufferedReader.read(charBuffer).also { bytesRead = it } > 0) {
+                            stringBuilder.append(charBuffer, 0, bytesRead)
+                        }
+                    } else {
+                        stringBuilder.append("")
+                    }
+                } finally {
+                    bufferedReader?.close()
                 }
-            } else {
-                stringBuilder.append("")
+                return stringBuilder.toString()
             }
-        } finally {
-            bufferedReader?.close()
-        }
-        return stringBuilder.toString()
-    }
 
-    override fun destroy() {
-        println("Servlet destroyed.")
-    }
-}
+            override fun destroy() {
+                println("Servlet destroyed.")
+            }
+        }
+
