@@ -1,9 +1,15 @@
 package de.hbrs.team7.se1_starter_repo
 
 import jakarta.servlet.annotation.WebServlet
+import javax.inject.Inject
 
 @WebServlet(name = "level1Servlet", value = ["/level1-servlet"])
-public class Level1Servlet : ParkhausServlet() {
+public class Level1Servlet constructor(
+    // https://jakarta.ee/specifications/cdi/2.0/cdi-spec-2.0.html#part_3
+    @Inject
+    override val parkhausService: ParkhausService
+) : ParkhausServlet()  {
+
     override fun NAME(): String {
         return "Level1 Kt"
     }

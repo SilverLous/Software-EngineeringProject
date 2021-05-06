@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo
 
+
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
@@ -9,8 +10,9 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+
 import java.util.*
-import kotlin.collections.ArrayList
+import javax.inject.Inject
 
 /**
  * common superclass for all servlets
@@ -18,6 +20,8 @@ import kotlin.collections.ArrayList
  */
 
 public abstract class ParkhausServlet : HttpServlet() {
+
+    protected abstract val parkhausService: ParkhausServiceIF
     /* abstract methods, to be defined in subclasses */
     abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
@@ -39,7 +43,10 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     override fun init() {
         super.init()
-        print("Hello from the other side\n")
+        println("Hello from the other side")
+        println(parkhausService.init)
+        parkhausService.iterInit()
+        println(parkhausService.init)
         setInitContext("carsHaveLeft" + NAME(), 0)
         setInitContext("totalCarCount" + NAME(), 0)
         setInitContext("sum" + NAME(), 0f)

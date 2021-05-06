@@ -3,7 +3,9 @@ package de.hbrs.team7.se1_starter_repo;
 import jakarta.servlet.annotation.WebServlet;
 
 @WebServlet(name = "level2Servlet", value = "/level2-servlet")
-public class Level2ServletJava extends ParkhausServlet {
+public class Level2ServletJava extends ParkhausServletJava {
+
+
 
     @Override
     public String NAME(){
