@@ -3,6 +3,7 @@ package de.hbrs.team7.se1_starter_repo
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 
+
 @WebServlet(name = "helloServlet", value = ["/hello-servlet"])
 class PayServlet : HttpServlet() {
     private lateinit var message: String

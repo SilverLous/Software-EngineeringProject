@@ -1,8 +1,9 @@
 package de.hbrs.team7.se1_starter_repo;
 
+
+import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -16,12 +17,16 @@ import java.util.Scanner;
  * common superclass for all servlets
  * groups all auxiliary common methods used in all servlets
  */
-public abstract class ParkhausServletJava extends HttpServlet {
+public abstract class ParkhausServletJava  extends HttpServlet {
 
     /* abstract methods, to be defined in subclasses */
     abstract String NAME(); // each ParkhausServlet should have a name, e.g. "Level1"
     abstract int MAX(); // maximum number of parking slots of a single parking level
     abstract String config(); // configuration of a single parking level
+
+    // @Inject
+    // public ParkhausService Ps;
+
 
     /**
      * HTTP GET

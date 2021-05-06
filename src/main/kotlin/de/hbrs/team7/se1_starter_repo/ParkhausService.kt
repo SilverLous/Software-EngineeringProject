@@ -1,18 +1,38 @@
 package de.hbrs.team7.se1_starter_repo
 
 
-class ParkhausService : ParkhausServiceIF {
+import jakarta.annotation.PostConstruct
+//import jakarta.ejb.Singleton
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Singleton
 
-    public override var init = 0
+
+//@ApplicationScoped
+// @Stateful
+// @ManagedBean
+// @SessionScoped
+//@ManagedBean
+// @ApplicationScoped
+//@Stateless
+@Singleton
+
+public class ParkhausService(public var initNumber: Int = 0) { // : ParkhausServiceIF {
+
+    // https://dzone.com/articles/understanding-jakarta-ee-8-cdi-part-2-qualifying-your-beans
+
 
     init {
-        init++
-        print(init)
-        println("hello service")
+        initNumber = 0
+        print(initNumber)
+        println("hello from service")
     }
 
-    public override fun iterInit() = init++;
 
+    public fun iterInit() = initNumber++;
 
+    @Throws(Exception::class)
+    fun createHelloMessage(name: String): String? {
+        return "Hello $name + $initNumber"
+    }
 
 }

@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo
 
-public interface ParkhausServiceIF {
+interface ParkhausServiceIF {
 
     var init: Int
         get() = 0

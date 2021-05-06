@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo
 
 
+import jakarta.inject.Inject
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
@@ -10,23 +11,41 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-
 import java.util.*
-import javax.inject.Inject
+// import jakarta.inject.Inject
+
 
 /**
  * common superclass for all servlets
  * groups all auxiliary common methods used in all servlets
  */
 
+/*
+Fragen?
+
+    keine Runner in Gitlab -> keine pipelines + auto unit tests
+
+    dependency injection mit vererbung
+
+    unit test framework? hatte nur irgendwas mit frameworks gefunden
+
+    @SessionStorage sinnvoll?
+    Servlet kontext inkonsistent (die cars liste wird einmal geholt und nie wieder gespeichert, aber sum wird gespeichert,
+    mehrere parallele klienten verursachen seiteneffekte)
+
+
+ */
+
 public abstract class ParkhausServlet : HttpServlet() {
 
-    protected abstract val parkhausService: ParkhausServiceIF
+
     /* abstract methods, to be defined in subclasses */
     abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
     abstract fun config(): String? // configuration of a single parking level
 
+    @Inject
+    private lateinit var parkhausService: ParkhausService
 
     /*Kontextvariablen:
     persistentSum: Summe der Parkgebühren aller Autos
@@ -44,9 +63,9 @@ public abstract class ParkhausServlet : HttpServlet() {
     override fun init() {
         super.init()
         println("Hello from the other side")
-        println(parkhausService.init)
+        println(parkhausService.initNumber.toString() + NAME())
         parkhausService.iterInit()
-        println(parkhausService.init)
+        println(parkhausService.initNumber.toString() +  NAME())
         setInitContext("carsHaveLeft" + NAME(), 0)
         setInitContext("totalCarCount" + NAME(), 0)
         setInitContext("sum" + NAME(), 0f)
