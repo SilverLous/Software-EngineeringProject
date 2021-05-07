@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo
 
 
+import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
@@ -28,8 +29,9 @@ public abstract class ParkhausServlet : HttpServlet() {
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
     abstract fun config(): String? // configuration of a single parking level
 
-    @Inject
-    private lateinit var parkhausService: ParkhausService
+    @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
+
+    @Inject private lateinit var parkhausServiceSession: Instance<ParkhausServiceSession>
 
     /*Kontextvariablen:
     persistentSum: Summe der Parkgebühren aller Autos
@@ -47,9 +49,7 @@ public abstract class ParkhausServlet : HttpServlet() {
     override fun init() {
         super.init()
         println("Hello from the other side")
-        println(parkhausService.initNumber.toString() + NAME())
-        parkhausService.iterInit()
-        println(parkhausService.initNumber.toString() +  NAME())
+
         setInitContext("carsHaveLeft" + NAME(), 0)
         setInitContext("totalCarCount" + NAME(), 0)
         setInitContext("sum" + NAME(), 0f)
@@ -59,6 +59,10 @@ public abstract class ParkhausServlet : HttpServlet() {
         kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
         kotlin.assert(context.getAttribute("sum" + NAME()) == 0f)
 
+        // get is used for getting the one instance of the running service
+        kotlin.assert(parkhausServiceSession.get().sessionCars == 0)
+
+        kotlin.assert(parkhausServiceGlobal.globalCars == 0)
 
     }
 
@@ -126,6 +130,8 @@ public abstract class ParkhausServlet : HttpServlet() {
                 cars().add(newCar)
                 println("enter,$newCar")
                 println("HELLO FROM KOOOOOTLIN")
+                parkhausServiceSession.get().sessionCars++
+                parkhausServiceGlobal.globalCars++
                 context.setAttribute("totalCarCount" + NAME(), totalCars + 1)
                 println(totalCars)
                 // re-direct car to another parking lot

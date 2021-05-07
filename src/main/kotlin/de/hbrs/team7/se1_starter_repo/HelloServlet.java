@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,7 +16,8 @@ import java.io.PrintWriter;
 public class HelloServlet extends HttpServlet {
     private String message;
 
-    @Inject private ParkhausService parkhausService;
+    @Inject Instance<ParkhausServiceSession> parkhausServiceSession;
+    @Inject ParkhausServiceGlobal parkhausServiceGlobal;
 
     // public void setParkhausService ( ParkhausService pS) { this.parkhausService = pS; }
 
@@ -25,7 +27,6 @@ public class HelloServlet extends HttpServlet {
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
-
         // Hello
         PrintWriter out = null;
         try {
@@ -35,7 +36,8 @@ public class HelloServlet extends HttpServlet {
         }
         out.println("<html><body>");
         try {
-            out.println("<h1>" + parkhausService.createHelloMessage("test") + "</h1>");
+            out.println("<h1>" + parkhausServiceGlobal.getGlobalCars() + "</h1>");
+            out.println("<h1>" + parkhausServiceSession.get().getSessionCars() + "</h1>");
         } catch (Exception e) {
             e.printStackTrace();
         }
