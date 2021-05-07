@@ -59,10 +59,10 @@ public abstract class ParkhausServlet : HttpServlet() {
         kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
         kotlin.assert(context.getAttribute("sum" + NAME()) == 0f)
 
+        kotlin.assert(parkhausServiceGlobal.globalCars == 0)
+
         // get is used for getting the one instance of the running service
         kotlin.assert(parkhausServiceSession.get().sessionCars == 0)
-
-        kotlin.assert(parkhausServiceGlobal.globalCars == 0)
 
     }
 
@@ -130,8 +130,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 cars().add(newCar)
                 println("enter,$newCar")
                 println("HELLO FROM KOOOOOTLIN")
-                parkhausServiceSession.get().sessionCars++
-                parkhausServiceGlobal.globalCars++
+                parkhausServiceSession.get().addCar()
                 context.setAttribute("totalCarCount" + NAME(), totalCars + 1)
                 println(totalCars)
                 // re-direct car to another parking lot

@@ -1,3 +1,5 @@
+<%@ page import="jakarta.inject.Inject" %>
+<%@ page import="de.hbrs.team7.se1_starter_repo.ParkhausServiceSession" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -40,8 +42,12 @@
     </style>
 </head>
 <body>
+<%!
+    @Inject
+    private ParkhausServiceSession parkhausServiceSession;
+%>
 <div class="box center grey-background">
-    <h1>Parkhaus Team 7</h1>
+    <h1>Parkhaus Team 7 ${parkhausServiceSession.city}</h1>
 </div>
 <div class="box lightblue">
     <h2><a href="kasse.jsp">Kasse</a></h2>

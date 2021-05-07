@@ -6,7 +6,7 @@ import java.io.Serializable;
 import jakarta.inject.Singleton;
 
 @Singleton
-public class ParkhausServiceSingleton implements Serializable {
+public class ParkhausServiceGlobalJava implements Serializable {
     private int initNumber;
 
     public int getInitNumber() {
@@ -22,5 +22,6 @@ public class ParkhausServiceSingleton implements Serializable {
         this.setInitNumber((var1 = this.getInitNumber()) + 1);
         return var1;
     }
+
 
 }

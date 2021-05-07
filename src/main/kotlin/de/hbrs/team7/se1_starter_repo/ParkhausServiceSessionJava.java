@@ -2,12 +2,15 @@ package de.hbrs.team7.se1_starter_repo;
 
 
 import jakarta.enterprise.context.SessionScoped;
-
+import jakarta.inject.Inject;
 import java.io.Serializable;
 
 @SessionScoped
 public class ParkhausServiceSessionJava implements Serializable {
     private int initNumber;
+
+    @Inject
+    private ParkhausServiceGlobal ps;
 
     public int getInitNumber() {
         return this.initNumber;
