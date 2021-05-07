@@ -100,6 +100,8 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.println("$persistentAvg € über $totalCars Autos");
             }
 
+            "total users" -> out.println("$totalCars Besucher Insgesamt")
+
             else -> println("Invalid Command: " + request.queryString)
         }
     }

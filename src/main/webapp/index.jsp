@@ -56,7 +56,7 @@
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Family":0.5}'
                          max="11"
-                         extra_buttons='["Average","Sum"]'>
+                         extra_buttons='["Average","Sum","Total Users"]'>
     </ccm-parkhaus-10-0-0>
 </div>
 <div class="box lightgreen">
@@ -64,7 +64,7 @@
     <ccm-parkhaus-10-0-0 server_url="./level2-servlet"
                          name="Etage2"
                          license_max="14"
-                         client_categories='["any","Business"]'
+                         client_categories='["any","Business","Total Users"]'
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Business":1}'
                          random_start="2"
