@@ -1,7 +1,6 @@
 package de.hbrs.team7.se1_starter_repo
 
 import jakarta.servlet.annotation.WebServlet
-import jakarta.inject.Inject
 
 
 @WebServlet(name = "level2Servlet", value = ["/level2-servlet"])

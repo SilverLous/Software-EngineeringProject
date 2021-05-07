@@ -12,7 +12,6 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
-// import jakarta.inject.Inject
 
 
 /**
@@ -20,21 +19,6 @@ import java.util.*
  * groups all auxiliary common methods used in all servlets
  */
 
-/*
-Fragen?
-
-    keine Runner in Gitlab -> keine pipelines + auto unit tests
-
-    dependency injection mit vererbung
-
-    unit test framework? hatte nur irgendwas mit frameworks gefunden
-
-    @SessionStorage sinnvoll?
-    Servlet kontext inkonsistent (die cars liste wird einmal geholt und nie wieder gespeichert, aber sum wird gespeichert,
-    mehrere parallele klienten verursachen seiteneffekte)
-
-
- */
 
 public abstract class ParkhausServlet : HttpServlet() {
 

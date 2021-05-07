@@ -1,11 +1,6 @@
 package de.hbrs.team7.se1_starter_repo
 
-
-import jakarta.inject.Inject
 import jakarta.servlet.annotation.WebServlet
-
-
-// import jakarta.inject.Inject
 
 @WebServlet(name = "level1Servlet", value = ["/level1-servlet"])
 public class Level1Servlet : ParkhausServlet()  {

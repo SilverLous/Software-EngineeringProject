@@ -1,7 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
 
-import jakarta.inject.Inject;
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
@@ -23,10 +22,6 @@ public abstract class ParkhausServletJava  extends HttpServlet {
     abstract String NAME(); // each ParkhausServlet should have a name, e.g. "Level1"
     abstract int MAX(); // maximum number of parking slots of a single parking level
     abstract String config(); // configuration of a single parking level
-
-    // @Inject
-    // public ParkhausService Ps;
-
 
     /**
      * HTTP GET
