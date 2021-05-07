@@ -2,8 +2,10 @@ package de.hbrs.team7.se1_starter_repo
 
 import jakarta.servlet.annotation.WebServlet
 
+
 @WebServlet(name = "level2Servlet", value = ["/level2-servlet"])
 class Level2Servlet : ParkhausServlet() {
+
     override fun NAME(): String {
         return "Level2 Kt"
     }
