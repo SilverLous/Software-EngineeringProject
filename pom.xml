@@ -71,6 +71,7 @@
     </dependencies>
 
     <build>
+        <finalName>team7Parkhaus</finalName>
         <sourceDirectory>src/main/kotlin</sourceDirectory>
         <testSourceDirectory>src/test/kotlin</testSourceDirectory>
         <plugins>
