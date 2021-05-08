@@ -23,6 +23,7 @@
             <artifactId>kotlin-stdlib-jdk8</artifactId>
             <version>${kotlin.version}</version>
         </dependency>
+
         <dependency>
             <artifactId>kotlin-test</artifactId>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -42,6 +43,17 @@
             <artifactId>weld-servlet-shaded</artifactId>
             <version>4.0.0.Final</version>
         </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jboss.weld/weld-junit5 -->
+        <dependency>
+            <groupId>org.jboss.weld</groupId>
+            <artifactId>weld-junit5</artifactId>
+            <version>3.0.0.Final</version>
+            <scope>test</scope>
+        </dependency>
+
+
+
 
         <dependency>
             <groupId>jakarta.json.bind</groupId>
