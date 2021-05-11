@@ -84,7 +84,9 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
+
             "sum" -> out.println("${parkhausServiceSession.get().sum(NAME()).format(2)}€")
+
             "cars" -> {
                 // TODO: Send list of cars stored on the server to the client.
                 // Cars are separated by comma.
