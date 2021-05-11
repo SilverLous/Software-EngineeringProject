@@ -13,7 +13,8 @@ import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.util.*
-
+import de.hbrs.team7.se1_starter_repo.ParkhausServiceSession
+import kotlin.math.round
 
 /**
  * common superclass for all servlets
@@ -83,7 +84,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
-            "sum" -> out.println("$persistentSum €")
+            "sum" -> out.println("${parkhausServiceSession.get().sum(NAME()).format(2)}€")
             "cars" -> {
                 // TODO: Send list of cars stored on the server to the client.
                 // Cars are separated by comma.
@@ -98,15 +99,12 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // http://json-b.net/docs/user-guide.html
             }
 
-            "average" -> {
-                println("persistentAvg");
-                println(persistentAvg);
-                out.println("$persistentAvg € über $totalCars Autos");
-            }
+            "average" ->  out.println("${parkhausServiceSession.get().average(NAME())?.format(2)} € per car")
 
-            "total users" -> out.println("$totalCars Besucher Insgesamt")
 
-            else -> println("Invalid Command: " + request.queryString)
+            "total users" -> out.println(parkhausServiceSession.get().totalUsers(NAME()).toString() + " Users")
+
+            else -> out.println("Invalid Command: " + request.queryString)
         }
     }
 
@@ -126,18 +124,12 @@ public abstract class ParkhausServlet : HttpServlet() {
         val event = params[0]
         when (event) {
             "enter" -> {
-                val newCar: CarIF = Car(params)
-                cars().add(newCar)
-                println("enter,$newCar")
-                println("HELLO FROM KOOOOOTLIN")
-                parkhausServiceSession.get().addCar()
-                context.setAttribute("totalCarCount" + NAME(), totalCars + 1)
-                println(totalCars)
+                parkhausServiceSession.get().addCar(NAME(),params)
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );
             }
-            "leave" -> {
-                val oldCar = cars()[0]
+            "leave" -> {/*
+                val oldCar = cars()?.get(0)
                 if (params.size > 4) {
                     val priceString = params[4]
                     if ("_" != priceString) {
@@ -158,12 +150,11 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println("leave,$oldCar")
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
-                println(persistentAvg)
+                println(persistentAvg)*/
+                parkhausServiceSession.get().leaveCar(NAME(),params)
+
             }
-
-
             "invalid", "occupied" -> {
-                context.setAttribute("totalCarCount" + NAME(), totalCars - 1)
                 println(body)
             }
 
@@ -185,7 +176,7 @@ public abstract class ParkhausServlet : HttpServlet() {
     internal fun locator(car: CarIF): Int {
         // numbers of parking lots start at 1, not zero
         print(car)
-        return 1 + (cars().size - 1) % MAX()
+        return 1 + ((cars()?.size ?: 1) - 1) % MAX()
     }
 
     /**
@@ -208,11 +199,12 @@ public abstract class ParkhausServlet : HttpServlet() {
     /**
      * @return the list of all cars stored in the servlet context so far
      */
-    private fun cars(): ArrayList<CarIF> {
+    private fun cars(): ArrayList<CarIF>? {/*
         if (context.getAttribute("cars" + NAME()) == null) {
             context.setAttribute("cars" + NAME(), java.util.ArrayList<Car>())
         }
-        return context.getAttribute("cars" + NAME()) as ArrayList<CarIF>
+        return context.getAttribute("cars" + NAME()) as ArrayList<CarIF>*/
+        return parkhausServiceSession.get().currentCars(NAME())
     }
 
 
@@ -240,6 +232,7 @@ public abstract class ParkhausServlet : HttpServlet() {
             return persistentSum / (context.getAttribute("carsHaveLeft" + NAME()) as Int)
         }
 
+    fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
     /**
      * @param request the HTTP POST request
