@@ -34,4 +34,13 @@ public class ParkhausServiceSessionJavaTest {
         assert !parkhausServiceSession.getCity().isEmpty() : "error";
     }
 
+    @Test
+    public void addCarTest(){
+        int carsGlobal = parkhausServiceSession.getParkhausServiceGlobal().getGlobalCars();
+        int carsSession = parkhausServiceSession.getSessionCars();
+        parkhausServiceSession.addCar();
+        assert (parkhausServiceSession.getSessionCars() - carsSession) == 1;
+        assert (parkhausServiceSession.getParkhausServiceGlobal().getGlobalCars() - carsGlobal) == 1;
+    }
+
 }
