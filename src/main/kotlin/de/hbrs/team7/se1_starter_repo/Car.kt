@@ -19,8 +19,8 @@ class Car(var params: Array<String>) : CarIF {
         get() = 0
 
 
-
     override fun toString(): String {
         return params.contentToString()
     }
+
 }

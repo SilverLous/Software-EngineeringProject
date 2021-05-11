@@ -1697,6 +1697,5 @@ open class ParkhausServiceSession : Serializable, CarIF {
         "Saal"
     )
         protected set
-
 }
 
