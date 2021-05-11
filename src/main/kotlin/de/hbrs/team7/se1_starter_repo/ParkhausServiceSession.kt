@@ -29,7 +29,7 @@ open class ParkhausServiceSession : Serializable {
 
     open fun addCar() {
         sessionCars++;
-        //
+        // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar()
     }
 

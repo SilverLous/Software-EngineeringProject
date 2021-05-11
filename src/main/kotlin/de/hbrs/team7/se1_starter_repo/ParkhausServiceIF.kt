@@ -5,4 +5,6 @@ interface ParkhausServiceIF {
     var initNumber: Int;
 
     public fun iterInit() = initNumber++;
+
+
 }
