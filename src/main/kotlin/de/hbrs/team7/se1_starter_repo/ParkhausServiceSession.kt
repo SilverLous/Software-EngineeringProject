@@ -16,7 +16,7 @@ BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
  */
 @Named
 @SessionScoped
-open class ParkhausServiceSession : Serializable {
+open class ParkhausServiceSession : Serializable, CarIF {
 
     // must be this way to ensure it is loaded and the injector has time to do its job
     @Inject
