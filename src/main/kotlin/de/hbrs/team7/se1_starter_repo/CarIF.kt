@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo
 
-internal interface CarIF {
+interface CarIF {
     val nr: Int
         get() = 0
 

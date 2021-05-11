@@ -4,6 +4,7 @@ package de.hbrs.team7.se1_starter_repo
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Singleton
+import java.util.ArrayList
 
 /*
 
@@ -23,10 +24,17 @@ public open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     //TODO Add hashmap with sessionID and SessionCars for global management
     //TODO Add hashmap getter
 
+    open var carDict: HashMap<String, ArrayList<CarIF>> = HashMap<String, ArrayList<CarIF>> ()
+        protected set
 
 
-    open fun addCar() {
+
+    open fun addCar(ID: String, params: Array<String>) {
         globalCars++
+
+        val newCar: CarIF = Car(params)
+        println("enter,$newCar")
+        carDict[ID]?.plusAssign(newCar)
     }
 
     // this is the constructor for own functionality (single called)

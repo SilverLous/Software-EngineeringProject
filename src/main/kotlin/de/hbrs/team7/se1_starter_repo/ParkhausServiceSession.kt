@@ -5,6 +5,8 @@ import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
+import jakarta.servlet.ServletContext
+import java.util.*
 
 
 /*
@@ -23,16 +25,61 @@ open class ParkhausServiceSession : Serializable {
     open lateinit var city: String
         protected set
 
+    open var sum: Double = 0.0
+        protected set
 
     open var sessionCars: Int = 0
         protected set
 
-    open fun addCar() {
-        sessionCars++;
-        // !!: darf nicht null sein
-        parkhausServiceGlobal!!.addCar()
+    open var currentCars: Int = 0
+        protected set
+
+    open fun totalCarCount(ID: String): Int {
+        return sessionCars
     }
 
+    open fun totalUsers(ID: String): Int {
+        return sessionCars - currentCars
+    }
+
+    open fun average(ID: String): Double?{
+        return sum/totalUsers(ID)
+    }
+
+    open fun leaveCar(ID: String, params: Array<String>){
+        val oldCar = currentCars(ID)?.get(0)
+        if (params.size > 4) {
+            val priceString = params[4]
+            if ("_" != priceString) {
+                // for JSON format skip over text and proceed to next integer
+                var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
+                price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
+                // store new sum in ServletContext
+                sum += price
+                println("Der aktuelle Name ist: " + ID)
+            }
+            // TODO check if this is the right bracket
+            currentCars--
+
+        }
+        println("leave,$oldCar")
+        println(sum)
+
+    }
+
+    open fun sum(ID: String): Double{
+        return sum
+    }
+
+    open fun addCar(ID: String, params: Array<String>) {
+        sessionCars++;
+        println("HELLO FROM KOOOOOTLIN")
+        // !!: darf nicht null sein
+        parkhausServiceGlobal!!.addCar(ID, params)
+    }
+    open fun currentCars(NAME: String): ArrayList<CarIF>? {
+        return parkhausServiceGlobal!!.carDict[NAME]
+    }
 
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
