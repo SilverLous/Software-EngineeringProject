@@ -56,6 +56,7 @@ public abstract class ParkhausServlet : HttpServlet() {
         setInitContext("sum" + NAME(), 0f)
 
         println(context.getAttribute("carsHaveLeft" + NAME()))
+        /*
         kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
         kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
         kotlin.assert(context.getAttribute("sum" + NAME()) == 0f)
@@ -63,7 +64,7 @@ public abstract class ParkhausServlet : HttpServlet() {
         kotlin.assert(parkhausServiceGlobal.globalCars == 0)
 
         // get is used for getting the one instance of the running service
-        kotlin.assert(parkhausServiceSession.get().sessionCars == 0)
+        kotlin.assert(parkhausServiceSession.get().sessionCars == 0)*/
 
     }
 

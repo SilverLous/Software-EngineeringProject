@@ -7,6 +7,7 @@ import jakarta.inject.Named
 import java.io.Serializable
 import jakarta.servlet.ServletContext
 import java.util.*
+import kotlin.collections.HashMap
 
 
 /*
@@ -22,9 +23,12 @@ open class ParkhausServiceSession : Serializable, CarIF {
     @Inject
     open var parkhausServiceGlobal: ParkhausServiceGlobal? = null
 
-    open lateinit var city: String
+    open var map: HashMap<String, Double> = HashMap<String, Double>()
         protected set
 
+    open lateinit var city: String
+        protected set
+/*
     open var sum: Double = 0.0
         protected set
 
@@ -33,17 +37,20 @@ open class ParkhausServiceSession : Serializable, CarIF {
 
     open var currentCars: Int = 0
         protected set
-
+*/
     open fun totalCarCount(ID: String): Int {
-        return sessionCars
+        return map[ID + "sessionCars"]?.toInt() ?: 0
     }
 
     open fun totalUsers(ID: String): Int {
-        return totalCarCount(ID) - currentCars
+        print("total cars: ${totalCarCount(ID)}\n")
+        print("current cars: ${map[ID + "currentCars"]?.toInt() ?: 0}")
+        return totalCarCount(ID) - (map[ID + "currentCars"]?.toInt() ?: 0)
     }
 
     open fun average(ID: String): Double?{
-        return sum/totalUsers(ID)
+        var sum1 = (map[ID + "sum"] ?: 0.0)
+        return (sum1) / totalUsers(ID)
     }
 
     open fun leaveCar(ID: String, params: Array<String>){
@@ -55,24 +62,29 @@ open class ParkhausServiceSession : Serializable, CarIF {
                 var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
                 price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
                 // store new sum in ServletContext
-                sum += price
+                sumadd(ID , price.toDouble())
                 println("Der aktuelle Name ist: " + ID)
             }
             // TODO check if this is the right bracket
-            currentCars--
+            map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
 
         }
         println("leave,$oldCar")
-        println(sum)
+        println(sum(ID))
 
     }
 
+    open fun sumadd(ID: String, toadd: Double) {
+        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toadd
+    }
     open fun sum(ID: String): Double{
-        return sum
+        return map[ID + "sum"]?: 0.0
     }
 
     open fun addCar(ID: String, params: Array<String>) {
-        sessionCars++
+        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
+        map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
+
         println("HELLO FROM KOOOOOTLIN")
         // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar(ID, params)
@@ -86,6 +98,10 @@ open class ParkhausServiceSession : Serializable, CarIF {
     open fun sessionInit() {
         city = cities.random()
         print("Hello from $city Service new User ")
+        map[city + "sum"] = 0.0
+        map[city + "sessionCars"] = 0.0
+        map[city + "currentCars"] = 0.0
+
     }
 
     open var cities: List<String> = listOf(
