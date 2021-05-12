@@ -39,7 +39,7 @@ open class ParkhausServiceSession : Serializable, CarIF {
     }
 
     open fun totalUsers(ID: String): Int {
-        return sessionCars - currentCars
+        return totalCarCount(ID) - currentCars
     }
 
     open fun average(ID: String): Double?{
@@ -72,7 +72,7 @@ open class ParkhausServiceSession : Serializable, CarIF {
     }
 
     open fun addCar(ID: String, params: Array<String>) {
-        sessionCars++;
+        sessionCars++
         println("HELLO FROM KOOOOOTLIN")
         // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar(ID, params)

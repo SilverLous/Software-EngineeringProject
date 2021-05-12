@@ -4,23 +4,23 @@ import java.util.ArrayList
 
 interface ParkhausServiceIF {
 
-    var initNumber: Int;
+    var initNumber: Int
 
-    public fun iterInit() = initNumber++;
+    public fun iterInit() = initNumber++
 
-    open fun totalCarCount(ID: String): Int;
+    fun totalCarCount(ID: String): Int
 
-    open fun totalUsers(ID: String): Int;
+    fun totalUsers(ID: String): Int
 
-    open fun average(ID: String): Double?;
+    fun average(ID: String): Double?
 
-    open fun leaveCar(ID: String, params: Array<String>);
+    fun leaveCar(ID: String, params: Array<String>)
 
-    open fun sum(ID: String): Double;
+    fun sum(ID: String): Double
 
-    open fun addCar(ID: String, params: Array<String>);
+    fun addCar(ID: String, params: Array<String>)
 
-    open fun currentCars(NAME: String): ArrayList<CarIF>?;
+    fun currentCars(NAME: String): ArrayList<CarIF>?
 
 
 
