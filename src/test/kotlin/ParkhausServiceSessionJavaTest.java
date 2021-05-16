@@ -25,7 +25,7 @@ public class ParkhausServiceSessionJavaTest {
 /*    @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ParkhausServiceSession.class, ParkhausServiceGlobal.class)
             .activate(SessionScoped.class, ApplicationScoped.class ).build();*/
-
+/*
 
     @Inject
     ParkhausServiceSession parkhausServiceSession;
@@ -74,5 +74,5 @@ public class ParkhausServiceSessionJavaTest {
         assert (parkhausServiceSession.currentCars(etage).size() - carsSession1) == 1;
 
     }
-
+*/
 }
