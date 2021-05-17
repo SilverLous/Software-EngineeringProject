@@ -3,18 +3,20 @@ package de.hbrs.team7.se1_starter_repo
 
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
+import jakarta.persistence.Persistence
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import org.hsqldb.rights.User
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.time.Instant
 import java.util.*
-import de.hbrs.team7.se1_starter_repo.ParkhausServiceSession
-import kotlin.math.round
+
 
 /**
  * common superclass for all servlets
@@ -65,6 +67,23 @@ public abstract class ParkhausServlet : HttpServlet() {
 
         // get is used for getting the one instance of the running service
         kotlin.assert(parkhausServiceSession.get().sessionCars == 0)*/
+
+        val ticket = Ticket()
+        ticket.Ausstellungsdatum = Date.from(Instant.now())
+        ticket.Preisklasse = 3
+
+        val entityManagerFactory = Persistence.createEntityManagerFactory("default")
+        val entityManager = entityManagerFactory.createEntityManager()
+        entityManager.transaction.begin()
+        entityManager.persist(ticket)
+        entityManager.transaction.commit()
+        val cb = entityManager.criteriaBuilder
+        val query = cb.createQuery(Ticket::class.java)
+        query.select(query.from(Ticket::class.java))
+        val test = entityManager.createQuery(query).resultList
+        print(test)
+        entityManager.close()
+        entityManagerFactory.close()
 
     }
 
