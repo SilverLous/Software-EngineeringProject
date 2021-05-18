@@ -72,7 +72,7 @@ public abstract class ParkhausServlet : HttpServlet() {
         ticket.Ausstellungsdatum = Date.from(Instant.now())
         ticket.Preisklasse = 3
 
-        val entityManagerFactory = Persistence.createEntityManagerFactory("default")
+        val entityManagerFactory = Persistence.createEntityManagerFactory("hsqldb-eclipselink")
         val entityManager = entityManagerFactory.createEntityManager()
         entityManager.transaction.begin()
         entityManager.persist(ticket)
