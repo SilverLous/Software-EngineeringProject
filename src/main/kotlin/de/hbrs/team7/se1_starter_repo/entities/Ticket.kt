@@ -1,9 +1,6 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.entities
 
-import jakarta.persistence.Column
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
 
@@ -11,6 +8,7 @@ import java.util.*
 // maybe helpful later https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/
 // https://blog.jetbrains.com/idea/2018/10/kotlin-jpa-and-spring-data/
 @Entity
+// @Table(name = "Tickets") //TODO Decide if class should named TicketEntity or just Ticket
 open class Ticket {
 
     @Id @GeneratedValue

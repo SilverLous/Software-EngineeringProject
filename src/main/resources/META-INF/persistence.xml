@@ -7,7 +7,7 @@
                       transaction-type="RESOURCE_LOCAL">
         <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 
-        <class>de.hbrs.team7.se1_starter_repo.Ticket</class>
+        <class>de.hbrs.team7.se1_starter_repo.entities.Ticket</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>

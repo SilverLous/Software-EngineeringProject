@@ -1,6 +1,8 @@
 package de.hbrs.team7.se1_starter_repo
 
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
 import jakarta.persistence.Persistence
@@ -9,7 +11,9 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
-import org.hsqldb.rights.User
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -99,7 +103,7 @@ public abstract class ParkhausServlet : HttpServlet() {
         val cmd = request.getParameter("cmd")
         println("$cmd + requested:" + request.queryString)
 
-        when (cmd.toLowerCase()) {
+        when (cmd.lowercase()) {
             "config" ->
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
@@ -119,6 +123,14 @@ public abstract class ParkhausServlet : HttpServlet() {
             "chart" -> {
                 // TODO send chart infos as JSON object to client
                 // http://json-b.net/docs/user-guide.html
+
+                // https://github.com/Kotlin/kotlinx.serialization
+                response.contentType = "application/json;charset=UTF-8"
+                // TODO Create DTO for chart generation
+                val jsonData = Json.encodeToJsonElement(MAX())
+                out.print(jsonData)
+                out.flush() // ?
+
             }
 
             "average" ->  out.println("${parkhausServiceSession.get().average(NAME())?.format(2)} € per car")
@@ -142,10 +154,11 @@ public abstract class ParkhausServlet : HttpServlet() {
 
         // toTypedArray() needed because return type is List not array as in original
         val params = body.split(",").toTypedArray()
-
+        val paramJson = body.split(",", limit = 2).toTypedArray()
         val event = params[0]
         when (event) {
             "enter" -> {
+                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 parkhausServiceSession.get().addCar(NAME(),params)
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );
@@ -173,6 +186,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
                 println(persistentAvg)*/
+                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 parkhausServiceSession.get().leaveCar(NAME(),params)
 
             }
