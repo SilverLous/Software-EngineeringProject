@@ -15,6 +15,13 @@
     <link rel="shortcut icon" href="https://kaul.inf.h-brs.de/favicon.ico" />
     <title>Tomcat Parkhaus</title>
     <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.1.0.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- production version, optimized for size and speed
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
+
     <style>
         * {
             font-family: sans-serif, Helvetica, Arial;
@@ -61,6 +68,7 @@
                          client_categories='["any","Family"]'
                          vehicle_types='["PKW","SUV"]'
                          price_factor='{"SUV":2,"Family":0.5}'
+                         json_format="true"
                          max="11"
                          extra_buttons='["Average","Sum","Total Users"]'>
     </ccm-parkhaus-10-1-0>
@@ -81,5 +89,37 @@
     </ccm-parkhaus-10-1-0>
 
 </div>
+
+
+
+<div id="main">
+    <h1> Vue.JS API Call Example</h1>
+    <div v-if="loaded">
+        <p>{{plotData}}</p>
+    </div>
+    <p v-else="loaded">Your Plot is being generated</p>
+
+</div>
+
 </body>
+
+<script>
+
+    const vm  = new Vue({
+        el: '#main',
+        data: {loaded: false, plotData: null},
+
+       mounted() {
+
+            axios.get('/team7Parkhaus/level1-servlet?cmd=chart')
+                .then(function (response) {
+                    vm.loaded = true;
+                    vm.plotData = response.data;
+                })
+        }
+    });
+
+
+
+</script>
 </html>
