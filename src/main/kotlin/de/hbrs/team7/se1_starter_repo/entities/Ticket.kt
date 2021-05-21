@@ -7,6 +7,8 @@ import java.util.*
 
 // maybe helpful later https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/
 // https://blog.jetbrains.com/idea/2018/10/kotlin-jpa-and-spring-data/
+
+// https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
 @Entity
 // @Table(name = "Tickets") //TODO Decide if class should named TicketEntity or just Ticket
 open class Ticket {

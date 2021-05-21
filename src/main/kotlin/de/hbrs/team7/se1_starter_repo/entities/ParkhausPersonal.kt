@@ -1,19 +1,38 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
+import jakarta.persistence.*
 import kotlinx.serialization.json.Json
 
-open class ParkhausPersonal(private var name: String, private var password: String) {
 
-    private var loggedIn: Boolean = false
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+open class ParkhausPersonal(
+
+    @Column(nullable = false)
+    open var name: String? = null,
+
+    @Column(nullable = false)
+    open var password: String? = null,
+) {
+
+    @Id
+    @GeneratedValue
+    open val Personalnummer: Long = 0
+
+    @Column(nullable = false)
+    open var loggedIn = false
+
+    @Column(nullable = false)
+    open var accessLevel = 0
+
     fun login(username: String, givenpassword: String): Boolean {
-        if (name.equals(username) and password.equals(givenpassword)) {
-            loggedIn = true
-        }
+        loggedIn = (name == username) && (password == givenpassword)
         return loggedIn
     }
 
-    fun logout(username: String){
-        loggedIn = false
+
+    fun logout() {
+        this.loggedIn = false
     }
 
     fun statistikAbrufen(parkhaus: Parkhaus): Json? {

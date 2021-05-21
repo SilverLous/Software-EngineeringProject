@@ -1,6 +1,14 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-class ParkhausBetreiber(private var name: String, private var password: String) : ParkhausPersonal(name, password) {
+import jakarta.persistence.Entity
+
+@Entity
+open class ParkhausBetreiber(
+    name: String, password: String) : ParkhausPersonal(name, password) {
+    constructor() : this("", "") {
+
+    }
+
 
     fun preisfaktorAendern(parkhaus: Parkhaus, newValue: Float) {
 
