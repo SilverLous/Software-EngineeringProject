@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.encodeToJsonElement
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -126,16 +127,16 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
-                /*response.contentType = "application/json;charset=UTF-8"
+                response.contentType = "application/json;charset=UTF-8"
                 // TODO Create DTO for chart generation
                 val cars = arrayListOf<String>("Suv","Kleinwagen")
                 val sumover = arrayListOf<Double>(50.0, 20.0)
-                val data = Data("Bar",cars,sumover)
+                val data = Data("bar",cars,sumover)
                 val dataList = arrayListOf<Data>(data)
-                val jsonData = Json.decodeFromString<Data>(parseJson(dataList).toString())
+                val jsonData = Json.encodeToJsonElement(parseJson(dataList))
 
-                //out.print(jsonData.toString())*/
-                response.contentType = ("text/plain")
+                out.print(jsonData)
+                /*response.contentType = ("text/plain")
                 val out2 = response.writer
                 out2.println("{\n" +
                         "  \"data\": [\n" +
@@ -154,7 +155,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                         "    }\n" +
                         "  ]\n" +
                         "}")
-                out2.flush() // ?
+                out2.flush() // ?*/
 
             }
 

@@ -18,6 +18,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <!-- production version, optimized for size and speed
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
@@ -70,7 +71,8 @@
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
-                         extra_buttons='["Average","Sum","Total Users","Chart"]'>
+                         extra_buttons='["Average","Sum","Total Users"]'
+                         extra_charts='["Chart"]'>
     </ccm-parkhaus-10-1-0>
 </div>
 <div class="box lightgreen">
