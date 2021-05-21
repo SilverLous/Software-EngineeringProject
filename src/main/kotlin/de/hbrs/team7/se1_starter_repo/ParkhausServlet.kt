@@ -136,27 +136,6 @@ public abstract class ParkhausServlet : HttpServlet() {
                 val jsonData = Json.encodeToJsonElement(parseJson(dataList))
 
                 out.print(jsonData)
-                /*response.contentType = ("text/plain")
-                val out2 = response.writer
-                out2.println("{\n" +
-                        "  \"data\": [\n" +
-                        "    {\n" +
-                        "      \"x\": [\n" +
-                        "        \"Car_1\",\n" +
-                        "        \"Car_2\",\n" +
-                        "        \"Car_3\"\n" +
-                        "      ],\n" +
-                        "      \"y\": [\n" +
-                        "        20,\n" +
-                        "        14,\n" +
-                        "        23\n" +
-                        "      ],\n" +
-                        "      \"type\": \"bar\"\n" +
-                        "    }\n" +
-                        "  ]\n" +
-                        "}")
-                out2.flush() // ?*/
-
             }
 
             "average" ->  out.println("${parkhausServiceSession.get().average(NAME())?.format(2)} € per car")
