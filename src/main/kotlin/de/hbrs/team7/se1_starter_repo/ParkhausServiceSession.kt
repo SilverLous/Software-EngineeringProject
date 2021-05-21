@@ -69,6 +69,7 @@ open class ParkhausServiceSession : Serializable, CarIF {
             map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
 
         }
+        parkhausServiceGlobal!!.leaveCar(ID)
         println("leave,$oldCar")
         println(sum(ID))
 

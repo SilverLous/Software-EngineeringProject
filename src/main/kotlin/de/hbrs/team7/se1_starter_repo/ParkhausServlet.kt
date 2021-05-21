@@ -1,7 +1,9 @@
 package de.hbrs.team7.se1_starter_repo
 
 
+import de.hbrs.team7.se1_starter_repo.dto.Data
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.dto.parseJson
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
@@ -13,7 +15,6 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.encodeToJsonElement
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
@@ -125,11 +126,35 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
-                response.contentType = "application/json;charset=UTF-8"
+                /*response.contentType = "application/json;charset=UTF-8"
                 // TODO Create DTO for chart generation
-                val jsonData = Json.encodeToJsonElement(MAX())
-                out.print(jsonData)
-                out.flush() // ?
+                val cars = arrayListOf<String>("Suv","Kleinwagen")
+                val sumover = arrayListOf<Double>(50.0, 20.0)
+                val data = Data("Bar",cars,sumover)
+                val dataList = arrayListOf<Data>(data)
+                val jsonData = Json.decodeFromString<Data>(parseJson(dataList).toString())
+
+                //out.print(jsonData.toString())*/
+                response.contentType = ("text/plain")
+                val out2 = response.writer
+                out2.println("{\n" +
+                        "  \"data\": [\n" +
+                        "    {\n" +
+                        "      \"x\": [\n" +
+                        "        \"Car_1\",\n" +
+                        "        \"Car_2\",\n" +
+                        "        \"Car_3\"\n" +
+                        "      ],\n" +
+                        "      \"y\": [\n" +
+                        "        20,\n" +
+                        "        14,\n" +
+                        "        23\n" +
+                        "      ],\n" +
+                        "      \"type\": \"bar\"\n" +
+                        "    }\n" +
+                        "  ]\n" +
+                        "}")
+                out2.flush() // ?
 
             }
 
@@ -186,7 +211,6 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
                 println(persistentAvg)*/
-                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 parkhausServiceSession.get().leaveCar(NAME(),params)
 
             }

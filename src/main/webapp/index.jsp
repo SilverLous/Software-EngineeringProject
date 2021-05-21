@@ -70,7 +70,7 @@
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
-                         extra_buttons='["Average","Sum","Total Users"]'>
+                         extra_buttons='["Average","Sum","Total Users","Chart"]'>
     </ccm-parkhaus-10-1-0>
 </div>
 <div class="box lightgreen">
