@@ -7,7 +7,6 @@ import de.hbrs.team7.se1_starter_repo.dto.parseJson
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
-import jakarta.persistence.Persistence
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
@@ -39,6 +38,8 @@ public abstract class ParkhausServlet : HttpServlet() {
     abstract fun config(): String? // configuration of a single parking level
 
     @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
+
+    @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
 
     @Inject private lateinit var parkhausServiceSession: Instance<ParkhausServiceSession>
 
@@ -74,22 +75,19 @@ public abstract class ParkhausServlet : HttpServlet() {
         // get is used for getting the one instance of the running service
         kotlin.assert(parkhausServiceSession.get().sessionCars == 0)*/
 
+        /*
         val ticket = Ticket()
         ticket.Ausstellungsdatum = Date.from(Instant.now())
-        ticket.Preisklasse = 3
+        ticket.Preisklasse = 2
 
-        val entityManagerFactory = Persistence.createEntityManagerFactory("hsqldb-eclipselink")
-        val entityManager = entityManagerFactory.createEntityManager()
-        entityManager.transaction.begin()
-        entityManager.persist(ticket)
-        entityManager.transaction.commit()
-        val cb = entityManager.criteriaBuilder
-        val query = cb.createQuery(Ticket::class.java)
-        query.select(query.from(Ticket::class.java))
-        val test = entityManager.createQuery(query).resultList
+        val created = this.DatabaseGlobal.persistTicket(ticket)
+
+        val test = this.DatabaseGlobal.queryAllEntities(Ticket::class.java)
+
+        print(created)
         print(test)
-        entityManager.close()
-        entityManagerFactory.close()
+
+         */
 
     }
 
@@ -164,6 +162,8 @@ public abstract class ParkhausServlet : HttpServlet() {
         when (event) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
+
+                parkhausServiceSession.get().addCar(NAME(), data)
                 parkhausServiceSession.get().addCar(NAME(),params)
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );

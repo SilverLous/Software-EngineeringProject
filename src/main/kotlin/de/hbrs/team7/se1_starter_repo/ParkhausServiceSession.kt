@@ -1,13 +1,18 @@
 package de.hbrs.team7.se1_starter_repo
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.entities.Auto
+import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import jakarta.servlet.ServletContext
+import java.time.Instant
 import java.util.*
 import kotlin.collections.HashMap
+import kotlin.math.atan
 
 
 /*
@@ -22,6 +27,9 @@ open class ParkhausServiceSession : Serializable, CarIF {
     // must be this way to ensure it is loaded and the injector has time to do its job
     @Inject
     open var parkhausServiceGlobal: ParkhausServiceGlobal? = null
+
+    @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
+
 
     open var map: HashMap<String, Double> = HashMap<String, Double>()
         protected set
@@ -90,6 +98,24 @@ open class ParkhausServiceSession : Serializable, CarIF {
         // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar(ID, params)
     }
+
+    open fun addCar(ID: String, params: ParkhausServletPostDto) {
+        val auto = Auto()
+        auto.Kennzeichen = params.license
+
+        val ticket = Ticket()
+        ticket.Ausstellungsdatum = Date.from(Instant.now())
+        ticket.Preisklasse = 2
+        ticket.Auto = auto
+
+        val saved = this.DatabaseGlobal.persistEntity(ticket)
+
+        print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
+        val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
+        print(test.first().Ausstellungsdatum)
+
+    }
+
     open fun currentCars(NAME: String): ArrayList<CarIF>? {
         return parkhausServiceGlobal!!.carDict[NAME]
     }

@@ -19,6 +19,10 @@ open class Ticket {
     @Column(nullable = true)
     open var Kennzeichen: String? = null
 
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "Auto_Autonummer", referencedColumnName = "Autonummer")
+    open var Auto: Auto? = null
+
     @Column(nullable = false)
     open var Ausstellungsdatum: Date = Date.from(Instant.now())
 
