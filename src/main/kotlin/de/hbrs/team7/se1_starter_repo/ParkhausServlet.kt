@@ -3,8 +3,7 @@ package de.hbrs.team7.se1_starter_repo
 
 import de.hbrs.team7.se1_starter_repo.dto.Data
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
-import de.hbrs.team7.se1_starter_repo.dto.parseJson
-import de.hbrs.team7.se1_starter_repo.entities.Ticket
+import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
 import jakarta.servlet.ServletContext
@@ -19,7 +18,6 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.time.Instant
 import java.util.*
 
 
@@ -128,10 +126,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 response.contentType = "application/json;charset=UTF-8"
                 // TODO Create DTO for chart generation
                 val cars = arrayListOf<String>("Suv","Kleinwagen")
-                val sumover = arrayListOf<Double>(50.0, 20.0)
-                val data = Data("bar",cars,sumover)
+                val sumOver = arrayListOf<Double>(50.0, 20.0)
+                val data = Data("bar",cars,sumOver)
                 val dataList = arrayListOf<Data>(data)
-                val jsonData = Json.encodeToJsonElement(parseJson(dataList))
+                val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
 
                 out.print(jsonData)
             }

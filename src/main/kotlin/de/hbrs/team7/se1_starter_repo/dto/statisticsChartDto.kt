@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class parseJson(
+data class statisticsChartDto(
     @SerialName("data")
     val `data`: List<Data>
 )
