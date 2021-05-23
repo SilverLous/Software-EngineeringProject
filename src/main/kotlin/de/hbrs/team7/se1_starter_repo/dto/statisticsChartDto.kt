@@ -5,10 +5,10 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class statisticsChartDto(
     @SerialName("data")
-    val `data`: List<Data>
+    val `data`: List<carData>
 )
 @Serializable
-data class Data(
+data class carData(
     @SerialName("type")
     val type: String,
     @SerialName("x")

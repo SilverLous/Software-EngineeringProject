@@ -1,7 +1,7 @@
 package de.hbrs.team7.se1_starter_repo
 
 
-import de.hbrs.team7.se1_starter_repo.dto.Data
+import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import jakarta.enterprise.inject.Instance
@@ -125,10 +125,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
                 // TODO Create DTO for chart generation
-                val cars = arrayListOf<String>("Suv","Kleinwagen")
-                val sumOver = arrayListOf<Double>(50.0, 20.0)
-                val data = Data("bar",cars,sumOver)
-                val dataList = arrayListOf<Data>(data)
+                val cars = arrayListOf("Suv","Kleinwagen")
+                val sumOver = arrayListOf(50.0, 20.0)
+                val tempData = carData("bar",cars,sumOver)
+                val dataList = arrayListOf(tempData)
                 val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
 
                 out.print(jsonData)
