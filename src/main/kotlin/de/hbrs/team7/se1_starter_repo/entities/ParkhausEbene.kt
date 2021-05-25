@@ -16,6 +16,8 @@ open class ParkhausEbene {
     @JoinColumn(name = "Parkhaus_id", nullable = false)
     private val parkhaus: Parkhaus? = null
 
+    @ManyToMany
+    var tickets: ArrayList<Ticket> = ArrayList()
 
     private var freiePlaetze: Int = 0
 

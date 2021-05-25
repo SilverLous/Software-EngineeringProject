@@ -13,7 +13,7 @@ open class Parkhaus {
     var name: String? = null
 
     @OneToMany(mappedBy="Parkhaus")
-    var ebenen: ArrayList<ParkhausEbene> = ArrayList<ParkhausEbene>()
+    var ebenen: ArrayList<ParkhausEbene> = ArrayList()
 
     fun addParkhausEbene(ebene: ParkhausEbene) {
         ebenen.add(ebene)
