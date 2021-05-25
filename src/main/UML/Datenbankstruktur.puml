@@ -44,7 +44,6 @@ class Auto {
 
 class Parkhauspersonal {
   +Personalnummer: Integer
-  +DType: String
   +Accesslevel: Integer
   +LoggedIn: Boolean
   +Name: String
