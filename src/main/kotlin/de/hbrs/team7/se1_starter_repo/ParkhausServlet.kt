@@ -4,6 +4,7 @@ package de.hbrs.team7.se1_starter_repo
 import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
+import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
 import jakarta.servlet.ServletContext
@@ -35,6 +36,10 @@ public abstract class ParkhausServlet : HttpServlet() {
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
     abstract fun config(): String? // configuration of a single parking level
 
+
+    private lateinit var parkhausEbene: ParkhausEbene
+
+
     @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
 
     @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
@@ -63,6 +68,9 @@ public abstract class ParkhausServlet : HttpServlet() {
         setInitContext("sum" + NAME(), 0f)
 
         println(context.getAttribute("carsHaveLeft" + NAME()))
+
+        this.parkhausEbene = this.parkhausServiceSession.get().initEbene(NAME())
+        print(this.parkhausEbene)
         /*
         kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
         kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)

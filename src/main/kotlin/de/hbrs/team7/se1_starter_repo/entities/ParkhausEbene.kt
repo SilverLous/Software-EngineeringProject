@@ -3,7 +3,16 @@ package de.hbrs.team7.se1_starter_repo.entities
 import jakarta.persistence.*
 
 @Entity
-open class ParkhausEbene {
+open class ParkhausEbene (
+
+    @Column(nullable = false)
+    var name: String? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "Parkhaus_id", nullable = false)
+    open val parkhaus: Parkhaus? = null
+
+        ){
 
     @Id
     @GeneratedValue
@@ -12,9 +21,7 @@ open class ParkhausEbene {
     @Column(nullable = false)
     private var gesamtPlaetze: Int = 0
 
-    @ManyToOne
-    @JoinColumn(name = "Parkhaus_id", nullable = false)
-    private val parkhaus: Parkhaus? = null
+
 
     @ManyToMany
     var tickets: ArrayList<Ticket> = ArrayList()

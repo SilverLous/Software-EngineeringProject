@@ -2,6 +2,8 @@ package de.hbrs.team7.se1_starter_repo
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
+import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
+import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
@@ -23,6 +25,8 @@ BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
 @Named
 @SessionScoped
 open class ParkhausServiceSession : Serializable {
+
+    private lateinit var parkhaus: Parkhaus
 
     // must be this way to ensure it is loaded and the injector has time to do its job
     @Inject
@@ -46,6 +50,23 @@ open class ParkhausServiceSession : Serializable {
     open var currentCars: Int = 0
         protected set
 */
+
+    // this is the constructor for own functionality (called per new browser connection)
+    @PostConstruct
+    open fun sessionInit() {
+        city = cities.random()
+
+        val ph = Parkhaus(city)
+        parkhaus = DatabaseGlobal.persistEntity(ph)
+
+        print("Hello from $city (id: ${parkhaus.id}) Service new User ")
+        map[city + "sum"] = 0.0
+        map[city + "sessionCars"] = 0.0
+        map[city + "currentCars"] = 0.0
+
+    }
+
+
     open fun totalCarCount(ID: String): Int {
         return map[ID + "sessionCars"]?.toInt() ?: 0
     }
@@ -175,14 +196,14 @@ open class ParkhausServiceSession : Serializable {
         return parkhausServiceGlobal!!.currentCarDict[NAME]
     }
 
-    // this is the constructor for own functionality (called per new browser connection)
-    @PostConstruct
-    open fun sessionInit() {
-        city = cities.random()
-        print("Hello from $city Service new User ")
-        map[city + "sum"] = 0.0
-        map[city + "sessionCars"] = 0.0
-        map[city + "currentCars"] = 0.0
+
+    open fun initEbene(name: String): ParkhausEbene {
+        val pe = ParkhausEbene(name, this.parkhaus)
+        val pePersist = DatabaseGlobal.persistEntity(pe)
+
+        parkhaus = DatabaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
+
+        return DatabaseGlobal.persistEntity(pe)
 
     }
 
