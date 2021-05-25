@@ -15,12 +15,17 @@ class Car(var params: Array<String>) : CarIF {
         get() = 0
 
 
-    override val price: Int
-        get() = 0
+    override var price: Int = 0
+
+    override var type: String = ""
 
 
     override fun toString(): String {
         return params.contentToString()
+    }
+
+    override fun paramsToArray(): Array<String>? {
+        return params
     }
 
 }

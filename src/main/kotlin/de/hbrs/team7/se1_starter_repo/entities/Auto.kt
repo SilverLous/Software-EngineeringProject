@@ -10,6 +10,9 @@ open class Auto(
 
 ) : CarIF {
 
+    override var price: Int = 0
+    override var type: String = ""
+
     @Id
     @GeneratedValue
     open val Autonummer: Long = 0
@@ -23,5 +26,7 @@ open class Auto(
         // return params.contentToString()
         return "";
     }
-
+    override fun paramsToArray(): Array<String>? {
+        return null
+    }
 }
