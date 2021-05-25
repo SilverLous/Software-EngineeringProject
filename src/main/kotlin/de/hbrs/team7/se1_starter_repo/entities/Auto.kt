@@ -15,9 +15,6 @@ open class Auto(
     open val Autonummer: Long = 0
 
     @Column(nullable = true)
-    override var price: Int = 0
-
-    @Column(nullable = true)
     override var type: String = ""
 
     @OneToOne(mappedBy = "Auto")

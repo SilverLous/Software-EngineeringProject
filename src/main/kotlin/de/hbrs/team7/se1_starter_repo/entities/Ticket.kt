@@ -17,9 +17,6 @@ open class Ticket {
     @Id @GeneratedValue
     open val Ticketnummer: Long = 0
 
-    @Column(nullable = true)
-    open var Kennzeichen: String? = null
-
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "Auto_Autonummer", referencedColumnName = "Autonummer")
     open var Auto: Auto? = null
@@ -36,6 +33,7 @@ open class Ticket {
     @Column(nullable = true)
     open var Preisklasse: Int = 0
 
-
+    @Column(nullable = true)
+    open var price: Int = 0
 
 }
