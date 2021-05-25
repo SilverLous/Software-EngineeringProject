@@ -1,8 +1,22 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-class ParkhausEbene(private val nummer: Int) {
+import jakarta.persistence.*
 
+@Entity
+open class ParkhausEbene {
+
+    @Id
+    @GeneratedValue
+    val id: Long = 0
+
+    @Column(nullable = false)
     private var gesamtPlaetze: Int = 0
+
+    @ManyToOne
+    @JoinColumn(name = "Parkhaus_id", nullable = false)
+    private val parkhaus: Parkhaus? = null
+
+
     private var freiePlaetze: Int = 0
 
     fun getGesamtPlaetze(): Int {

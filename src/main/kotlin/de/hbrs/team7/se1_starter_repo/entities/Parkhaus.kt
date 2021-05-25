@@ -1,8 +1,19 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-class Parkhaus {
+import jakarta.persistence.*
 
-    val ebenen = mutableListOf<ParkhausEbene>()
+@Entity
+open class Parkhaus {
+
+    @Id
+    @GeneratedValue
+    val id: Long = 0
+
+    @Column(nullable = false)
+    var name: String? = null
+
+    @OneToMany(mappedBy="Parkhaus")
+    var ebenen: ArrayList<ParkhausEbene> = ArrayList<ParkhausEbene>()
 
     fun addParkhausEbene(ebene: ParkhausEbene) {
         ebenen.add(ebene)

@@ -10,6 +10,8 @@
         <class>de.hbrs.team7.se1_starter_repo.entities.Ticket</class>
         <class>de.hbrs.team7.se1_starter_repo.entities.Auto</class>
         <class>de.hbrs.team7.se1_starter_repo.entities.ParkhausPersonal</class>
+        <class>de.hbrs.team7.se1_starter_repo.entities.Parkhaus</class>
+        <class>de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene</class>
 
         <properties>
             <property name="jakarta.persistence.jdbc.driver" value="org.hsqldb.jdbcDriver"/>

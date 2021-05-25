@@ -10,17 +10,18 @@ open class Auto(
 
 ) : CarIF {
 
-    override var price: Int = 0
-    override var type: String = ""
-
     @Id
     @GeneratedValue
     open val Autonummer: Long = 0
 
+    @Column(nullable = true)
+    override var price: Int = 0
+
+    @Column(nullable = true)
+    override var type: String = ""
+
     @OneToOne(mappedBy = "Auto")
     private val Ticket: Ticket? = null
-
-    
 
     override fun toString(): String {
         // return params.contentToString()
