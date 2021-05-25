@@ -107,7 +107,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
 
-            "sum" -> out.println("${parkhausServiceSession.get().sum(NAME()).format(2)}€")
+            "sum" -> out.println("${parkhausServiceSession.get().sumOverAllCars(NAME()).format(2)}€")
 
             "cars" -> {
                 // TODO: Send list of cars stored on the server to the client.
@@ -119,18 +119,16 @@ public abstract class ParkhausServlet : HttpServlet() {
 
             }
             "chart" -> {
-                // TODO send chart infos as JSON object to client
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
-                // TODO Create DTO for chart generation
-                val cars = arrayListOf("Suv","Kleinwagen")
-                val sumOver = arrayListOf(50.0, 20.0)
-                val tempData = carData("bar",cars,sumOver)
+                val carTypeSum = parkhausServiceSession.get().sumOverCarTypes(NAME())
+                val cars = carTypeSum.keys.toList()
+                val sumOver = ArrayList<Double>(carTypeSum.values)
+                val tempData = carData("bar", cars as List<String>,sumOver)
                 val dataList = arrayListOf(tempData)
                 val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
-
                 out.print(jsonData)
             }
 
@@ -161,8 +159,8 @@ public abstract class ParkhausServlet : HttpServlet() {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
 
-                parkhausServiceSession.get().addCar(NAME(), data)
-                parkhausServiceSession.get().addCar(NAME(),params)
+                parkhausServiceSession.get().addCarLegacy(NAME(), data)
+                //parkhausServiceSession.get().addCar(NAME(),params)
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );
             }
@@ -189,7 +187,9 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println(context.getAttribute("sum" + NAME()))
                 println(persistentSum)
                 println(persistentAvg)*/
-                parkhausServiceSession.get().leaveCar(NAME(),params)
+                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
+                parkhausServiceSession.get().leaveCar(NAME(), data)
+                //parkhausServiceSession.get().leaveCar(NAME(),params)
 
             }
             "invalid", "occupied" -> {
@@ -211,11 +211,11 @@ public abstract class ParkhausServlet : HttpServlet() {
      * TODO: replace this by your own function
      * @return the number of the free parking lot to which the next incoming car will be directed
      */
-    internal fun locator(car: CarIF): Int {
+    /*internal fun locator(car: CarIF): Int {
         // numbers of parking lots start at 1, not zero
         print(car)
         return 1 + ((cars()?.size ?: 1) - 1) % MAX()
-    }
+    }*/
 
     /**
      * @return the list of all cars stored in the servlet context so far
@@ -237,13 +237,13 @@ public abstract class ParkhausServlet : HttpServlet() {
     /**
      * @return the list of all cars stored in the servlet context so far
      */
-    private fun cars(): ArrayList<CarIF>? {/*
+    /*private fun cars(): ArrayList<CarIF>? {/*
         if (context.getAttribute("cars" + NAME()) == null) {
             context.setAttribute("cars" + NAME(), java.util.ArrayList<Car>())
         }
         return context.getAttribute("cars" + NAME()) as ArrayList<CarIF>*/
         return parkhausServiceSession.get().currentCars(NAME())
-    }
+    }*/
 
 
     /**

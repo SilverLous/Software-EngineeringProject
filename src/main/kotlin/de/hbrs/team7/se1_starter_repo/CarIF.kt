@@ -13,7 +13,10 @@ interface CarIF {
     val duration: Int
         get() = 0
 
-    val price: Int
-        get() = 0
+    var price: Int
 
+    var type: String
+
+
+    fun paramsToArray(): Array<String>?
 }

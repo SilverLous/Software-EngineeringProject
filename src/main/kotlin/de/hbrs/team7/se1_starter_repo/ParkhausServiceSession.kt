@@ -22,7 +22,7 @@ BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
  */
 @Named
 @SessionScoped
-open class ParkhausServiceSession : Serializable, CarIF {
+open class ParkhausServiceSession : Serializable {
 
     // must be this way to ensure it is loaded and the injector has time to do its job
     @Inject
@@ -62,7 +62,8 @@ open class ParkhausServiceSession : Serializable, CarIF {
     }
 
     open fun leaveCar(ID: String, params: Array<String>){
-        val oldCar = currentCars(ID)?.get(0)
+        val placeNumber = params[1].substring(params[2].indexOf(":")+1).toInt()
+        val oldCar = currentCars(ID)?.get(placeNumber)
         if (params.size > 4) {
             val priceString = params[4]
             if ("_" != priceString) {
@@ -70,24 +71,44 @@ open class ParkhausServiceSession : Serializable, CarIF {
                 var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
                 price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
                 // store new sum in ServletContext
-                sumadd(ID , price.toDouble())
+                sumAdd(ID , price.toDouble())
+                oldCar?.price = price.toInt()
                 println("Der aktuelle Name ist: " + ID)
             }
+            val allCars = parkhausServiceGlobal?.carDict?.get(ID)
+            println(allCars)
             // TODO check if this is the right bracket
             map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
 
         }
-        parkhausServiceGlobal!!.leaveCar(ID)
+        parkhausServiceGlobal!!.leaveCar(ID,params)
         println("leave,$oldCar")
-        println(sum(ID))
+        println(sumOverAllCars(ID))
 
     }
 
-    open fun sumadd(ID: String, toadd: Double) {
-        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toadd
+    open fun sumAdd(ID: String, toAdd: Double) {
+        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toAdd
     }
-    open fun sum(ID: String): Double{
-        return map[ID + "sum"]?: 0.0
+    open fun sumOverAllCars(ID: String): Double{
+        return map[ID + "sessionCars"]?: 0.0
+    }
+
+    open fun sumOverCarTypes(ID: String): HashMap<String?, Double?>{
+        val allCars = parkhausServiceGlobal?.carDict?.get(ID)
+        var priceOfCarTypes = HashMap<String?, Double?>()
+        if (allCars != null) {
+            for (car in allCars){
+                priceOfCarTypes.getOrPut(car.type){0.0}
+                priceOfCarTypes[car.type] = priceOfCarTypes[car.type]?.plus(car.price)
+                print(car.price)
+            }
+
+
+        }
+        print(priceOfCarTypes)
+        return priceOfCarTypes
+
     }
 
     open fun addCar(ID: String, params: Array<String>) {
@@ -116,8 +137,42 @@ open class ParkhausServiceSession : Serializable, CarIF {
 
     }
 
-    open fun currentCars(NAME: String): ArrayList<CarIF>? {
-        return parkhausServiceGlobal!!.carDict[NAME]
+    open fun addCarLegacy(ID: String, params: ParkhausServletPostDto) {
+
+        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
+        map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
+
+        println("HELLO FROM KOOOOOTLIN")
+        // !!: darf nicht null sein
+        parkhausServiceGlobal!!.addCar(ID, params)
+
+    }
+
+    open fun leaveCar(ID: String, params: ParkhausServletPostDto) {
+        val placeNumber = params.nr
+        val oldCar = currentCars(ID)?.get(placeNumber)
+        var price = params.duration.toDouble()
+
+        price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
+        // store new sum in ServletContext
+        sumAdd(ID , price.toDouble())
+        oldCar?.price = price.toInt()
+        println("Der aktuelle Name ist: " + ID)
+
+        val allCars = parkhausServiceGlobal?.carDict?.get(ID)
+        //println(allCars)
+        // TODO check if this is the right bracket
+        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
+
+
+        parkhausServiceGlobal!!.leaveCar(ID, params)
+        println("leave,$oldCar")
+        println(sumOverAllCars(ID))
+
+    }
+
+    open fun currentCars(NAME: String): HashMap<Int, CarIF>? {
+        return parkhausServiceGlobal!!.currentCarDict[NAME]
     }
 
     // this is the constructor for own functionality (called per new browser connection)
