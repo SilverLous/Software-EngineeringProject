@@ -1,0 +1,40 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class Parkhäuser {
+  +ID: Integer
+  +ParkhausName: String
+}
+
+class Ticket {
+  +Nummer: String
+  +Preisklasse: Integer
+}
+
+class Dauerticket{
+  +Ablaufdatum: DateTime
+  +Kundennummer: Integer
+}
+
+class Einzelticket {
+  +Ausstellungsdatum: DateTime
+  +Ausfahrdatum: DateTime
+}
+
+class verwendeteTickets {
+  +Ticketnummer: Ticket.Nummer
+  +Ticketart: Ticketarten.ID //nur nötig, wenn wir kein isInstance() benutzen können zur Unterscheidung von Einzel- und Dauertickets
+  +Kennnzeichen: String
+  +Parkhaus: Parkhaus.ID
+  +ParkhausEbene: Integer
+}
+
+class Ticketarten {
+  //an Kommentar von verwendeteTickets.Ticketart gebunden
+  +ID: Integer
+  +Ticketart: String
+}
+
+Dauerticket --> Ticket: extends
+Einzelticket --> Ticket: extends
+@enduml
