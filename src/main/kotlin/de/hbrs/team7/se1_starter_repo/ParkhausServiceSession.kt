@@ -22,7 +22,7 @@ import kotlin.math.atan
 BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
 
  */
-@Named
+
 @SessionScoped
 open class ParkhausServiceSession : Serializable {
 

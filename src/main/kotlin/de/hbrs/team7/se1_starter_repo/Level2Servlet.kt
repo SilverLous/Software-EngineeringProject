@@ -6,6 +6,10 @@ import jakarta.servlet.annotation.WebServlet
 @WebServlet(name = "level2Servlet", value = ["/level2-servlet"])
 class Level2Servlet : ParkhausServlet() {
 
+    init {
+        println("Hello from Level2 Kt")
+    }
+
     override fun NAME(): String {
         return "Level2 Kt"
     }
