@@ -107,7 +107,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
 
-            "sum" -> out.println("${parkhausServiceSession.get().sum(NAME()).format(2)}€")
+            "sum" -> out.println("${parkhausServiceSession.get().sumOverAllCars(NAME()).format(2)}€")
 
             "cars" -> {
                 // TODO: Send list of cars stored on the server to the client.

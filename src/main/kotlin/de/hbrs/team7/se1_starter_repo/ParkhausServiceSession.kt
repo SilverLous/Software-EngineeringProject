@@ -70,7 +70,7 @@ open class ParkhausServiceSession : Serializable, CarIF {
                 var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
                 price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
                 // store new sum in ServletContext
-                sumadd(ID , price.toDouble())
+                sumAdd(ID , price.toDouble())
                 println("Der aktuelle Name ist: " + ID)
             }
             // TODO check if this is the right bracket
@@ -79,14 +79,14 @@ open class ParkhausServiceSession : Serializable, CarIF {
         }
         parkhausServiceGlobal!!.leaveCar(ID)
         println("leave,$oldCar")
-        println(sum(ID))
+        println(sumOverAllCars(ID))
 
     }
 
-    open fun sumadd(ID: String, toadd: Double) {
-        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toadd
+    open fun sumAdd(ID: String, toAdd: Double) {
+        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toAdd
     }
-    open fun sum(ID: String): Double{
+    open fun sumOverAllCars(ID: String): Double{
         return map[ID + "sum"]?: 0.0
     }
 
