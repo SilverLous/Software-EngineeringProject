@@ -24,7 +24,7 @@ class Einzelticket {
 class verwendeteTickets {
   +Ticketnummer: Ticket.Nummer
   +Ticketart: Ticketarten.ID //nur nötig, wenn wir kein isInstance() benutzen können zur Unterscheidung von Einzel- und Dauertickets
-  +Kennnzeichen: String
+  +Kennnzeichen: Auto.Autonummer
   +Parkhaus: Parkhaus.ID
   +ParkhausEbene: Integer
 }
@@ -33,6 +33,22 @@ class Ticketarten {
   //an Kommentar von verwendeteTickets.Ticketart gebunden
   +ID: Integer
   +Ticketart: String
+}
+
+class Auto {
+  +Autonummer: Integer
+  +Kennzeichen: String
+  +Farbe: String
+  +Typ: String
+}
+
+class Parkhauspersonal {
+  +Personalnummer: Integer
+  +DType: String
+  +Accesslevel: Integer
+  +LoggedIn: Boolean
+  +Name: String
+  +Password: String
 }
 
 Dauerticket --> Ticket: extends
