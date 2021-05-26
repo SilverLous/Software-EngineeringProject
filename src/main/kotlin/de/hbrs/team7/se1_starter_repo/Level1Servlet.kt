@@ -1,12 +1,16 @@
 package de.hbrs.team7.se1_starter_repo
 
+import jakarta.servlet.ServletConfig
+import jakarta.servlet.ServletException
 import jakarta.servlet.annotation.WebServlet
 
 @WebServlet(name = "level1Servlet", value = ["/level1-servlet"])
 public class Level1Servlet : ParkhausServlet()  {
 
-    init {
-        println("Hello from Level1 Kt")
+    @Throws(ServletException::class)
+    override fun init(config: ServletConfig) {
+        super.init(config)
+        println("Level 1 Servlet is Initialized")
     }
 
     override fun NAME(): String {

@@ -1,12 +1,12 @@
 package de.hbrs.team7.se1_starter_repo
 
 
-import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
-import jakarta.enterprise.inject.Instance
 import jakarta.inject.Inject
+import jakarta.servlet.ServletConfig
 import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
@@ -19,7 +19,7 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.util.*
+import java.util.ArrayList
 
 
 /**
@@ -40,11 +40,12 @@ public abstract class ParkhausServlet : HttpServlet() {
     private lateinit var parkhausEbene: ParkhausEbene
 
 
-    @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
+    @Inject
+    private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
 
     @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
 
-    @Inject private lateinit var parkhausServiceSession: Instance<ParkhausServiceSession>
+    @Inject private lateinit var parkhausServiceSession: ParkhausServiceSession
 
     /*Kontextvariablen:
     persistentSum: Summe der Parkgebühren aller Autos
@@ -59,9 +60,12 @@ public abstract class ParkhausServlet : HttpServlet() {
     }
 
 
-    override fun init() {
-        super.init()
-        println("Hello from the other side")
+    @Throws(ServletException::class)
+    override fun init(config: ServletConfig) {
+        super.init(config)
+
+        println("Hello Parkhaus ${NAME()} Base")
+
 
         setInitContext("carsHaveLeft" + NAME(), 0)
         setInitContext("totalCarCount" + NAME(), 0)
@@ -69,8 +73,10 @@ public abstract class ParkhausServlet : HttpServlet() {
 
         println(context.getAttribute("carsHaveLeft" + NAME()))
 
-        this.parkhausEbene = this.parkhausServiceSession.get().initEbene(NAME())
+        this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
         print(this.parkhausEbene)
+
+
         /*
         kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
         kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
@@ -97,6 +103,11 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     }
 
+    public override fun destroy() {
+        println("Destroyed Parkhaus ${NAME()} Base")
+        super.destroy()
+    }
+
     /**
      * HTTP GET
      */
@@ -115,7 +126,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Max, open_from, open_to, delay, simulation_speed
                 out.println(config())
 
-            "sum" -> out.println("${parkhausServiceSession.get().sumOverAllCars(NAME()).format(2)}€")
+            "sum" -> out.println("${parkhausServiceSession.sumOverAllCars(NAME()).format(2)}€")
 
             "cars" -> {
                 // TODO: Send list of cars stored on the server to the client.
@@ -131,7 +142,7 @@ public abstract class ParkhausServlet : HttpServlet() {
 
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
-                val carTypeSum = parkhausServiceSession.get().sumOverCarTypes(NAME())
+                val carTypeSum = parkhausServiceSession.sumOverCarTypes(NAME())
                 val cars = carTypeSum.keys.toList()
                 val sumOver = ArrayList<Double>(carTypeSum.values)
                 val tempData = carData("bar", cars as List<String>,sumOver)
@@ -140,10 +151,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.print(jsonData)
             }
 
-            "average" ->  out.println("${parkhausServiceSession.get().average(NAME())?.format(2)} € per car")
+            "average" ->  out.println("${parkhausServiceSession.average(NAME())?.format(2)} € per car")
 
 
-            "total users" -> out.println(parkhausServiceSession.get().totalUsers(NAME()).toString() + " Users")
+            "total users" -> out.println(parkhausServiceSession.totalUsers(NAME()).toString() + " Users")
 
             else -> out.println("Invalid Command: " + request.queryString)
         }
@@ -167,7 +178,7 @@ public abstract class ParkhausServlet : HttpServlet() {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
 
-                parkhausServiceSession.get().addCarLegacy(NAME(), data)
+                parkhausServiceSession.addCarLegacy(NAME(), data)
                 //parkhausServiceSession.get().addCar(NAME(),params)
                 // re-direct car to another parking lot
                 // out.println( locator( newCar ) );
@@ -196,7 +207,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 println(persistentSum)
                 println(persistentAvg)*/
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                parkhausServiceSession.get().leaveCar(NAME(), data)
+                parkhausServiceSession.leaveCar(NAME(), data)
                 //parkhausServiceSession.get().leaveCar(NAME(),params)
 
             }
@@ -306,9 +317,6 @@ public abstract class ParkhausServlet : HttpServlet() {
         return stringBuilder.toString()
     }
 
-    override fun destroy() {
-        println("Servlet destroyed.")
-    }
 }
 
 
