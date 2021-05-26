@@ -1,3 +1,5 @@
+package de.hbrs.team7.se1_starter_repo;
+
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -5,6 +7,7 @@ import jakarta.enterprise.context.RequestScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import org.jboss.weld.context.bound.BoundSessionContext;
 import org.jboss.weld.junit5.WeldInitiator;
 import org.jboss.weld.junit5.WeldSetup;
 import org.jboss.weld.junit5.auto.ActivateScopes;
@@ -25,7 +28,9 @@ public class ParkhausServiceSessionJavaTest {
 /*    @WeldSetup
     public WeldInitiator weld = WeldInitiator.from(ParkhausServiceSession.class, ParkhausServiceGlobal.class)
             .activate(SessionScoped.class, ApplicationScoped.class ).build();*/
-/*
+
+    @Inject
+    BoundSessionContext sessionContext;
 
     @Inject
     ParkhausServiceSession parkhausServiceSession;
@@ -37,12 +42,13 @@ public class ParkhausServiceSessionJavaTest {
 
     @BeforeEach
     public void setup(){
-        parkhausServiceSession = new ParkhausServiceSession();
+        sessionContext.invalidate();
+        // parkhausServiceSession = new ParkhausServiceSession();
     }
 
     @Test
     public void sessionInitTest() {
-        assert !parkhausServiceSession.getCity().isEmpty() : "error";
+        assert !parkhausServiceSession.getCity().isEmpty();
     }
 
     @Test
@@ -74,5 +80,5 @@ public class ParkhausServiceSessionJavaTest {
         assert (parkhausServiceSession.currentCars(etage).size() - carsSession1) == 1;
 
     }
-*/
+
 }
