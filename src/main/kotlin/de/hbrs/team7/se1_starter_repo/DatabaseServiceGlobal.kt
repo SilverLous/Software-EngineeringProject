@@ -58,6 +58,18 @@ open class DatabaseServiceGlobal {
         return em.find(classType, id)
     }
 
+    open fun <T> deleteByID(id: Long, classType: Class<T>) {
+        val toDelete = findByID(id, classType)
+        et.begin()
+        em.remove(toDelete)
+        et.commit()
+    }
+
+    open fun <T> deleteByObject(toDelete: T, classType: Class<T>) {
+        et.begin()
+        em.remove(toDelete)
+        et.commit()
+    }
 
 
     // this is the constructor for own functionality (single called)
