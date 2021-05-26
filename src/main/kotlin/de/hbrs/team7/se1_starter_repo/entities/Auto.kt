@@ -8,14 +8,14 @@ open class Auto(
     @Column(nullable = false)
     open var Kennzeichen: String? = null
 
-) : CarIF {
+) {
 
     @Id
     @GeneratedValue
     open val Autonummer: Long = 0
 
     @Column(nullable = true)
-    override var type: String = ""
+    var type: String = ""
 
     @OneToOne(mappedBy = "Auto")
     private val Ticket: Ticket? = null
@@ -24,7 +24,7 @@ open class Auto(
         // return params.contentToString()
         return "";
     }
-    override fun paramsToArray(): Array<String>? {
+    fun paramsToArray(): Array<String>? {
         return null
     }
 }
