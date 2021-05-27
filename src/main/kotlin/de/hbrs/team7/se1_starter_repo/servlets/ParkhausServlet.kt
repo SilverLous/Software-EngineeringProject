@@ -52,24 +52,6 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     @Inject private lateinit var context: ServletContext
 
-    /*Kontextvariablen:
-    persistentSum: Summe der Parkgebühren aller Autos
-    totalCars: Counter, wie viele Autos jemals im Parkhaus waren
-    carsHaveLeft: Autos, die das Parkhaus verlassen haben
-    */
-
-    private fun <T> setInitContext(value: String, init: T) {
-        if (context.getAttribute(value) == null) {
-            context.setAttribute(value, init)
-        }
-    }
-
-/*
-    open fun onMemberListChanged(@Observes @Initialized(SessionScoped::class) parkhausServiceSession: ParkhausServiceSession) {
-        println("Whatever this does")
-    }
-*/
-
 
     @Throws(ServletException::class)
     override fun init(config: ServletConfig) {
@@ -78,39 +60,11 @@ public abstract class ParkhausServlet : HttpServlet() {
         println("Hello Parkhaus ${NAME()} Base")
 
 
-        setInitContext("carsHaveLeft" + NAME(), 0)
-        setInitContext("totalCarCount" + NAME(), 0)
-        setInitContext("sum" + NAME(), 0f)
-
         println(context.getAttribute("carsHaveLeft" + NAME()))
 
 
         this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
         this.parkhausServiceGlobal.levelSet.add(NAME())
-
-        /*
-        kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
-        kotlin.assert(context.getAttribute("totalCarCount" + NAME()) == 0)
-        kotlin.assert(context.getAttribute("sum" + NAME()) == 0f)
-
-        kotlin.assert(parkhausServiceGlobal.globalCars == 0)
-
-        // get is used for getting the one instance of the running service
-        kotlin.assert(parkhausServiceSession.get().sessionCars == 0)*/
-
-        /*
-        val ticket = Ticket()
-        ticket.Ausstellungsdatum = Date.from(Instant.now())
-        ticket.Preisklasse = 2
-
-        val created = this.DatabaseGlobal.persistTicket(ticket)
-
-        val test = this.DatabaseGlobal.queryAllEntities(Ticket::class.java)
-
-        print(created)
-        print(test)
-
-         */
 
     }
 
@@ -145,27 +99,27 @@ public abstract class ParkhausServlet : HttpServlet() {
                 // Values of a single car are separated by slash.
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
-                // out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2"); // TODO replace by real list of cars
+                // out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2");
+                // TODO replace by real list of cars
 
             }
             "chart" -> {
+                // TODO: fill with data
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
-                val carTypeSum = parkhausServiceSession.sumOverCarTypes(NAME())
-                val cars = carTypeSum.keys.toList()
-                val sumOver = ArrayList<Double>(carTypeSum.values)
-                val tempData = carData("bar", cars as List<String>,sumOver)
+                val sumOver = ArrayList<Double>()
+                val tempData = carData("bar", sumOver as List<String>,sumOver)
                 val dataList = arrayListOf(tempData)
                 val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
                 out.print(jsonData)
             }
+            //TODO: fix when corresponding functions are implemented again
+            /*"average" ->  out.println("${parkhausServiceSession.average(NAME())?.format(2)} € per car")
 
-            "average" ->  out.println("${parkhausServiceSession.average(NAME())?.format(2)} € per car")
 
-
-            "total users" -> out.println(parkhausServiceSession.totalUsers(NAME()).toString() + " Users")
+            "total users" -> out.println(parkhausServiceSession.totalUsers(NAME()).toString() + " Users")*/
 
             else -> out.println("Invalid Command: " + request.queryString)
         }
@@ -187,40 +141,10 @@ public abstract class ParkhausServlet : HttpServlet() {
         val event = params[0]
         when (event) {
             "enter" -> {
-                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-
-                parkhausServiceSession.addCarLegacy(NAME(), data)
-                //parkhausServiceSession.get().addCar(NAME(),params)
-                // re-direct car to another parking lot
-                // out.println( locator( newCar ) );
+                //TODO: implement addCar
             }
-            "leave" -> {/*
-                val oldCar = cars()?.get(0)
-                if (params.size > 4) {
-                    val priceString = params[4]
-                    if ("_" != priceString) {
-                        // for JSON format skip over text and proceed to next integer
-                        var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
-                        price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
-                        // store new sum in ServletContext
-                        context.setAttribute("sum" + NAME(), persistentSum + price)
-                        println("Der aktuelle Name ist: " + NAME())
-                    }
-                    // TODO check if this is the right bracket
-                    context.setAttribute(
-                        "carsHaveLeft" + NAME(),
-                        context.getAttribute("carsHaveLeft" + NAME()) as Int + 1
-                    )
-
-                }
-                println("leave,$oldCar")
-                println(context.getAttribute("sum" + NAME()))
-                println(persistentSum)
-                println(persistentAvg)*/
-                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                parkhausServiceSession.leaveCar(NAME(), data)
-                //parkhausServiceSession.get().leaveCar(NAME(),params)
-
+            "leave" -> {
+                //TODO: implement leaveCar
             }
             "invalid", "occupied" -> {
                 println(body)
@@ -229,80 +153,11 @@ public abstract class ParkhausServlet : HttpServlet() {
             else -> println(body)
         }
     }
-    // auxiliary methods used in HTTP request processing
 
-    /**
-     * @return the servlet context
-     */
-    /*
-    val context: ServletContext
-        get() = servletConfig.servletContext
-*/
-    /**
-     * TODO: replace this by your own function
-     * @return the number of the free parking lot to which the next incoming car will be directed
-     */
-    /*internal fun locator(car: CarIF): Int {
-        // numbers of parking lots start at 1, not zero
-        print(car)
-        return 1 + ((cars()?.size ?: 1) - 1) % MAX()
-    }*/
-
-    /**
-     * @return the list of all cars stored in the servlet context so far
-
-    //@SuppressWarnings("unchecked")
-    internal var cars: ArrayList<CarIF>
-    get() {
-    /*if (context.getAttribute("cars" + NAME()) == null) {
-    context.setAttribute("cars" + NAME(), ArrayList<Car>())
-    }*/
-    return (context.getAttribute("cars" + NAME()) as ArrayList<CarIF>?) ?: ArrayList<CarIF>();
-    }
-    set(value) {
-    //TODO possible validation
-    context.setAttribute("cars" + NAME(), value);
-    }
-     */
-
-    /**
-     * @return the list of all cars stored in the servlet context so far
-     */
-    /*private fun cars(): ArrayList<CarIF>? {/*
-        if (context.getAttribute("cars" + NAME()) == null) {
-            context.setAttribute("cars" + NAME(), java.util.ArrayList<Car>())
-        }
-        return context.getAttribute("cars" + NAME()) as ArrayList<CarIF>*/
-        return parkhausServiceSession.get().currentCars(NAME())
-    }*/
-
-
-    /**
-     * TODO: replace this by your own function
-     * @return the sum of parking fees of all cars stored so far
-     */
-    val persistentSum: Float
-        get() {
-            val sum = context.getAttribute("sum" + NAME()) as Float?
-            println("Log aus getPersistentSum: aktuelle Summe: $sum")
-            // instead of return sum == null ?  0.0f : sum;
-            return sum ?: 0.0f
-        }
-
-    val totalCars: Int
-        get() {
-            val totalCarCount = context.getAttribute("totalCarCount" + NAME()) as Int?
-            return totalCarCount ?: 0
-        }
-
-    val persistentAvg: Float
-        //get() = persistentSum / (totalCars - (cars().size - 1)) // Average nur über die bereits ausgefahrenen machen LUKAS!
-        get() {
-            return persistentSum / (context.getAttribute("carsHaveLeft" + NAME()) as Int)
-        }
-
+    // Hilfsfunktion zum formatieren
     fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
+    // auxiliary methods used in HTTP request processing
     /**
      * @param request the HTTP POST request
      * @return the body of the request

@@ -1,6 +1,5 @@
 package de.hbrs.team7.se1_starter_repo.services
 
-import de.hbrs.team7.se1_starter_repo.CarIF
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
@@ -44,16 +43,6 @@ open class ParkhausServiceSession : Serializable {
 
     open lateinit var city: String
         protected set
-/*
-    open var sum: Double = 0.0
-        protected set
-
-    open var sessionCars: Int = 0
-        protected set
-
-    open var currentCars: Int = 0
-        protected set
-*/
 
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
@@ -61,10 +50,8 @@ open class ParkhausServiceSession : Serializable {
     open fun sessionInit() {
         city = cities.random()
 
-
         val ph = Parkhaus(city)
         parkhaus = DatabaseGlobal.persistEntity(ph)
-
 
         if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
             parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
@@ -74,49 +61,6 @@ open class ParkhausServiceSession : Serializable {
         map[city + "sum"] = 0.0
         map[city + "sessionCars"] = 0.0
         map[city + "currentCars"] = 0.0
-
-    }
-
-
-    open fun totalCarCount(ID: String): Int {
-        return map[ID + "sessionCars"]?.toInt() ?: 0
-    }
-
-    open fun totalUsers(ID: String): Int {
-        print("total cars: ${totalCarCount(ID)}\n")
-        print("current cars: ${map[ID + "currentCars"]?.toInt() ?: 0}")
-        return totalCarCount(ID) - (map[ID + "currentCars"]?.toInt() ?: 0)
-    }
-
-    open fun average(ID: String): Double?{
-        var sum1 = (map[ID + "sum"] ?: 0.0)
-        return (sum1) / totalUsers(ID)
-    }
-
-    open fun leaveCar(ID: String, params: Array<String>){
-        val placeNumber = params[1].substring(params[2].indexOf(":")+1).toInt()
-        val oldCar = currentCars(ID)?.get(placeNumber)
-        if (params.size > 4) {
-            val priceString = params[4]
-            if ("_" != priceString) {
-                // for JSON format skip over text and proceed to next integer
-                var price = Scanner(priceString).useDelimiter("\\D+").nextInt().toFloat()
-                price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
-                // store new sum in ServletContext
-                sumAdd(ID , price.toDouble())
-                oldCar?.price = price.toInt()
-                println("Der aktuelle Name ist: " + ID)
-            }
-            val allCars = parkhausServiceGlobal?.carDict?.get(ID)
-            println(allCars)
-            // TODO check if this is the right bracket
-            map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
-
-        }
-        parkhausServiceGlobal!!.leaveCar(ID,params)
-        println("leave,$oldCar")
-        println(sumOverAllCars(ID))
-
     }
 
     open fun sumAdd(ID: String, toAdd: Double) {
@@ -124,31 +68,6 @@ open class ParkhausServiceSession : Serializable {
     }
     open fun sumOverAllCars(ID: String): Double{
         return map[ID + "sessionCars"]?: 0.0
-    }
-
-    open fun sumOverCarTypes(ID: String): HashMap<String?, Double?>{
-        val allCars = parkhausServiceGlobal?.carDict?.get(ID)
-        var priceOfCarTypes = HashMap<String?, Double?>()
-        if (allCars != null) {
-            for (car in allCars){
-                priceOfCarTypes.getOrPut(car.type){0.0}
-                priceOfCarTypes[car.type] = priceOfCarTypes[car.type]?.plus(car.price)
-                print(car.price)
-            }
-
-
-        }
-        print(priceOfCarTypes)
-        return priceOfCarTypes
-
-    }
-
-    open fun addCar(ID: String, params: Array<String>) {
-        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
-        map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
-
-        // !!: darf nicht null sein
-        parkhausServiceGlobal!!.addCar(ID, params)
     }
 
     open fun addCar(ID: String, params: ParkhausServletPostDto) {
@@ -165,46 +84,7 @@ open class ParkhausServiceSession : Serializable {
         print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
         val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
         print(test.first().Ausstellungsdatum)
-
     }
-
-    open fun addCarLegacy(ID: String, params: ParkhausServletPostDto) {
-
-        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
-        map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
-
-        // !!: darf nicht null sein
-        parkhausServiceGlobal!!.addCar(ID, params)
-
-    }
-
-    open fun leaveCar(ID: String, params: ParkhausServletPostDto) {
-        val placeNumber = params.nr
-        val oldCar = currentCars(ID)?.get(placeNumber)
-        var price = params.duration.toDouble()
-
-        price /= 100.0f // like Integer.parseInt( priceString ) / 100.0f;
-        // store new sum in ServletContext
-        sumAdd(ID , price.toDouble())
-        oldCar?.price = price.toInt()
-        println("Der aktuelle Name ist: " + ID)
-
-        val allCars = parkhausServiceGlobal?.carDict?.get(ID)
-        //println(allCars)
-        // TODO check if this is the right bracket
-        map[ID + "currentCars"] = (map[ID + "currentCars"]?: 1.0) - 1
-
-
-        parkhausServiceGlobal!!.leaveCar(ID, params)
-        println("leave,$oldCar")
-        println(sumOverAllCars(ID))
-
-    }
-
-    open fun currentCars(NAME: String): HashMap<Int, CarIF>? {
-        return parkhausServiceGlobal!!.currentCarDict[NAME]
-    }
-
 
     open fun initEbene(name: String): ParkhausEbene {
         val pe = ParkhausEbene(name, this.parkhaus)
@@ -213,7 +93,6 @@ open class ParkhausServiceSession : Serializable {
         parkhaus = DatabaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
 
         return DatabaseGlobal.persistEntity(pe)
-
     }
 
     open var cities: List<String> = listOf(
