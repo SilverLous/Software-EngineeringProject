@@ -45,34 +45,5 @@ public class ParkhausServiceSessionJavaTest {
         assert !parkhausServiceSession.getCity().isEmpty();
     }
 
-    @Test
-    public void addCarTestNumber(){
-        // Problem: auf ID kann nicht direkt zugegriffen werden
-        int carsSession1 = parkhausServiceSession.currentCars(etage).size();
-        String[] carParams = {"123", "2207", "_", "_", "_"};
-        parkhausServiceSession.addCar("Bonn, Level1", carParams);
-        assert (parkhausServiceSession.currentCars(etage).size() - carsSession1) == 1;
-        assert (parkhausServiceGlobal.getGlobalCars() - carsSession1) == 1;
-    }
-
-    @Test
-    public void leaveCarTestNumber(){
-        // Problem: auf ID kann nicht direkt zugegriffen werden
-        int carsSession1 = parkhausServiceSession.currentCars(etage).size();
-        String[] carParams = {"123", "2207", "_", "_", "_"};
-        parkhausServiceSession.addCar("Bonn, Level1", carParams);
-        parkhausServiceSession.leaveCar("Bonn, Level1", carParams);
-        assert (parkhausServiceSession.currentCars(etage).size() - carsSession1) == 0;
-    }
-
-    @Test
-    public void totalUsersTest(){
-        int carsSession1 = parkhausServiceSession.currentCars(etage).size();
-        String[] carParams = {"123", "2207", "_", "_", "_"};
-        parkhausServiceSession.addCar("Bonn, Level1", carParams);
-        parkhausServiceSession.leaveCar("Bonn, Level1", carParams);
-        assert (parkhausServiceSession.currentCars(etage).size() - carsSession1) == 1;
-
-    }
 
 }
