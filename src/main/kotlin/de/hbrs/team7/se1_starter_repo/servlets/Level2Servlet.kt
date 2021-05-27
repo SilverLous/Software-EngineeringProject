@@ -1,5 +1,6 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.servlets
 
+import de.hbrs.team7.se1_starter_repo.servlets.ParkhausServlet
 import jakarta.servlet.ServletConfig
 import jakarta.servlet.ServletException
 import jakarta.servlet.annotation.WebServlet

@@ -1,5 +1,7 @@
 package de.hbrs.team7.se1_starter_repo
 
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject

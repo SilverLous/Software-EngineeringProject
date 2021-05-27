@@ -1,10 +1,13 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.servlets
 
 
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
+import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import jakarta.inject.Inject
 import jakarta.servlet.ServletConfig
 import jakarta.servlet.ServletContext

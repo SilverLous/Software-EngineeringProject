@@ -1,5 +1,5 @@
 <%@ page import="jakarta.inject.Inject" %>
-<%@ page import="de.hbrs.team7.se1_starter_repo.ParkhausServiceSession" %>
+<%@ page import="de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>

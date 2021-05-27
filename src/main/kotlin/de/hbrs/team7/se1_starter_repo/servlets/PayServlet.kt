@@ -1,4 +1,4 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.servlets
 
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;

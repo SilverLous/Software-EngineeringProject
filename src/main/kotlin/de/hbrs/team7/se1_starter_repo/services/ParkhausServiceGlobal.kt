@@ -1,6 +1,8 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.Car
+import de.hbrs.team7.se1_starter_repo.CarIF
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
