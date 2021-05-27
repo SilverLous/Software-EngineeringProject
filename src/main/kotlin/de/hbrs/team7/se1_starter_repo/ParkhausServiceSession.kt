@@ -10,11 +10,8 @@ import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
-import jakarta.servlet.ServletContext
 import java.time.Instant
 import java.util.*
-import kotlin.collections.HashMap
-import kotlin.math.atan
 
 
 /*
@@ -29,11 +26,16 @@ open class ParkhausServiceSession : Serializable {
 
     private lateinit var parkhaus: Parkhaus
 
+    private val parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
+
     // must be this way to ensure it is loaded and the injector has time to do its job
-    @Inject
-    open var parkhausServiceGlobal: ParkhausServiceGlobal? = null
+    @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
 
     @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
+
+
+    // scrapped idea because it is not testable with junit
+    //@Inject private lateinit var servletContext: ServletContext
 
 
     open var map: HashMap<String, Double> = HashMap<String, Double>()
@@ -54,11 +56,18 @@ open class ParkhausServiceSession : Serializable {
 
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
+    // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
     open fun sessionInit() {
         city = cities.random()
 
+
         val ph = Parkhaus(city)
         parkhaus = DatabaseGlobal.persistEntity(ph)
+
+
+        if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
+            parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
+        }
 
         print("Hello from $city (id: ${parkhaus.id}) Service new User ")
         map[city + "sum"] = 0.0
@@ -137,7 +146,6 @@ open class ParkhausServiceSession : Serializable {
         map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
         map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
 
-        println("HELLO FROM KOOOOOTLIN")
         // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar(ID, params)
     }
@@ -164,7 +172,6 @@ open class ParkhausServiceSession : Serializable {
         map[ID + "currentCars"] = (map[ID + "currentCars"]?: 0.0) + 1
         map[ID + "sessionCars"] = (map[ID + "sessionCars"]?: 0.0) + 1
 
-        println("HELLO FROM KOOOOOTLIN")
         // !!: darf nicht null sein
         parkhausServiceGlobal!!.addCar(ID, params)
 

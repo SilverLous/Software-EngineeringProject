@@ -47,6 +47,8 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     @Inject private lateinit var parkhausServiceSession: ParkhausServiceSession
 
+    @Inject private lateinit var context: ServletContext
+
     /*Kontextvariablen:
     persistentSum: Summe der Parkgebühren aller Autos
     totalCars: Counter, wie viele Autos jemals im Parkhaus waren
@@ -58,6 +60,12 @@ public abstract class ParkhausServlet : HttpServlet() {
             context.setAttribute(value, init)
         }
     }
+
+/*
+    open fun onMemberListChanged(@Observes @Initialized(SessionScoped::class) parkhausServiceSession: ParkhausServiceSession) {
+        println("Whatever this does")
+    }
+*/
 
 
     @Throws(ServletException::class)
@@ -73,9 +81,9 @@ public abstract class ParkhausServlet : HttpServlet() {
 
         println(context.getAttribute("carsHaveLeft" + NAME()))
 
-        this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
-        print(this.parkhausEbene)
 
+        this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
+        this.parkhausServiceGlobal.levelSet.add(NAME())
 
         /*
         kotlin.assert(context.getAttribute("carsHaveLeft" + NAME()) == 0)
@@ -223,9 +231,10 @@ public abstract class ParkhausServlet : HttpServlet() {
     /**
      * @return the servlet context
      */
+    /*
     val context: ServletContext
         get() = servletConfig.servletContext
-
+*/
     /**
      * TODO: replace this by your own function
      * @return the number of the free parking lot to which the next incoming car will be directed

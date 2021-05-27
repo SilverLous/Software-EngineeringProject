@@ -4,14 +4,6 @@ package de.hbrs.team7.se1_starter_repo
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
-import jakarta.persistence.Persistence
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
-import org.eclipse.persistence.internal.sessions.DirectCollectionChangeRecord
-import java.time.Instant
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 /*
@@ -24,6 +16,11 @@ kotlin is final by default
 @ApplicationScoped
 //@Singleton
 open class ParkhausServiceGlobal { // : ParkhausServiceIF {
+
+
+    open val levelSet = mutableSetOf<String>()
+
+
 
     // private is currently not possible due to Kotlins "feature" private must be final
     open var globalCars: Int = 0
