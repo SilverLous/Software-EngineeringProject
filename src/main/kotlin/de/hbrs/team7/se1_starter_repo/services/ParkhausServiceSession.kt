@@ -38,9 +38,6 @@ open class ParkhausServiceSession : Serializable {
     //@Inject private lateinit var servletContext: ServletContext
 
 
-    open var map: HashMap<String, Double> = HashMap<String, Double>()
-        protected set
-
     open lateinit var city: String
         protected set
 
@@ -58,16 +55,7 @@ open class ParkhausServiceSession : Serializable {
         }
 
         print("Hello from $city (id: ${parkhaus.id}) Service new User ")
-        map[city + "sum"] = 0.0
-        map[city + "sessionCars"] = 0.0
-        map[city + "currentCars"] = 0.0
-    }
 
-    open fun sumAdd(ID: String, toAdd: Double) {
-        map[ID + "sum"] = (map[ID + "sum"]?: 0.0) + toAdd
-    }
-    open fun sumOverAllCars(ID: String): Double{
-        return map[ID + "sessionCars"]?: 0.0
     }
 
     open fun addCar(ID: String, params: ParkhausServletPostDto) {
