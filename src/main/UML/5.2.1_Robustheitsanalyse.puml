@@ -18,7 +18,6 @@ rectangle ParkhausSystem {
   boundary LoginMaske
   boundary StatistikMaske
 
-  boundary HilfeKnopf
 
   control ParkhausController
   control DatenbankController
@@ -28,9 +27,8 @@ rectangle ParkhausSystem {
   StatistikMaske -left- Mitarbeiter
 
   SprachAuswahlMaske -left- Kunde
-  HilfeKnopf -left- Kunde
-  TicketMaske -left- Kunde
 
+  TicketMaske -left- Kunde
 
 
 
@@ -38,17 +36,19 @@ rectangle ParkhausSystem {
 
 
   ParkhausController ..> KundenInfo
-  KundenInfo ..> DatenbankController
+  KundenInfo <.. DatenbankController
   ParkhausController ..> Ticket
-  Ticket ..> DatenbankController
+  Ticket <.. DatenbankController
+  Statistik <.. DatenbankController
+  ParkhausController ..> Statistik
 
-  WebsiteController ..> HilfeKnopf
+
   ParkhausController ..> Kartenzahlung
   Kartenzahlung ..> Bank: "rob >"
   WebsiteController ..> ParkhausController
   DatenbankController ..> DatenbankSchnittstelle
-  ParkhausController ..> Statistik
-  Statistik ..> DatenbankController
+
+
   WebsiteController ..> LoginMaske
   WebsiteController ..>SprachAuswahlMaske
   WebsiteController ..> TicketMaske
