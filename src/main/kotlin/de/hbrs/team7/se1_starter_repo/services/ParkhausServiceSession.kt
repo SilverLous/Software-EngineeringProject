@@ -83,6 +83,10 @@ open class ParkhausServiceSession : Serializable {
         return DatabaseGlobal.persistEntity(pe)
     }
 
+    open fun zieheTicket(ID: String, params: ParkhausServletPostDto): Ticket {
+        throw NotImplementedError()
+    }
+
     open var cities: List<String> = listOf(
         "Berlin",
         "Hamburg",
