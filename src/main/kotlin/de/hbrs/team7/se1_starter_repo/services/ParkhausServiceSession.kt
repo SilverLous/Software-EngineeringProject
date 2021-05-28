@@ -84,6 +84,13 @@ open class ParkhausServiceSession : Serializable {
     }
 
     open fun zieheTicket(ID: String, params: ParkhausServletPostDto): Ticket {
+        //TODO add zieheTicket functionality
+        throw NotImplementedError()
+    }
+
+    open fun bezahleTicket(ID: String, autoHash: String, timeCheckOut: Long): Int {
+        //autoHash soll nur für eine unique Sache stehen die das Auto identifiziert, andere Keys wären auch ok.
+        //TODO add bezahleTicket functionality
         throw NotImplementedError()
     }
 

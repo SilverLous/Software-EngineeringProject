@@ -52,15 +52,20 @@ public class ParkhausServiceSessionJavaTest {
     class basicIOTest{
         String ID = "Test Ebene";
         Long timeNow = System.currentTimeMillis();
+        ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow ,0,
+                0,"echterHash","REGENBOGEN",1,"Family","SUV","Y-123 456");
 
         @Test
         @Order(1)
         @DisplayName("Testen der addCar Funktion")
         public void zieheTicketTest(){
-            ParkhausServletPostDto params = new ParkhausServletPostDto(2, timeNow ,0,
-                    0,"echterHash","REGENBOGEN",1,"Family","SUV","Y-123 456");
-            Ticket erstesTestTicket = parkhausServiceSession.zieheTicket(ID,params);
+            Ticket erstesTestTicket = parkhausServiceSession.zieheTicket(ID,paramsErstesAuto);
             Assertions.assertNotNull(erstesTestTicket);
+        }
+        public void bezahleTicketTest(){
+            Long timeCheckOut = timeNow + 100;
+            int preisInCent = parkhausServiceSession.bezahleTicket(ID,paramsErstesAuto.getHash(),timeCheckOut);
+            assert preisInCent>0;
         }
     }
 
