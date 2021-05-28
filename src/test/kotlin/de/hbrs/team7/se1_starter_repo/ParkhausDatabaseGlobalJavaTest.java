@@ -19,6 +19,8 @@ import org.junit.jupiter.api.*;
 @AddBeanClasses({ ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
 public class ParkhausDatabaseGlobalJavaTest {
 
+    static Parkhaus testEntity;
+
     @Inject
     ParkhausServiceSession parkhausServiceSession;
 
@@ -44,19 +46,17 @@ public class ParkhausDatabaseGlobalJavaTest {
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class basicFunctionalityTest {
 
-        private Parkhaus p;
-
-
         @Test
         @Order(1)
         @DisplayName("Testen der Insert Funktion")
         public void insertTest(){
+
             // Problem: auf ID kann nicht direkt zugegriffen werden
             Parkhaus p_test = new Parkhaus("TestStadt" );
-            this.p =  databaseServiceGlobal.persistEntity(p_test);
+            testEntity =  databaseServiceGlobal.persistEntity(p_test);
 
-            Assertions.assertNotNull(p.getId());
-            System.out.println(p.getId());
+            Assertions.assertNotNull(testEntity.getId());
+            System.out.println(testEntity.getId());
             // assertAll
         }
 
@@ -65,10 +65,11 @@ public class ParkhausDatabaseGlobalJavaTest {
         @DisplayName("Testen der find Funktion")
         public void findTest(){
 
-            long p_id = p.getId();
+            long p_id = testEntity.getId();
             Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
 
-            Assertions.assertEquals(p, p_test);
+            Assertions.assertEquals(testEntity.getId(), p_test.getId());
+            Assertions.assertEquals(testEntity.getName(), p_test.getName());
         }
 
         @Test
@@ -76,7 +77,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         @DisplayName("Testen der delete Funktion")
         public void deleteTest(){
 
-            long p_id = p.getId();
+            long p_id = testEntity.getId();
             databaseServiceGlobal.deleteByID(p_id, Parkhaus.class);
             Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
 
@@ -85,6 +86,8 @@ public class ParkhausDatabaseGlobalJavaTest {
 
 
     }
+
+
 
 
 
