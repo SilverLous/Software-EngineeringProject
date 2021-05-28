@@ -8,9 +8,9 @@ open class ParkhausEbene (
     @Column(nullable = false)
     var name: String? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST])
     @JoinColumn(name = "Parkhaus_id", nullable = false)
-    open val parkhaus: Parkhaus? = null
+    open var parkhaus: Parkhaus? = null
 
         ){
 

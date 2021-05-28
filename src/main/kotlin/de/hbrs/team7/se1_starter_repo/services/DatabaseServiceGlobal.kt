@@ -40,6 +40,13 @@ open class DatabaseServiceGlobal {
         return e
     }
 
+    open fun <T> mergeUpdatedEntity(e: T): T {
+        et.begin()
+        val newE = em.merge(e)
+        et.commit()
+        return newE
+    }
+
     open fun <T> queryAllEntities(classType: Class<T>): MutableList<T>? {
         val cb = em.criteriaBuilder
         val query = cb.createQuery(classType)
@@ -65,7 +72,7 @@ open class DatabaseServiceGlobal {
         et.commit()
     }
 
-    open fun <T> deleteByObject(toDelete: T, classType: Class<T>) {
+    open fun <T> deleteByObject(toDelete: T) {
         et.begin()
         em.remove(toDelete)
         et.commit()

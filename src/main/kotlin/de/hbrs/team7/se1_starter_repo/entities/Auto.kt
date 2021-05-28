@@ -18,7 +18,7 @@ open class Auto(
     var type: String = ""
 
     @OneToOne(mappedBy = "Auto")
-    private val Ticket: Ticket? = null
+    var Ticket: Ticket? = null
 
     override fun toString(): String {
         // return params.contentToString()
