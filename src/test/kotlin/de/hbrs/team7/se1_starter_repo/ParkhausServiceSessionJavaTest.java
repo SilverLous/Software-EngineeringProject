@@ -59,12 +59,12 @@ public class ParkhausServiceSessionJavaTest {
         @Order(1)
         @DisplayName("Testen der addCar Funktion")
         public void zieheTicketTest(){
-            Ticket erstesTestTicket = parkhausServiceSession.zieheTicket(ID,paramsErstesAuto);
+            Ticket erstesTestTicket = parkhausServiceSession.generateTicket(ID,paramsErstesAuto);
             Assertions.assertNotNull(erstesTestTicket);
         }
         public void bezahleTicketTest(){
-            Long timeCheckOut = timeNow + 100;
-            int preisInCent = parkhausServiceSession.bezahleTicket(ID,paramsErstesAuto.getHash(),timeCheckOut);
+            long timeCheckOut = timeNow + 100;
+            int preisInCent = parkhausServiceSession.payForTicket(ID,paramsErstesAuto.getHash(),timeCheckOut);
             assert preisInCent>0;
         }
     }

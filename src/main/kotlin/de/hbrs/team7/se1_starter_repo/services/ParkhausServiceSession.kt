@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.services
 
+import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import de.hbrs.team7.se1_starter_repo.entities.Auto
@@ -23,7 +24,7 @@ BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
 
 @Named
 @SessionScoped
-open class ParkhausServiceSession : Serializable {
+open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     private lateinit var parkhaus: Parkhaus
 
@@ -45,7 +46,7 @@ open class ParkhausServiceSession : Serializable {
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
     // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
-    open fun sessionInit() {
+    override fun sessionInit() {
         city = parkhausServiceGlobal.cities.random()
 
         val ph = Parkhaus(city.name)
@@ -55,11 +56,11 @@ open class ParkhausServiceSession : Serializable {
             parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
         }
 
-        print("Hello from $city (id: ${parkhaus.id}) Service new User ")
+        print("Hello from $city (ParkhausEbeneID: ${parkhaus.id}) Service new User ")
 
     }
 
-    open fun addCar(ID: String, params: ParkhausServletPostDto) {
+    override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto) {
         val auto = Auto()
         auto.Kennzeichen = params.license
 
@@ -75,7 +76,7 @@ open class ParkhausServiceSession : Serializable {
         print(test.first().Ausstellungsdatum)
     }
 
-    open fun initEbene(name: String): ParkhausEbene {
+    override  fun initEbene(name: String): ParkhausEbene {
         val pe = ParkhausEbene(name, this.parkhaus)
         val pePersist = DatabaseGlobal.persistEntity(pe)
 
@@ -84,17 +85,31 @@ open class ParkhausServiceSession : Serializable {
         return DatabaseGlobal.persistEntity(pe)
     }
 
-    open fun zieheTicket(ID: String, params: ParkhausServletPostDto): Ticket {
+    override fun generateTicket(ParkhausEbeneID: String, params: ParkhausServletPostDto): Ticket {
         //TODO add zieheTicket functionality
         throw NotImplementedError()
     }
 
-    open fun bezahleTicket(ID: String, autoHash: String, timeCheckOut: Long): Int {
+    override fun payForTicket(ParkhausEbeneID: String, autoHash: String, timeCheckOut: Long): Int {
         //autoHash soll nur für eine unique Sache stehen die das Auto identifiziert, andere Keys wären auch ok.
         //TODO add bezahleTicket functionality
         throw NotImplementedError()
     }
 
+    override fun sumOverCars(ID: String): Int {
+        //TODO("Not yet implemented")
+        throw NotImplementedError()
+    }
+
+    override fun averageOverCars(ID: String): Int {
+        //TODO("Not yet implemented")
+        throw NotImplementedError()
+    }
+
+    override fun statsToChart(ID: String): Int {
+        //TODO("Not yet implemented")
+        throw NotImplementedError()
+    }
 
 
 }
