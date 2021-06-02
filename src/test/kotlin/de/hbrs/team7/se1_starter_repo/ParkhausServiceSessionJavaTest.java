@@ -43,7 +43,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void sessionInitTest() {
-        assert !parkhausServiceSession.getCity().isEmpty();
+        Assertions.assertNotNull(parkhausServiceSession.getCity());
     }
 
     @Nested
