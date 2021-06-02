@@ -3,6 +3,7 @@ package de.hbrs.team7.se1_starter_repo.services
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
+import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
@@ -96,17 +97,17 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         throw NotImplementedError()
     }
 
-    override fun sumOverCars(ID: String): Int {
+    override fun sumOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented")
         throw NotImplementedError()
     }
 
-    override fun averageOverCars(ID: String): Int {
+    override fun averageOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented")
         throw NotImplementedError()
     }
 
-    override fun statsToChart(ID: String): Int {
+    override fun statsToChart(ParkhausEbeneID: String): statisticsChartDto {
         //TODO("Not yet implemented")
         throw NotImplementedError()
     }
