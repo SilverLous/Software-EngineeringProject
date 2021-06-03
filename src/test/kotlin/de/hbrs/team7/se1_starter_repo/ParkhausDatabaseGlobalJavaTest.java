@@ -1,9 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
-import de.hbrs.team7.se1_starter_repo.entities.Auto;
-import de.hbrs.team7.se1_starter_repo.entities.Parkhaus;
-import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
-import de.hbrs.team7.se1_starter_repo.entities.Ticket;
+import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
@@ -15,7 +12,9 @@ import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -148,6 +147,38 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertNotNull(saved_Auto.getTicket());
 
     }
+
+    @Test
+    @DisplayName("Test 1-n Relation")
+    public void oneToManyTest() {
+        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        ParkhausEbene ebene = new ParkhausEbene();
+        ebene.assignParkhaus(parkhaus);
+        parkhaus.addParkhausEbene(ebene);
+
+        Assertions.assertNotNull(parkhaus.getEbenen(), "Parkhaus hat die Ebene nicht erhalten");
+        Assertions.assertNotNull(ebene.getParkhaus(), "Ebene hat das Parkhaus nicht erhalten");
+    }
+
+    /*
+    @Test
+    @DisplayName("Test n-n Relation")
+    public void manyToManyTest() {
+        ParkhausEbene ebene1 = new ParkhausEbene();
+        ParkhausEbene ebene2 = new ParkhausEbene();
+        Ticket ticket1 = new Ticket();
+        Ticket ticket2 = new Ticket();
+
+        ebene1.appendTicket(ticket1);
+        ebene1.appendTicket(ticket2);
+
+        ebene2.appendTicket(ticket1);
+        ebene2.appendTicket(ticket2);
+
+        Assertions.assertNotNull(ebene1.getTickets);
+        Assertions.assertNotNull(SELECT parkhausEbene FROM TicketInParkhaus WHERE Ticket.ID = ticket1.ID); oder so
+        TODO: DB-Interface schreiben und in die Assertion reinschreiben
+    }*/
 
 
     @Test
