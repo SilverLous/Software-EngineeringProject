@@ -152,22 +152,44 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
         Parkhaus parkhaus = new Parkhaus("TestStadt");
-        ParkhausEbene ebene = new ParkhausEbene();
-        ebene.assignParkhaus(parkhaus);
-        parkhaus.addParkhausEbene(ebene);
+        ParkhausEbene ebene1 = new ParkhausEbene();
+        ParkhausEbene ebene2 = new ParkhausEbene();
 
-        Assertions.assertNotNull(parkhaus.getEbenen(), "Parkhaus hat die Ebene nicht erhalten");
-        Assertions.assertNotNull(ebene.getParkhaus(), "Ebene hat das Parkhaus nicht erhalten");
+        databaseServiceGlobal.persistEntity(parkhaus);
+        databaseServiceGlobal.persistEntity(ebene1);
+        databaseServiceGlobal.persistEntity(ebene2);
+        Assertions.assertNotNull(parkhaus.getId(), "Parkhaus wurde nicht gespeichert");
+        Assertions.assertNotNull(ebene1.getId(), "Ebene 1 wurde nicht gespeichert");
+        Assertions.assertNotNull(ebene2.getId(), "Ebene 2 wurde nicht gespeichert");
+
+        parkhaus.addParkhausEbene(ebene1);
+        parkhaus.addParkhausEbene(ebene2);
+        ebene1.assignParkhaus(parkhaus);
+        ebene2.assignParkhaus(parkhaus);
+
+        Parkhaus saved_Parkhaus = databaseServiceGlobal.findByID(parkhaus.getId(), Parkhaus.class);
+        ParkhausEbene saved_ebene1 = databaseServiceGlobal.findByID(ebene1.getId(), ParkhausEbene.class);
+        ParkhausEbene saved_ebene2 = databaseServiceGlobal.findByID(ebene2.getId(), ParkhausEbene.class);
+
+        Assertions.assertNotNull(saved_Parkhaus.getEbenen(), "Dem Parkhaus wurden die Ebenen nicht zugewiesen");
+        Assertions.assertNotNull(saved_ebene1.getParkhaus(), "Ebene 1 hat kein Parkhaus erhalten");
+        Assertions.assertNotNull(saved_ebene2.getParkhaus(), "Ebene 2 hat kein parkhaus erhalten");
+
     }
 
-    /*
-    @Test
+
+    /*@Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
         ParkhausEbene ebene1 = new ParkhausEbene();
         ParkhausEbene ebene2 = new ParkhausEbene();
         Ticket ticket1 = new Ticket();
         Ticket ticket2 = new Ticket();
+
+        databaseServiceGlobal.persistEntity(ebene1);
+        databaseServiceGlobal.persistEntity(ebene2);
+        databaseServiceGlobal.persistEntity(ticket1);
+        databaseServiceGlobal.persistEntity(ticket2);
 
         ebene1.appendTicket(ticket1);
         ebene1.appendTicket(ticket2);
@@ -176,10 +198,9 @@ public class ParkhausDatabaseGlobalJavaTest {
         ebene2.appendTicket(ticket2);
 
         Assertions.assertNotNull(ebene1.getTickets);
-        Assertions.assertNotNull(SELECT parkhausEbene FROM TicketInParkhaus WHERE Ticket.ID = ticket1.ID); oder so
-        TODO: DB-Interface schreiben und in die Assertion reinschreiben
-    }*/
 
+    }
+*/
 
     @Test
     @DisplayName("Testen der Ticket Create funktion")

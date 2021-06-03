@@ -68,4 +68,9 @@ open class ParkhausEbene (
         }
     }
 
+    fun assignParkhaus(parkhaus: Parkhaus) {
+        this.parkhaus = parkhaus;
+
+    }
+
 }
