@@ -12,7 +12,7 @@ import java.util.*
 interface ParkhausServiceSessionIF {
     fun sessionInit()
 
-    fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto)
+    fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto): Auto
 
     fun initEbene(name: String): ParkhausEbene
 

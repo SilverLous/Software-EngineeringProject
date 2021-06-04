@@ -61,20 +61,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
-    override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto) {
+    override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto):Auto {
         val auto = Auto()
         auto.Kennzeichen = params.license
 
-        val ticket = Ticket()
-        ticket.Ausstellungsdatum = Date.from(Instant.now())
-        ticket.Preisklasse = 2
-        ticket.Auto = auto
-
-        val saved = this.DatabaseGlobal.persistEntity(ticket)
-
-        print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
-        val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
-        print(test.first().Ausstellungsdatum)
+        // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
+        return auto
     }
 
     override  fun initEbene(name: String): ParkhausEbene {
@@ -83,12 +75,26 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         parkhaus = DatabaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
 
+        this.parkhausServiceGlobal.levelSet.add(name)
         return DatabaseGlobal.persistEntity(pe)
     }
 
     override fun generateTicket(ParkhausEbeneID: String, params: ParkhausServletPostDto): Ticket {
+        val auto = addCar(ParkhausEbeneID, params)
+
+        val ticket = Ticket()
+        // ticket.Ausstellungsdatum = Date.from(Instant.now())
+        ticket.Preisklasse = 2
+        ticket.Auto = auto
+        auto.Ticket = ticket
+
+        val saved = this.DatabaseGlobal.persistEntity(ticket)
+        val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
+        print(test.first().Ausstellungsdatum)
+
         //TODO add zieheTicket functionality
-        throw NotImplementedError()
+        // throw NotImplementedError()
+        return ticket
     }
 
     override fun payForTicket(ParkhausEbeneID: String, autoHash: String, timeCheckOut: Long): Int {

@@ -64,7 +64,6 @@ public abstract class ParkhausServlet : HttpServlet() {
 
 
         this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
-        this.parkhausServiceGlobal.levelSet.add(NAME())
 
     }
 
@@ -138,12 +137,13 @@ public abstract class ParkhausServlet : HttpServlet() {
         println(body)
 
         // toTypedArray() needed because return type is List not array as in original
-        val params = body.split(",").toTypedArray()
         val paramJson = body.split(",", limit = 2).toTypedArray()
-        val event = params[0]
+        val event = paramJson[0]
         when (event) {
             "enter" -> {
+                // val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 //TODO: implement addCar
+                // parkhausServiceSession.generateTicket(NAME(),data)
             }
             "leave" -> {
                 //TODO: implement leaveCar
