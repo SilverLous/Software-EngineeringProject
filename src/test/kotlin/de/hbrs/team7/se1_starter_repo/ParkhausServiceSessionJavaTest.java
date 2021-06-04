@@ -3,6 +3,7 @@ package de.hbrs.team7.se1_starter_repo;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
+import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -40,7 +41,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @BeforeEach
     public void setup(){
-        sessionContext.invalidate();
+        // sessionContext.invalidate();
         // parkhausServiceSession = new ParkhausServiceSession();
     }
 
@@ -54,14 +55,34 @@ public class ParkhausServiceSessionJavaTest {
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         Assertions.assertNotNull(temp);
         Assertions.assertEquals("TESTEBENE1",parkhausServiceSession.getLevelByName("TESTEBENE1").getName());
+        parkhausServiceSession.initEbene("TESTEBENE2");
+        Assertions.assertEquals("TESTEBENE2",parkhausServiceSession.getLevelByName("TESTEBENE2").getName());
+        Assertions.assertEquals(2,parkhausServiceSession.getParkhausEbenen().size());
+        Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
 
     }
 
+    @Test
+    public void sessionAddLevel2() {
+        parkhausServiceSession.initEbene("TESTEBENE1");
+        String stadtName = parkhausServiceSession.getCity().getName();
+        List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
+        parkhausServiceSession.initEbene("TESTEBENE2");
+        sessionContext.invalidate();
+        //Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
+        //Assertions.assertEquals(2,parkhausServiceSession.getParkhausEbenen().size());
+        parkhausServiceSession.initEbene("TESTEBENE1");
+        String zweiterStadtName = parkhausServiceSession.getCity().getName();
+        Assertions.assertNotEquals( stadtName, zweiterStadtName);
+        //Assertions.assertEquals(3,parkhausServiceSession.getParkhausEbenen().size());
+
+    }
     @Nested
     @DisplayName("Basic IO chain")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
     class basicIOTest{
-        String ID = "Test Ebene";
+        String parkhausId = "Test Ebene";
+
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow ,0,
                 0,"echterHash","REGENBOGEN",1,"Family","SUV","Y-123 456");
@@ -70,7 +91,8 @@ public class ParkhausServiceSessionJavaTest {
         @Order(1)
         @DisplayName("Testen der addCar Funktion")
         public void zieheTicketTest(){
-            Ticket erstesTestTicket = parkhausServiceSession.generateTicket(ID,paramsErstesAuto);
+            parkhausServiceSession.initEbene(parkhausId);
+            Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId,paramsErstesAuto);
             Assertions.assertNotNull(erstesTestTicket);
         }
         public void bezahleTicketTest(){
@@ -79,5 +101,6 @@ public class ParkhausServiceSessionJavaTest {
             //assert preisInCent>0;
         }
     }
+
 
 }

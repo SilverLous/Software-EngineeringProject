@@ -129,7 +129,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-1 Relation")
     public void oneToOneTest(){
 
-        Auto a_test = new Auto( "Y test 123","as" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
@@ -216,7 +216,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.persistEntity(p_e);
         Assertions.assertNotNull(p_e.getId());
 
-        Auto a_test = new Auto( "Y test 123","as" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
