@@ -30,5 +30,7 @@ interface ParkhausServiceSessionIF {
 
     fun findTicketByPlace(placeNumber: Int): Ticket
 
+    fun getTotalUsers(ParkhausEbeneID: String): Int
+
 
 }

@@ -92,7 +92,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.println(config())
 
             "sum" -> {
-                //TODO implement sumOverAllCars
+                //TODO uncomment when implemented out.print(parkhausServiceSession.sumOverCars(NAME()))
             }
 
             "cars" -> {
@@ -106,7 +106,6 @@ public abstract class ParkhausServlet : HttpServlet() {
 
             }
             "chart" -> {
-                // TODO: fill with data
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
@@ -118,10 +117,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.print(jsonData)
             }
             //TODO: fix when corresponding functions are implemented again
-            /*"average" ->  out.println("${parkhausServiceSession.average(NAME())?.format(2)} € per car")
+            ///TODO uncomment when implemented "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())} € per car")
 
 
-            "total users" -> out.println(parkhausServiceSession.totalUsers(NAME()).toString() + " Users")*/
+            //TODO uncomment when implemented "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
 
             else -> out.println("Invalid Command: " + request.queryString)
         }

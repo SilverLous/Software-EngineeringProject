@@ -106,11 +106,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun sumOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
         throw NotImplementedError()
+        // return price in Cent
     }
 
     override fun averageOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price, durch Anzahl wo ImParkhaus false ist
         throw NotImplementedError()
+        // return round(price in Cent)
     }
 
     override fun statsToChart(ParkhausEbeneID: String): statisticsChartDto {
@@ -121,10 +123,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         // print(parkhausEbenen)
         return parkhausEbenen.filter{e->e.name.equals(ParkhausEbeneID)}.first { true }
     }
+    override fun getTotalUsers(ParkhausEbeneID: String):Int{
+        // TODO("Not yet implemented") SQL Abfrage die die Anzahl der totalen Tickets ausgibt
+        throw NotImplementedError()
+        // return Anzahl als Int
+    }
 
     override fun findTicketByPlace(placeNumber: Int): Ticket {
         // TODO("Not yet implemented") SQL Abfrage die das Ticket zu der zugehoerigen Platznummer findet
         throw NotImplementedError()
+        // return Ticket
     }
 
     open fun getParkhausEbenen():List<ParkhausEbene>{
