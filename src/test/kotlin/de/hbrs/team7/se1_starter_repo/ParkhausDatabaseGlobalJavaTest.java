@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
+// import com.sun.org.apache.xpath.internal.operations.Equals;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -236,6 +237,16 @@ public class ParkhausDatabaseGlobalJavaTest {
 
         Assertions.assertEquals(1,saved_p.getEbenen().size());
 
+
+    }
+
+    @Test
+    @DisplayName("Testen der Finde Parkhaus bei PahrkhausID Funktion")
+    public void testFindeParkhausDurchID(String ParkhausID){
+
+        Parkhaus p = new Parkhaus("TestParkhausZuFinden");
+        databaseServiceGlobal.persistEntity(p);
+        // assert Equals(p,databaseServiceGlobal.findEbeneByName("TestParkhausZuFinden"));
 
     }
 

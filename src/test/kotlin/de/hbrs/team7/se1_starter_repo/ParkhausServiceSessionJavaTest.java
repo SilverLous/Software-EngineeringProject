@@ -45,6 +45,11 @@ public class ParkhausServiceSessionJavaTest {
     public void sessionInitTest() {
         Assertions.assertNotNull(parkhausServiceSession.getCity());
     }
+    @Test
+    public void sessionAddLevel() {
+
+        Assertions.assertNotNull(parkhausServiceSession.getCity());
+    }
 
     @Nested
     @DisplayName("Basic IO chain")
