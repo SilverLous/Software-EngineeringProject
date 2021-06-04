@@ -22,7 +22,8 @@ import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStream
 import java.io.InputStreamReader
-import java.util.ArrayList
+import java.time.Instant
+import java.util.*
 
 
 /**
@@ -141,12 +142,15 @@ public abstract class ParkhausServlet : HttpServlet() {
         val event = paramJson[0]
         when (event) {
             "enter" -> {
-                // val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
+                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 //TODO: implement addCar
-                // parkhausServiceSession.generateTicket(NAME(),data)
+                parkhausServiceSession.generateTicket(NAME(),data)
             }
             "leave" -> {
                 //TODO: implement leaveCar
+                val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
+                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(data.space)
+                parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
             "invalid", "occupied" -> {
                 println(body)

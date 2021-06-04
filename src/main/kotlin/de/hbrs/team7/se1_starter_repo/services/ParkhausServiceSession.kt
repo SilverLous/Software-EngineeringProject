@@ -13,7 +13,6 @@ import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
-import java.time.Instant
 import java.util.*
 
 
@@ -44,6 +43,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     open lateinit var city: citiesDTO
         protected set
 
+
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
     // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
@@ -62,9 +62,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto):Auto {
-        val auto = Auto()
-        auto.Kennzeichen = params.license
-
+        val auto = Auto(params.hash,params.color,params.space,params.license)
         // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
         return auto
     }
@@ -76,6 +74,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         parkhaus = DatabaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
 
         this.parkhausServiceGlobal.levelSet.add(name)
+        parkhausEbenen.add(pe)
         return DatabaseGlobal.persistEntity(pe)
     }
 
@@ -97,25 +96,39 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return ticket
     }
 
-    override fun payForTicket(ParkhausEbeneID: String, autoHash: String, timeCheckOut: Long): Int {
-        //autoHash soll nur für eine unique Sache stehen die das Auto identifiziert, andere Keys wären auch ok.
-        //TODO add bezahleTicket functionality
-        throw NotImplementedError()
+    override fun payForTicket(ParkhausEbeneID: String, ticket: Ticket, timeCheckOut: Date): Long {
+        ticket.Ausfahrdatum = timeCheckOut
+        val duration = ticket.Ausstellungsdatum.time - ticket.Ausfahrdatum!!.time
+        ticket.price = (duration/100).toInt()
+        return duration/100
     }
 
     override fun sumOverCars(ParkhausEbeneID: String): Int {
-        //TODO("Not yet implemented")
+        //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
         throw NotImplementedError()
     }
 
     override fun averageOverCars(ParkhausEbeneID: String): Int {
-        //TODO("Not yet implemented")
+        //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price, durch Anzahl wo ImParkhaus false ist
         throw NotImplementedError()
     }
 
     override fun statsToChart(ParkhausEbeneID: String): statisticsChartDto {
         //TODO("Not yet implemented")
         throw NotImplementedError()
+    }
+    override fun getLevelByName(ParkhausEbeneID: String):ParkhausEbene{
+        // print(parkhausEbenen)
+        return parkhausEbenen.filter{e->e.name.equals(ParkhausEbeneID)}.first { true }
+    }
+
+    override fun findTicketByPlace(placeNumber: Int): Ticket {
+        // TODO("Not yet implemented") SQL Abfrage die das Ticket zu der zugehoerigen Platznummer findet
+        throw NotImplementedError()
+    }
+
+    open fun getParkhausEbenen():List<ParkhausEbene>{
+        return parkhausEbenen
     }
 
 
