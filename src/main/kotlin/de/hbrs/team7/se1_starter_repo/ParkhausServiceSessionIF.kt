@@ -18,13 +18,17 @@ interface ParkhausServiceSessionIF {
 
     fun generateTicket(ParkhausEbeneID: String, params: ParkhausServletPostDto): Ticket
 
-    fun payForTicket(ParkhausEbeneID: String, autoHash: String, timeCheckOut: Long): Int
+    fun payForTicket(ParkhausEbeneID: String, ticket: Ticket, timeCheckOut: Date): Long
 
     fun sumOverCars(ParkhausEbeneID: String): Int
 
     fun averageOverCars(ParkhausEbeneID: String): Int
 
     fun statsToChart(ParkhausEbeneID: String): statisticsChartDto
+
+    fun getLevelByName(ParkhausEbeneID: String): ParkhausEbene
+
+    fun findTicketByPlace(placeNumber: Int): Ticket
 
 
 }

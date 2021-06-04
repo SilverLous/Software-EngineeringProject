@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
+import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
@@ -12,6 +13,8 @@ import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -47,8 +50,11 @@ public class ParkhausServiceSessionJavaTest {
     }
     @Test
     public void sessionAddLevel() {
+        parkhausServiceSession.initEbene("TESTEBENE1");
+        List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
+        Assertions.assertNotNull(temp);
+        Assertions.assertEquals("TESTEBENE1",parkhausServiceSession.getLevelByName("TESTEBENE1").getName());
 
-        Assertions.assertNotNull(parkhausServiceSession.getCity());
     }
 
     @Nested
@@ -69,8 +75,8 @@ public class ParkhausServiceSessionJavaTest {
         }
         public void bezahleTicketTest(){
             long timeCheckOut = timeNow + 100;
-            int preisInCent = parkhausServiceSession.payForTicket(ID,paramsErstesAuto.getHash(),timeCheckOut);
-            assert preisInCent>0;
+            //int preisInCent = parkhausServiceSession.payForTicket(ID,paramsErstesAuto.getHash(),timeCheckOut);
+            //assert preisInCent>0;
         }
     }
 
