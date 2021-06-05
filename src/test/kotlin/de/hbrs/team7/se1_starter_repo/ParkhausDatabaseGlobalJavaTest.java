@@ -8,6 +8,8 @@ import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
+import kotlin.Pair;
+import kotlinx.serialization.descriptors.PrimitiveKind;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
@@ -179,18 +181,18 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
 
-    /*@Test
+    @Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
         ParkhausEbene ebene1 = new ParkhausEbene();
         ParkhausEbene ebene2 = new ParkhausEbene();
-        Ticket ticket1 = new Ticket();
-        Ticket ticket2 = new Ticket();
+        Auto auto1 = new Auto();
+        Auto auto2 = new Auto();
 
         databaseServiceGlobal.persistEntity(ebene1);
         databaseServiceGlobal.persistEntity(ebene2);
-        databaseServiceGlobal.persistEntity(ticket1);
-        databaseServiceGlobal.persistEntity(ticket2);
+        databaseServiceGlobal.persistEntity(auto1);
+        databaseServiceGlobal.persistEntity(auto2);
 
         ebene1.appendTicket(ticket1);
         ebene1.appendTicket(ticket2);
@@ -201,7 +203,6 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertNotNull(ebene1.getTickets);
 
     }
-*/
 
     @Test
     @DisplayName("Testen der Ticket Create funktion")
@@ -240,6 +241,41 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     }
 
+    @Test
+    @DisplayName("Testen der Summe und Zählfunktion einer Parkhausebene sowie ein Ticket nach Platznummer finden")
+    public void testGetSumAndCountOfLevel() {
+        Parkhaus p = new Parkhaus("TestParkhaus");
+        databaseServiceGlobal.persistEntity(p);
+        Assertions.assertNotNull(p.getId());
+
+        ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",p);
+        p.addParkhausEbene(p_e);
+        databaseServiceGlobal.persistEntity(p_e);
+        Assertions.assertNotNull(p_e.getId());
+
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        databaseServiceGlobal.persistEntity(a_test);
+        Assertions.assertNotNull(a_test.getAutonummer());
+
+        Auto a_test_2 = new Auto("GanzEchterHash", "Mausgrau", 5, "ABC-123");
+        databaseServiceGlobal.persistEntity(a_test_2);
+        Assertions.assertNotNull(a_test_2.getAutonummer());
+
+        Ticket t_test = new Ticket(  );
+        t_test.setAuto(a_test);
+        databaseServiceGlobal.persistEntity(t_test);
+        Assertions.assertNotNull(t_test.getTicketnummer());
+
+        Ticket t_test_2 = new Ticket();
+        t_test_2.setAuto(a_test_2);
+        databaseServiceGlobal.persistEntity((t_test_2));
+        Assertions.assertNotNull(t_test_2.getTicketnummer());
+
+        Assertions.assertNotNull(databaseServiceGlobal.getSumAndCountOfLevel(p_e.getId()));
+        Assertions.assertEquals(databaseServiceGlobal.findTicketByPlace(p_e.getId(),5),t_test_2);
+
+
+    }
     @Test
     @DisplayName("Testen der Finde Parkhaus bei PahrkhausID Funktion")
     public void testFindeParkhausDurchID(String ParkhausID){
