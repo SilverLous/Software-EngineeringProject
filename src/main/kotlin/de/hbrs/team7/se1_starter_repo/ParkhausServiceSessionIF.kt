@@ -28,7 +28,7 @@ interface ParkhausServiceSessionIF {
 
     fun getLevelByName(ParkhausEbeneID: String): ParkhausEbene
 
-    fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket
+    fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket?
 
     fun getTotalUsers(ParkhausEbeneID: String): Int
 

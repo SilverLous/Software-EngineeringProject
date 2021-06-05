@@ -14,6 +14,8 @@ open means not final
 kotlin is final by default
  */
 
+// https://gist.github.com/jahe/18a4efe614fc73cf184d8ceef8cdc996
+
 @ApplicationScoped
 //@Singleton
 //@Singleton
@@ -88,19 +90,39 @@ open class DatabaseServiceGlobal {
 
     open fun getSumAndCountOfLevel(parkhausLevelID: String): Pair<Int, Int> {
         // Sum then Count from one level of Cars that left
-        throw NotImplementedError()
+        // TODO specify what is SUM?
+
+        val query = em.createNativeQuery(
+            "SELECT COUNT(*) FROM TICKET" +
+                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+
+                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ? AND au.IMPARKHAUS = FALSE"
+            )
+        query.setParameter(1, parkhausLevelID.toLong())
+
+        val test = query.singleResult as Long
+        return Pair(test.toInt(), test.toInt())
     }
 
-    open fun findTicketByPlace(parkhausLevelID: String, placeNumber: Int): Ticket {
+    open fun findTicketByPlace(parkhausLevelID: String, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
-            "INNER JOIN PARKHAUSEBEBE pe on TICKET.TICKETNUMMER = pe.TICKETS_TICKETNUMMER" +
-            "INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
-            "WHERE pe.ID = ? AND au.Platznummer = ?"
+            " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+
+            " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+
+            " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+
+            " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE"
             , Ticket::class.java)
-        query.setParameter(1, parkhausLevelID)
-        query.setParameter(2, placeNumber.toString())
-        return query.resultList as Ticket
+        query.setParameter(1, parkhausLevelID.toLong())
+        query.setParameter(2, placeNumber)
+
+        return query.singleResult as Ticket?
 
     }
 
