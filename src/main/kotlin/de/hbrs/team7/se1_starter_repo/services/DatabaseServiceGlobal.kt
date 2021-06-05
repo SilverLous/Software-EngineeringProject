@@ -87,5 +87,13 @@ open class DatabaseServiceGlobal {
 
     }
 
+    open fun getSumAndCount(parkhausId: String): List<Int> {
+        // Sum then Count from one level of Cars that left
+        throw NotImplementedError()
+    }
+
+    open fun findTicketByPlace(parkhausEbeneID: String, placeNumber: Int): Ticket {
+        throw NotImplementedError()
+    }
 
 }

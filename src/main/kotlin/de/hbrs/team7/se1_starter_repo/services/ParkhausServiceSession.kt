@@ -105,13 +105,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun sumOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
-        throw NotImplementedError()
+        return DatabaseGlobal.getSumAndCount(ParkhausEbeneID)[0]
         // return price in Cent
     }
 
     override fun averageOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price, durch Anzahl wo ImParkhaus false ist
-        throw NotImplementedError()
+        val result = DatabaseGlobal.getSumAndCount(ParkhausEbeneID)
+        return result[0]/result[1]
         // return round(price in Cent)
     }
 
@@ -125,13 +126,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
     override fun getTotalUsers(ParkhausEbeneID: String):Int{
         // TODO("Not yet implemented") SQL Abfrage die die Anzahl der totalen Tickets ausgibt
-        throw NotImplementedError()
+        return DatabaseGlobal.getSumAndCount(ParkhausEbeneID)[1]
         // return Anzahl als Int
     }
 
-    override fun findTicketByPlace(placeNumber: Int): Ticket {
+    override fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket {
         // TODO("Not yet implemented") SQL Abfrage die das Ticket zu der zugehoerigen Platznummer findet
-        throw NotImplementedError()
+        return DatabaseGlobal.findTicketByPlace(ParkhausEbeneID, placeNumber)
         // return Ticket
     }
 

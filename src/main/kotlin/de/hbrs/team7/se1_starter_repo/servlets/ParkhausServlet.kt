@@ -148,7 +148,7 @@ public abstract class ParkhausServlet : HttpServlet() {
             "leave" -> {
                 //TODO: implement leaveCar
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(data.space)
+                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space)
                 parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
             "invalid", "occupied" -> {
