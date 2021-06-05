@@ -7,7 +7,6 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
 
 
-
 /*
 
 Functions may need to be open
@@ -87,7 +86,7 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun getSumAndCountOfLevel(parkhausLevelID: String): List<Int> {
+    open fun getSumAndCountOfLevel(parkhausLevelID: String): Pair<Int, Int> {
         // Sum then Count from one level of Cars that left
         throw NotImplementedError()
     }
