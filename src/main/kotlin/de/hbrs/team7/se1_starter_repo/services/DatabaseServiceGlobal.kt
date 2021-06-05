@@ -92,7 +92,16 @@ open class DatabaseServiceGlobal {
     }
 
     open fun findTicketByPlace(parkhausLevelID: String, placeNumber: Int): Ticket {
-        throw NotImplementedError()
+        val query = em.createNativeQuery(
+            "SELECT * FROM TICKET" +
+            "INNER JOIN PARKHAUSEBEBE pe on TICKET.TICKETNUMMER = pe.TICKETS_TICKETNUMMER" +
+            "INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+            "WHERE pe.ID = ? AND au.Platznummer = ?"
+            , Ticket::class.java)
+        query.setParameter(1, parkhausLevelID)
+        query.setParameter(2, placeNumber.toString())
+        return query.resultList as Ticket
+
     }
 
 }
