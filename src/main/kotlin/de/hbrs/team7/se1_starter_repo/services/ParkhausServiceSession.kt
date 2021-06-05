@@ -63,6 +63,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto):Auto {
         val auto = Auto(params.hash,params.color,params.space,params.license)
+        this.DatabaseGlobal.persistEntity(auto)
         // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
         return auto
     }
@@ -100,18 +101,21 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         ticket.Ausfahrdatum = timeCheckOut
         val duration = ticket.Ausstellungsdatum.time - ticket.Ausfahrdatum!!.time
         ticket.price = (duration/100).toInt()
+        this.DatabaseGlobal.mergeUpdatedEntity(ticket)
+        ticket.Auto?.ImParkhaus = false
+        this.DatabaseGlobal.mergeUpdatedEntity(ticket.Auto)
         return duration/100
     }
 
     override fun sumOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
-        return DatabaseGlobal.getSumAndCount(ParkhausEbeneID)[0]
+        return DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID)[0]
         // return price in Cent
     }
 
     override fun averageOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price, durch Anzahl wo ImParkhaus false ist
-        val result = DatabaseGlobal.getSumAndCount(ParkhausEbeneID)
+        val result = DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID)
         return result[0]/result[1]
         // return round(price in Cent)
     }
@@ -126,7 +130,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
     override fun getTotalUsers(ParkhausEbeneID: String):Int{
         // TODO("Not yet implemented") SQL Abfrage die die Anzahl der totalen Tickets ausgibt
-        return DatabaseGlobal.getSumAndCount(ParkhausEbeneID)[1]
+        return DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID)[1]
         // return Anzahl als Int
     }
 
