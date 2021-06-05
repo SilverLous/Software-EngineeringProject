@@ -28,6 +28,10 @@ open class ParkhausEbene (
 
     private var freiePlaetze: Int = 0
 
+    fun getIdAsString(): String {
+        return id.toString()
+    }
+
     fun getGesamtPlaetze(): Int {
         return gesamtPlaetze
     }
