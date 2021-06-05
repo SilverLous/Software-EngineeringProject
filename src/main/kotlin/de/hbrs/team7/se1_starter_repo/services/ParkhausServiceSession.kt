@@ -134,7 +134,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         // return Anzahl als Int
     }
 
-    override fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket {
+    override fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket? {
         // TODO("Not yet implemented") SQL Abfrage die das Ticket zu der zugehoerigen Platznummer findet
         return DatabaseGlobal.findTicketByPlace(ParkhausEbeneID, placeNumber)
         // return Ticket

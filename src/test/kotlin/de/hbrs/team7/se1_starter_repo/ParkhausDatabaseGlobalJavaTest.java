@@ -239,7 +239,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     @Test
-    @DisplayName("Testen der Summe und Zählfunktion einer Parkhausebene sowie ein Ticket nach Platznummer finden")
+    @DisplayName("Testen der Summe und Zählfunktion einer Parkhausebene")
     public void testGetSumAndCountOfLevel() {
         Parkhaus p = new Parkhaus("TestParkhaus");
         databaseServiceGlobal.persistEntity(p);
@@ -264,14 +264,51 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertNotNull(t_test.getTicketnummer());
 
         Ticket t_test_2 = new Ticket();
+        ArrayList<ParkhausEbene> arraylistEbenen = new ArrayList<ParkhausEbene>();
+        arraylistEbenen.add(p_e);
         t_test_2.setAuto(a_test_2);
-        databaseServiceGlobal.persistEntity((t_test_2));
+        databaseServiceGlobal.persistEntity(t_test_2);
         Assertions.assertNotNull(t_test_2.getTicketnummer());
 
         Assertions.assertNotNull(databaseServiceGlobal.getSumAndCountOfLevel(p_e.getIdAsString()));
+
+    }
+
+
+    @Test
+    @DisplayName("Finden eines Tickets anhand der Platznummer und der Ebenen-ID")
+    public void testFindTicketByPlace() {
+        Parkhaus p = new Parkhaus("TestParkhaus");
+        databaseServiceGlobal.persistEntity(p);
+        Assertions.assertNotNull(p.getId());
+
+        ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",p);
+        p.addParkhausEbene(p_e);
+        databaseServiceGlobal.persistEntity(p_e);
+        Assertions.assertNotNull(p_e.getId());
+
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        databaseServiceGlobal.persistEntity(a_test);
+        Assertions.assertNotNull(a_test.getAutonummer());
+
+        Auto a_test_2 = new Auto("GanzEchterHash", "Mausgrau", 5, "ABC-123");
+        databaseServiceGlobal.persistEntity(a_test_2);
+        Assertions.assertNotNull(a_test_2.getAutonummer());
+
+        Ticket t_test = new Ticket();
+        t_test.setAuto(a_test);
+        databaseServiceGlobal.persistEntity(t_test);
+        Assertions.assertNotNull(t_test.getTicketnummer());
+
+        Ticket t_test_2 = new Ticket();
+        ArrayList<ParkhausEbene> arraylistEbenen = new ArrayList<ParkhausEbene>();
+        arraylistEbenen.add(p_e);
+        t_test_2.setParkhausEbenen(arraylistEbenen);
+        t_test_2.setAuto(a_test_2);
+        databaseServiceGlobal.persistEntity(t_test_2);
+        Assertions.assertNotNull(t_test_2.getTicketnummer());
+
         Assertions.assertEquals(databaseServiceGlobal.findTicketByPlace(p_e.getIdAsString(),5),t_test_2);
-
-
     }
     @Test
     @DisplayName("Testen der Finde Parkhaus bei ParkhausID Funktion")
