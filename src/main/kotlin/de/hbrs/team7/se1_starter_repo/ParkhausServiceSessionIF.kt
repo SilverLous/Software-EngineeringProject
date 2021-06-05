@@ -32,5 +32,8 @@ interface ParkhausServiceSessionIF {
 
     fun getTotalUsers(ParkhausEbeneID: String): Int
 
+    fun getCurrenUsers(ParkhausEbeneID: String): Int
+
+    fun getParkhausEbenen():List<ParkhausEbene>
 
 }

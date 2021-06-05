@@ -126,4 +126,21 @@ open class DatabaseServiceGlobal {
 
     }
 
+    open fun getSumOfTicketPrices(parkhausEbeneID: String): Int {
+        //TODO lieber atomarisieren
+        throw NotImplementedError()
+    }
+
+    open fun getTotalUsersCount(parkhausEbeneID: String): Int {
+        //TODO lieber atomarisieren
+        // returned Anzahl aller Benutzer außerhalb und innerhalb der Parkhaus Ebene
+        throw NotImplementedError()
+    }
+
+    open fun getNotAvailableParkingSpaces(parkhausEbeneID: String): Int {
+        //TODO lieber atomarisieren
+        // returned Anzahl aller belegter Plätze
+        throw NotImplementedError()
+    }
+
 }

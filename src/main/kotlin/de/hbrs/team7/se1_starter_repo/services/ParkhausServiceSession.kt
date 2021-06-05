@@ -109,15 +109,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun sumOverCars(ParkhausEbeneID: String): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
-        return DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID).first
+        return DatabaseGlobal.getSumOfTicketPrices(ParkhausEbeneID)
         // return price in Cent
-    }
-
-    override fun averageOverCars(ParkhausEbeneID: String): Int {
-        //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price, durch Anzahl wo ImParkhaus false ist
-        val result = DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID)
-        return result.first/result.second
-        // return round(price in Cent)
     }
 
     override fun statsToChart(ParkhausEbeneID: String): statisticsChartDto {
@@ -125,22 +118,24 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         throw NotImplementedError()
     }
     override fun getLevelByName(ParkhausEbeneID: String):ParkhausEbene{
-        // print(parkhausEbenen)
         return parkhausEbenen.filter{e->e.name.equals(ParkhausEbeneID)}.first { true }
     }
     override fun getTotalUsers(ParkhausEbeneID: String):Int{
-        // TODO("Not yet implemented") SQL Abfrage die die Anzahl der totalen Tickets ausgibt
-        return DatabaseGlobal.getSumAndCountOfLevel(ParkhausEbeneID).second
-        // return Anzahl als Int
+        return DatabaseGlobal.getTotalUsersCount(ParkhausEbeneID)
+    }
+    override fun getCurrenUsers(ParkhausEbeneID: String):Int{
+        return DatabaseGlobal.getNotAvailableParkingSpaces(ParkhausEbeneID)
+    }
+
+    override fun averageOverCars(ParkhausEbeneID: String): Int {
+        return sumOverCars(ParkhausEbeneID) / (getTotalUsers(ParkhausEbeneID) - getCurrenUsers(ParkhausEbeneID))
     }
 
     override fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket? {
-        // TODO("Not yet implemented") SQL Abfrage die das Ticket zu der zugehoerigen Platznummer findet
         return DatabaseGlobal.findTicketByPlace(ParkhausEbeneID, placeNumber)
-        // return Ticket
     }
 
-    open fun getParkhausEbenen():List<ParkhausEbene>{
+    override fun getParkhausEbenen():List<ParkhausEbene>{
         return parkhausEbenen
     }
 
