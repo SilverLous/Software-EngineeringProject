@@ -324,7 +324,7 @@ public class ParkhausDatabaseGlobalJavaTest {
 
 
     @Test
-    @DisplayName("Testen der Finde Parkhaus bei ParkhausID Funktion")
+    @DisplayName("Testen der Get Sum bei Data Base Funktion")
     public void testGetSum() {
         Parkhaus parkhaus = new Parkhaus("TestStadt");
         ParkhausEbene ebene1 = new ParkhausEbene("65489", parkhaus);
@@ -353,7 +353,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     @Test
-    @DisplayName("Testen der Finde Parkhaus bei ParkhausID Funktion")
+    @DisplayName("Testen der Total Users bei Data Base Funktion")
     public void testTotalUsers() {
         Parkhaus parkhaus = new Parkhaus("TestStadt");
         ParkhausEbene ebene1 = new ParkhausEbene("65489", parkhaus);
@@ -380,7 +380,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     @Test
-    @DisplayName("Testen der Finde Parkhaus bei ParkhausID Funktion")
+    @DisplayName("Testen der Not vailable bei Data Base Funktion")
     public void testGetNotAvailableParkingSpaces() {
         Parkhaus parkhaus = new Parkhaus("TestStadt");
         ParkhausEbene ebene1 = new ParkhausEbene("65489", parkhaus);
