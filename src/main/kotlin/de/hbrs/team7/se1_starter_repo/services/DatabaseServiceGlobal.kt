@@ -1,6 +1,8 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.entities.Auto
+import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -127,20 +129,69 @@ open class DatabaseServiceGlobal {
     }
 
     open fun getSumOfTicketPrices(parkhausEbeneID: String): Int {
-        //TODO lieber atomarisieren
-        throw NotImplementedError()
+        val query = em.createNativeQuery(
+            "SELECT SUM(TICKET.PRICE) FROM TICKET" +
+
+                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ?"
+        )
+        query.setParameter(1, parkhausEbeneID.toLong())
+
+        val result = query.singleResult as Long
+        return result.toInt()
     }
 
     open fun getTotalUsersCount(parkhausEbeneID: String): Int {
-        //TODO lieber atomarisieren
         // returned Anzahl aller Benutzer außerhalb und innerhalb der Parkhaus Ebene
-        throw NotImplementedError()
+
+        val query = em.createNativeQuery(
+            "SELECT COUNT(*) FROM TICKET" +
+
+                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+
+                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ?"
+        )
+        query.setParameter(1, parkhausEbeneID.toLong())
+
+        val result = query.singleResult as Long
+        return result.toInt()
     }
 
     open fun getNotAvailableParkingSpaces(parkhausEbeneID: String): Int {
         //TODO lieber atomarisieren
         // returned Anzahl aller belegter Plätze
-        throw NotImplementedError()
+
+        // val ebene = findByID(parkhausEbeneID.toLong(),ParkhausEbene::class.java )
+
+        val query = em.createNativeQuery(
+            "SELECT Platznummer FROM AUTO" +
+
+                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
+
+                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on ti.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = TRUE"
+        )
+
+        query.setParameter(1, parkhausEbeneID.toLong())
+
+        val belegtePlaetze = query.resultList as List<Int>
+
+        // val ebenenSet = (1 .. ebene!!.gesamtPlaetze).toSet()
+
+        // val ebenenSet.minus(  autos.map { a -> a.Platznummer!! } )
+        // autos.map { a -> a.Platznummer!! }
+
+        return belegtePlaetze.count()
     }
 
 }

@@ -123,7 +123,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun getTotalUsers(ParkhausEbeneID: String):Int{
         return DatabaseGlobal.getTotalUsersCount(ParkhausEbeneID)
     }
-    override fun getCurrenUsers(ParkhausEbeneID: String):Int{
+    override fun getCurrenUsers(ParkhausEbeneID: String): Int{
         return DatabaseGlobal.getNotAvailableParkingSpaces(ParkhausEbeneID)
     }
 

@@ -19,7 +19,7 @@ open class ParkhausEbene (
     val id: Long = 0
 
     @Column(nullable = false)
-    private var gesamtPlaetze: Int = 0
+    internal var gesamtPlaetze: Int = 0
 
 
 
