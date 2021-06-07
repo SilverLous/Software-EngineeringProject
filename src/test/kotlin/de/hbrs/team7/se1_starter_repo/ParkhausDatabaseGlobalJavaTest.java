@@ -178,29 +178,56 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     }
 
-       /*
     @Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
+        Parkhaus parkhaus = new Parkhaus("Parkhaus");
         ParkhausEbene ebene1 = new ParkhausEbene();
+        ebene1.setName("Ebene 1");
+        ebene1.setParkhaus(parkhaus);
         ParkhausEbene ebene2 = new ParkhausEbene();
-        Auto auto1 = new Auto();
-        Auto auto2 = new Auto();
+        ebene2.setName("Ebene 2");
+        ebene2.setParkhaus(parkhaus);
+
+
+        Auto auto1 = new Auto("EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto auto2 = new Auto("HashWert", "bunt", 3,"ACG-398");
 
         databaseServiceGlobal.persistEntity(ebene1);
         databaseServiceGlobal.persistEntity(ebene2);
         databaseServiceGlobal.persistEntity(auto1);
         databaseServiceGlobal.persistEntity(auto2);
 
-        ebene1.appendTicket(ticket1);
-        ebene1.appendTicket(ticket2);
+        Ticket ticket1 = new Ticket();
+        Ticket ticket2 = new Ticket();
+        databaseServiceGlobal.persistEntity(ticket1);
+        databaseServiceGlobal.persistEntity(ticket2);
+        ArrayList<Ticket> liste1 = new ArrayList<Ticket>();
+        liste1.add(ticket1);
+        liste1.add(ticket2);
 
-        ebene2.appendTicket(ticket1);
-        ebene2.appendTicket(ticket2);
+        ebene1.setTickets(liste1);
 
-        Assertions.assertNotNull(ebene1.getTickets);
+        Ticket ticket3 = new Ticket();
+        Ticket ticket4 = new Ticket();
+        databaseServiceGlobal.persistEntity(ticket3);
+        databaseServiceGlobal.persistEntity(ticket4);
+        ArrayList<Ticket> liste2 = new ArrayList<Ticket>();
+        liste2.add(ticket3);
+        liste2.add(ticket4);
 
-    }             */
+        ebene2.setTickets(liste2);
+
+        Assertions.assertTrue(ebene1.getTickets().contains(ticket1));
+        Assertions.assertTrue(ebene1.getTickets().contains(ticket2));
+        Assertions.assertFalse(ebene1.getTickets().contains(ticket3));
+        Assertions.assertFalse(ebene1.getTickets().contains(ticket4));
+
+        Assertions.assertFalse(ebene2.getTickets().contains(ticket1));
+        Assertions.assertFalse(ebene2.getTickets().contains(ticket2));
+        Assertions.assertTrue(ebene2.getTickets().contains(ticket3));
+        Assertions.assertTrue(ebene2.getTickets().contains(ticket4));
+    }
 
     @Test
     @DisplayName("Testen der Ticket Create funktion")
