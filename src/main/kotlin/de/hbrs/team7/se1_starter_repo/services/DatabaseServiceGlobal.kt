@@ -113,11 +113,11 @@ open class DatabaseServiceGlobal {
     open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
-            " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
 
-            " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
-            " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
             " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE"
             , Ticket::class.java)
@@ -151,11 +151,11 @@ open class DatabaseServiceGlobal {
         val query = em.createNativeQuery(
             "SELECT COUNT(*) FROM TICKET" +
 
-                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
+                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
 
-                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
-                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ?"
         )
@@ -176,9 +176,9 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
 
-                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on ti.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
-                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = TRUE"
         , Auto::class.java)
