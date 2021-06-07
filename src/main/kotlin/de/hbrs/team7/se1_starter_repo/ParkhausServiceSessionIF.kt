@@ -16,24 +16,26 @@ interface ParkhausServiceSessionIF {
 
     fun initEbene(name: String): ParkhausEbene
 
-    fun generateTicket(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Ticket
+    fun generateTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
 
-    fun payForTicket(ParkhausEbeneID: Long, ticket: Ticket, timeCheckOut: Date): Long
+    fun payForTicket(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
 
-    fun sumOverCars(ParkhausEbeneID: Long): Int
+    fun sumOverCars(ParkhausEbeneName: String): Int
 
-    fun averageOverCars(ParkhausEbeneID: Long): Int
+    fun averageOverCars(ParkhausEbeneName: String): Int
 
-    fun statsToChart(ParkhausEbeneID: Long): statisticsChartDto
+    fun statsToChart(ParkhausEbeneName: String): statisticsChartDto
 
     fun getLevelById(ParkhausEbeneID: Long): ParkhausEbene
 
-    fun findTicketByPlace(ParkhausEbeneID: Long, placeNumber: Int): Ticket?
+    fun findTicketByPlace(ParkhausEbeneName: String, placeNumber: Int): Ticket?
 
-    fun getTotalUsers(ParkhausEbeneID: Long): Int
+    fun getTotalUsers(ParkhausEbeneName: String): Int
 
-    fun getCurrenUsers(ParkhausEbeneID: Long): Int
+    fun getCurrenUsers(ParkhausEbeneName: String): Int
 
     fun getParkhausEbenen():List<ParkhausEbene>
+
+    fun getIdByName(ParkhausEbeneName: String):Long
 
 }

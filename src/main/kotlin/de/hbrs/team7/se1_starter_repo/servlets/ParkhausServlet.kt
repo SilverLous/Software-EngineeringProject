@@ -93,7 +93,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.println(config())
 
             "sum" -> {
-                //TODO uncomment when implemented out.print(parkhausServiceSession.sumOverCars(this.parkhausEbene.id))
+                //TODO uncomment when implemented out.print(parkhausServiceSession.sumOverCars(NAME()))
             }
 
             "cars" -> {
@@ -118,10 +118,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.print(jsonData)
             }
             //TODO: fix when corresponding functions are implemented again
-            ///TODO uncomment when implemented "average" ->  out.println("${parkhausServiceSession.averageOverCars(this.parkhausEbene.id)} € per car")
+            ///TODO uncomment when implemented "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())} € per car")
 
 
-            //TODO uncomment when implemented "total users" -> out.println("${parkhausServiceSession.getTotalUsers(this.parkhausEbene.id)} Users")
+            //TODO uncomment when implemented "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
 
             else -> out.println("Invalid Command: " + request.queryString)
         }
@@ -144,14 +144,14 @@ public abstract class ParkhausServlet : HttpServlet() {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 //TODO: implement addCar
-                parkhausServiceSession.generateTicket(this.parkhausEbene.id, data)
+                parkhausServiceSession.generateTicket(NAME(), data)
             }
             "leave" -> {
                 //TODO: implement leaveCar
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(this.parkhausEbene.id,data.space) !!
+                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space) !!
                 // TODO fix possible nullpointer
-                parkhausServiceSession.payForTicket(this.parkhausEbene.id,zustaendigesTicket, Date.from(Instant.now()))
+                parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
             "invalid", "occupied" -> {
                 println(body)

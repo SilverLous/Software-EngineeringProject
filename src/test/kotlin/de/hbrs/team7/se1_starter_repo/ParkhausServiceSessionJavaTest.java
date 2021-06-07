@@ -82,8 +82,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testFindTicketByPlace() {
-        ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-        Long parkhausId = parkhuus.getId();
+        String parkhausId = "Test Ebene";
+        parkhausServiceSession.initEbene(parkhausId);
+
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
@@ -94,8 +95,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetSum() {
-        ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-        Long parkhausId = parkhuus.getId();
+        String parkhausId = "Test Ebene";
+        parkhausServiceSession.initEbene(parkhausId);
+
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
@@ -111,8 +113,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetAverage() {
-        ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-        Long parkhausId = parkhuus.getId();
+        String parkhausId = "Test Ebene";
+        parkhausServiceSession.initEbene(parkhausId);
+
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
@@ -124,8 +127,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetTotalUsers() {
-        ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-        Long parkhausId = parkhuus.getId();
+        String parkhausId = "Test Ebene";
+        parkhausServiceSession.initEbene(parkhausId);
+
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
@@ -153,15 +157,17 @@ public class ParkhausServiceSessionJavaTest {
         @Order(1)
         @DisplayName("Testen der addCar Funktion")
         public void zieheTicketTest() {
-            ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-            Long parkhausId = parkhuus.getId();
+            String parkhausId = "Test Ebene";
+            parkhausServiceSession.initEbene(parkhausId);
+
             Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
             Assertions.assertNotNull(erstesTestTicket);
         }
 
         public void bezahleTicketTest() {
-            ParkhausEbene parkhuus = parkhausServiceSession.initEbene("parkhausName");
-            Long parkhausId = parkhuus.getId();
+            String parkhausId = "Test Ebene";
+            parkhausServiceSession.initEbene(parkhausId);
+
             Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
             Date timeCheckOut = new Date(erstesTestTicket.getAusstellungsdatum().getTime() + 100);
             Long preisInCent = parkhausServiceSession.payForTicket(parkhausId, erstesTestTicket, timeCheckOut);
