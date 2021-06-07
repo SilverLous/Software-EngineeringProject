@@ -1,8 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
-import de.hbrs.team7.se1_starter_repo.entities.Auto
-import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -90,7 +88,7 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun getSumAndCountOfLevel(parkhausLevelID: String): Pair<Int, Int> {
+    open fun getSumAndCountOfLevel(parkhausLevelID: Long): Pair<Int, Int> {
         // Sum then Count from one level of Cars that left
         // TODO specify what is SUM?
 
@@ -110,7 +108,7 @@ open class DatabaseServiceGlobal {
         return Pair(test.toInt(), test.toInt())
     }
 
-    open fun findTicketByPlace(parkhausLevelID: String, placeNumber: Int): Ticket? {
+    open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
             " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
@@ -128,7 +126,7 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun getSumOfTicketPrices(parkhausEbeneID: String): Int {
+    open fun getSumOfTicketPrices(parkhausEbeneID: Long): Int {
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +
 
@@ -144,7 +142,7 @@ open class DatabaseServiceGlobal {
         return result.toInt()
     }
 
-    open fun getTotalUsersCount(parkhausEbeneID: String): Int {
+    open fun getTotalUsersCount(parkhausEbeneID: Long): Int {
         // returned Anzahl aller Benutzer außerhalb und innerhalb der Parkhaus Ebene
 
         val query = em.createNativeQuery(
@@ -164,7 +162,7 @@ open class DatabaseServiceGlobal {
         return result.toInt()
     }
 
-    open fun getNotAvailableParkingSpaces(parkhausEbeneID: String): Int {
+    open fun getNotAvailableParkingSpaces(parkhausEbeneID: Long): Int {
         //TODO lieber atomarisieren
         // returned Anzahl aller belegter Plätze
 

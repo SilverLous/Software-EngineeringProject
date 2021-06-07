@@ -61,7 +61,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
-    override fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto):Auto {
+    override fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
         val auto = Auto(params.hash,params.color,params.space,params.license)
         this.DatabaseGlobal.persistEntity(auto)
         // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
@@ -79,7 +79,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return DatabaseGlobal.persistEntity(pe)
     }
 
-    override fun generateTicket(ParkhausEbeneID: String, params: ParkhausServletPostDto): Ticket {
+    override fun generateTicket(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Ticket {
         val auto = addCar(ParkhausEbeneID, params)
 
         val ticket = Ticket()
@@ -87,7 +87,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         ticket.Preisklasse = 2
         ticket.Auto = auto
         auto.Ticket = ticket
-        val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.name == ParkhausEbeneID }
+        val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == ParkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
         this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
         val saved = this.DatabaseGlobal.persistEntity(ticket)
@@ -99,7 +99,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return ticket
     }
 
-    override fun payForTicket(ParkhausEbeneID: String, ticket: Ticket, timeCheckOut: Date): Long {
+    override fun payForTicket(ParkhausEbeneID: Long, ticket: Ticket, timeCheckOut: Date): Long {
         ticket.Ausfahrdatum = timeCheckOut
         val duration = ticket.Ausstellungsdatum.time - ticket.Ausfahrdatum!!.time
         ticket.price = (duration/100).toInt()
@@ -109,31 +109,31 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return duration/100
     }
 
-    override fun sumOverCars(ParkhausEbeneID: String): Int {
+    override fun sumOverCars(ParkhausEbeneID: Long): Int {
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
         return DatabaseGlobal.getSumOfTicketPrices(ParkhausEbeneID)
         // return price in Cent
     }
 
-    override fun statsToChart(ParkhausEbeneID: String): statisticsChartDto {
+    override fun statsToChart(ParkhausEbeneID: Long): statisticsChartDto {
         //TODO("Not yet implemented")
         throw NotImplementedError()
     }
-    override fun getLevelByName(ParkhausEbeneID: String):ParkhausEbene{
-        return parkhausEbenen.filter{e->e.name.equals(ParkhausEbeneID)}.first { true }
+    override fun getLevelById(ParkhausEbeneID: Long):ParkhausEbene{
+        return parkhausEbenen.filter{e-> e.id == ParkhausEbeneID }.first { true }
     }
-    override fun getTotalUsers(ParkhausEbeneID: String):Int{
+    override fun getTotalUsers(ParkhausEbeneID: Long):Int{
         return DatabaseGlobal.getTotalUsersCount(ParkhausEbeneID)
     }
-    override fun getCurrenUsers(ParkhausEbeneID: String): Int{
+    override fun getCurrenUsers(ParkhausEbeneID: Long): Int{
         return DatabaseGlobal.getNotAvailableParkingSpaces(ParkhausEbeneID)
     }
 
-    override fun averageOverCars(ParkhausEbeneID: String): Int {
+    override fun averageOverCars(ParkhausEbeneID: Long): Int {
         return sumOverCars(ParkhausEbeneID) / (getTotalUsers(ParkhausEbeneID) - getCurrenUsers(ParkhausEbeneID))
     }
 
-    override fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket? {
+    override fun findTicketByPlace(ParkhausEbeneID: Long, placeNumber: Int): Ticket? {
         return DatabaseGlobal.findTicketByPlace(ParkhausEbeneID, placeNumber)
     }
 

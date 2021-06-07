@@ -12,27 +12,27 @@ import java.util.*
 interface ParkhausServiceSessionIF {
     fun sessionInit()
 
-    fun addCar(ParkhausEbeneID: String, params: ParkhausServletPostDto): Auto
+    fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Auto
 
     fun initEbene(name: String): ParkhausEbene
 
-    fun generateTicket(ParkhausEbeneID: String, params: ParkhausServletPostDto): Ticket
+    fun generateTicket(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Ticket
 
-    fun payForTicket(ParkhausEbeneID: String, ticket: Ticket, timeCheckOut: Date): Long
+    fun payForTicket(ParkhausEbeneID: Long, ticket: Ticket, timeCheckOut: Date): Long
 
-    fun sumOverCars(ParkhausEbeneID: String): Int
+    fun sumOverCars(ParkhausEbeneID: Long): Int
 
-    fun averageOverCars(ParkhausEbeneID: String): Int
+    fun averageOverCars(ParkhausEbeneID: Long): Int
 
-    fun statsToChart(ParkhausEbeneID: String): statisticsChartDto
+    fun statsToChart(ParkhausEbeneID: Long): statisticsChartDto
 
-    fun getLevelByName(ParkhausEbeneID: String): ParkhausEbene
+    fun getLevelById(ParkhausEbeneID: Long): ParkhausEbene
 
-    fun findTicketByPlace(ParkhausEbeneID: String, placeNumber: Int): Ticket?
+    fun findTicketByPlace(ParkhausEbeneID: Long, placeNumber: Int): Ticket?
 
-    fun getTotalUsers(ParkhausEbeneID: String): Int
+    fun getTotalUsers(ParkhausEbeneID: Long): Int
 
-    fun getCurrenUsers(ParkhausEbeneID: String): Int
+    fun getCurrenUsers(ParkhausEbeneID: Long): Int
 
     fun getParkhausEbenen():List<ParkhausEbene>
 
