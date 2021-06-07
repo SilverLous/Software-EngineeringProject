@@ -21,7 +21,7 @@ open class Ticket {
     @JoinColumn(name = "Auto_Autonummer", referencedColumnName = "Autonummer")
     open var Auto: Auto? = null
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "tickets")
     var parkhausEbenen: ArrayList<ParkhausEbene> = ArrayList()
 
     @Column(nullable = false)

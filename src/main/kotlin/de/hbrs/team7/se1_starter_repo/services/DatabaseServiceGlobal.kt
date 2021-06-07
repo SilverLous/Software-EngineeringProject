@@ -195,8 +195,23 @@ open class DatabaseServiceGlobal {
         return belegtePlaetze.count()
     }
 
-    open fun autosInParkEbene(parkhausEbeneID: Any): List<Auto> {
-        throw NotImplementedError()
+    open fun autosInParkEbene(parkhausEbeneID: Long): List<Auto> {
+        val query = em.createNativeQuery(
+            "SELECT * FROM AUTO" +
+
+                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = TRUE"
+            , Auto::class.java)
+
+        query.setParameter(1, parkhausEbeneID)
+
+        val belegtePlaetze = query.resultList as List<Auto>
+        return belegtePlaetze
     }
 
 }
