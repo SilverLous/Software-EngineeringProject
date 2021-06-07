@@ -38,4 +38,8 @@ interface ParkhausServiceSessionIF {
 
     fun getIdByName(ParkhausEbeneName: String):Long
 
+    fun autosInParkEbene(ParkhausEbeneName: String): List<Auto>
+
+    fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>
+
 }

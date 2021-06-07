@@ -151,6 +151,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return parkhausEbenen
     }
 
+    override fun autosInParkEbene(ParkhausEbeneName: String): List<Auto>{
+        val parkhausEbeneID = getIdByName(ParkhausEbeneName)
+        return autosInParkEbene(parkhausEbeneID)
+    }
+
+    override fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>{
+        return DatabaseGlobal.autosInParkEbene(ParkhausEbeneID)
+    }
+
 
 }
 

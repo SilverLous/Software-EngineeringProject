@@ -346,6 +346,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         ticketArray.add(t_test);
         ebene1.setTickets(ticketArray);
         databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
 
         // assert databaseServiceGlobal.getSumOfTicketPrices(ebene1.getId()) > 0;
 
@@ -375,6 +376,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         ticketArray.add(t_test);
         ebene1.setTickets(ticketArray);
         databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
 
         Assertions.assertEquals(1,databaseServiceGlobal.getTotalUsersCount(ebene1.getId()));
     }
@@ -387,8 +389,8 @@ public class ParkhausDatabaseGlobalJavaTest {
         ebene1.setGesamtPlaetze(12);
         ParkhausEbene ebene2 = new ParkhausEbene("654321", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
-        int available = databaseServiceGlobal.getNotAvailableParkingSpaces(ebene1.getId());
         int shouldBeAvailable = ebene1.getGesamtPlaetze();
+        int available = shouldBeAvailable - databaseServiceGlobal.getNotAvailableParkingSpaces(ebene1.getId());
         Assertions.assertEquals(available,shouldBeAvailable);
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto params = new ParkhausServletPostDto(2, timeNow, 0,
@@ -404,8 +406,34 @@ public class ParkhausDatabaseGlobalJavaTest {
         ticketArray.add(t_test);
         ebene1.setTickets(ticketArray);
         databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
 
-        Assertions.assertEquals(available+1,databaseServiceGlobal.getNotAvailableParkingSpaces(ebene1.getId()));
+        Assertions.assertEquals(available-1,databaseServiceGlobal.getNotAvailableParkingSpaces(ebene1.getId()));
+    }
+
+    @Test
+    @DisplayName("Testen der Not vailable bei Data Base Funktion")
+    public void testGetAllCars() {
+        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        ParkhausEbene ebene1 = new ParkhausEbene("65489", parkhaus);
+        ebene1.setGesamtPlaetze(12);
+        databaseServiceGlobal.persistEntity(ebene1);
+        Long timeNow = System.currentTimeMillis();
+        ParkhausServletPostDto params = new ParkhausServletPostDto(2, timeNow, 0,
+                0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+        Auto firstCar = new Auto(params.getHash(),params.getColor(),params.getSpace(),params.getLicense());
+        Ticket t_test = new Ticket();
+        t_test.setAuto(firstCar);
+        firstCar.setTicket(t_test);
+        Ticket erstesTestTicket = databaseServiceGlobal.persistEntity(t_test);
+        Assertions.assertEquals(t_test,erstesTestTicket);
+        ArrayList<Ticket> ticketArray = ebene1.getTickets();
+        ticketArray.add(t_test);
+        ebene1.setTickets(ticketArray);
+        databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+
+        Assertions.assertEquals(firstCar,databaseServiceGlobal.autosInParkEbene(ebene1.getId()).stream().findFirst());
     }
 
 

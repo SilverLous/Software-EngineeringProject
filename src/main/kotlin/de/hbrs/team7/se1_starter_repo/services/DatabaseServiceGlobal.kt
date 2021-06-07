@@ -195,4 +195,8 @@ open class DatabaseServiceGlobal {
         return belegtePlaetze.count()
     }
 
+    open fun autosInParkEbene(parkhausEbeneID: Any): List<Auto> {
+        throw NotImplementedError()
+    }
+
 }
