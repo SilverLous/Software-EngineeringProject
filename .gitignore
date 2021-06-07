@@ -83,3 +83,5 @@ nb-configuration.xml
 ##############################
 .DS_Store
 ssl-key.log
+/tomcat_database/
+mydb*
