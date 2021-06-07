@@ -1,10 +1,12 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
+
 
 
 /*
@@ -135,11 +137,12 @@ open class DatabaseServiceGlobal {
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ?"
-        )
+            )
         query.setParameter(1, parkhausEbeneID.toLong())
 
-        val result = query.singleResult as Long
-        return result.toInt()
+        val result = query.firstResult
+        print(result)
+        return result
     }
 
     open fun getTotalUsersCount(parkhausEbeneID: Long): Int {
@@ -169,7 +172,7 @@ open class DatabaseServiceGlobal {
         // val ebene = findByID(parkhausEbeneID.toLong(),ParkhausEbene::class.java )
 
         val query = em.createNativeQuery(
-            "SELECT Platznummer FROM AUTO" +
+            "SELECT * FROM AUTO" +
 
                     " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
 
@@ -178,11 +181,11 @@ open class DatabaseServiceGlobal {
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = TRUE"
-        )
+        , Auto::class.java)
 
         query.setParameter(1, parkhausEbeneID.toLong())
 
-        val belegtePlaetze = query.resultList as List<Int>
+        val belegtePlaetze = query.resultList as List<Auto>
 
         // val ebenenSet = (1 .. ebene!!.gesamtPlaetze).toSet()
 
