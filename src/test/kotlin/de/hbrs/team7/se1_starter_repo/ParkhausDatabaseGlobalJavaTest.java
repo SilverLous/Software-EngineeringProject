@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 // import com.sun.org.apache.xpath.internal.operations.Equals;
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -322,7 +323,29 @@ public class ParkhausDatabaseGlobalJavaTest {
 
 
 
+    @Test
+    @DisplayName("Testen der Finde Parkhaus bei ParkhausID Funktion")
+    public void testGetSum() {
+        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        ParkhausEbene ebene1 = new ParkhausEbene("65489", parkhaus);
+        ParkhausEbene ebene2 = new ParkhausEbene("654321", parkhaus);
 
+        Long timeNow = System.currentTimeMillis();
+        ParkhausServletPostDto params = new ParkhausServletPostDto(2, timeNow, 0,
+                0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+        Assertions.assertEquals(0,databaseServiceGlobal.getSumOfTicketPrices(ebene1.getName()));
+        Auto firstCar = new Auto(params.getHash(),params.getColor(),params.getSpace(),params.getLicense());
+        Ticket t_test = new Ticket(  );
+        t_test.setAuto(firstCar);
+        firstCar.setTicket(t_test);
+        Ticket erstesTestTicket = databaseServiceGlobal.persistEntity(t_test);
+        Assertions.assertEquals(0,databaseServiceGlobal.getTotalUsersCount(ebene1.getName()));
+        parkhausServiceSession.payForTicket(ebene1.getName(),
+                parkhausServiceSession.findTicketByPlace(ebene1.getName(), params.getSpace()),
+                new Date(erstesTestTicket.getAusstellungsdatum().getTime() + 100));
+        assert parkhausServiceSession.getTotalUsers(ebene1.getName()) > 0;
+        Assertions.assertEquals(1,parkhausServiceSession.getTotalUsers(ebene1.getName()));
+    }
 
 
 

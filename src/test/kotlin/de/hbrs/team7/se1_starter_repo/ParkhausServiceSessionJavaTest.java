@@ -94,19 +94,19 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetSum() {
-        String parkhausId = "Test Ebene";
+        String parkhausId = "47461354";
         parkhausServiceSession.initEbene(parkhausId);
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
-        assert parkhausServiceSession.sumOverCars(parkhausId) == 0;
+        Assertions.assertEquals(0,parkhausServiceSession.sumOverCars(parkhausId));
         Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
-        assert parkhausServiceSession.getTotalUsers(parkhausId) == 0;
+        Assertions.assertEquals(0,parkhausServiceSession.getTotalUsers(parkhausId));
         parkhausServiceSession.payForTicket(parkhausId,
                 parkhausServiceSession.findTicketByPlace(parkhausId, paramsErstesAuto.getSpace()),
                 new Date(erstesTestTicket.getAusstellungsdatum().getTime() + 100));
         assert parkhausServiceSession.getTotalUsers(parkhausId) > 0;
-        assert parkhausServiceSession.getTotalUsers(parkhausId) == 1;
+        Assertions.assertEquals(1,parkhausServiceSession.getTotalUsers(parkhausId));
     }
 
     @Test
@@ -124,15 +124,19 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetTotalUsers() {
-        String parkhausId = "Test Ebene";
+        String parkhausId = "155236542";
         parkhausServiceSession.initEbene(parkhausId);
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
-        assert parkhausServiceSession.getTotalUsers(parkhausId) == 0;
+        int countUsers = parkhausServiceSession.getTotalUsers(parkhausId);
+        Assertions.assertEquals(0, countUsers);
+
         parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
-        assert parkhausServiceSession.getTotalUsers(parkhausId) == 1;
+        countUsers = parkhausServiceSession.getTotalUsers(parkhausId);
+        Assertions.assertEquals(1, countUsers);
         parkhausServiceSession.payForTicket(parkhausId, parkhausServiceSession.findTicketByPlace(parkhausId, paramsErstesAuto.getSpace()), Date.from(Instant.now()));
+        Assertions.assertEquals(1, countUsers);
     }
 
     @Nested
