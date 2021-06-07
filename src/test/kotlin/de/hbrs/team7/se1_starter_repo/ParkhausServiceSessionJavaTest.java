@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
+import de.hbrs.team7.se1_starter_repo.entities.Parkhaus;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -141,6 +142,24 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(1, countUsers);
         parkhausServiceSession.payForTicket(parkhausId, parkhausServiceSession.findTicketByPlace(parkhausId, paramsErstesAuto.getSpace()), Date.from(Instant.now()));
         Assertions.assertEquals(1, countUsers);
+    }
+
+    @Test
+    @DisplayName("Test der addCar-Funktion")
+    public void testAddCar() {
+        Parkhaus parkhaus = new Parkhaus("Testparkhaus");
+        ParkhausEbene ebene = new ParkhausEbene();
+        parkhaus.addParkhausEbene(ebene);
+        ebene.setParkhaus(parkhaus);
+
+        Long timeNow = System.currentTimeMillis();
+        ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0, 0,
+                "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+
+        Assertions.assertTrue(ebene.getTickets().isEmpty());
+        parkhausServiceSession.addCar(ebene.getId(), paramsErstesAuto);
+
+        Assertions.assertFalse(ebene.getTickets().isEmpty());
     }
 
     @Nested
