@@ -90,26 +90,6 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun getSumAndCountOfLevel(parkhausLevelID: Long): Pair<Int, Int> {
-        // Sum then Count from one level of Cars that left
-        // TODO specify what is SUM?
-
-        val query = em.createNativeQuery(
-            "SELECT COUNT(*) FROM TICKET" +
-                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
-
-                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
-
-                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
-
-                    " WHERE pe.ID = ? AND au.IMPARKHAUS = FALSE"
-            )
-        query.setParameter(1, parkhausLevelID)
-
-        val res: Long? = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { null }
-        return Pair(res!!.toInt(), res!!.toInt())
-    }
-
     open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
@@ -141,7 +121,8 @@ open class DatabaseServiceGlobal {
             )
         query.setParameter(1, parkhausEbeneID)
 
-        return (query.singleResult ?: 0) as Int
+        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        return res.toInt()
     }
 
     open fun getTotalUsersCount(parkhausEbeneID: Long): Int {
@@ -163,36 +144,6 @@ open class DatabaseServiceGlobal {
         val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
         return res.toInt()
 
-    }
-
-    open fun getNotAvailableParkingSpaces(parkhausEbeneID: Long): Int {
-        //TODO lieber atomarisieren
-        // returned Anzahl aller belegter Plätze
-
-        // val ebene = findByID(parkhausEbeneID.toLong(),ParkhausEbene::class.java )
-
-        val query = em.createNativeQuery(
-            "SELECT * FROM AUTO" +
-
-                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
-
-                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
-
-                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
-
-                    " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = TRUE"
-        , Auto::class.java)
-
-        query.setParameter(1, parkhausEbeneID.toLong())
-
-        val belegtePlaetze = query.resultList as List<Auto>
-
-        // val ebenenSet = (1 .. ebene!!.gesamtPlaetze).toSet()
-
-        // val ebenenSet.minus(  autos.map { a -> a.Platznummer!! } )
-        // autos.map { a -> a.Platznummer!! }
-
-        return belegtePlaetze.count()
     }
 
     open fun autosInParkEbene(parkhausEbeneID: Long): List<Auto> {

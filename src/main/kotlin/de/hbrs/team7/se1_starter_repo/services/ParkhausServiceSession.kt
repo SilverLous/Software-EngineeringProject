@@ -132,7 +132,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
     override fun getCurrenUsers(ParkhausEbeneName: String): Int{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.getNotAvailableParkingSpaces(parkhausEbeneID)
+        return DatabaseGlobal.autosInParkEbene(parkhausEbeneID).size
     }
 
     override fun averageOverCars(ParkhausEbeneName: String): Int {
