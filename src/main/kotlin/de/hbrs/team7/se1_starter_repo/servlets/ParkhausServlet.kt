@@ -120,10 +120,8 @@ public abstract class ParkhausServlet : HttpServlet() {
 
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
-                val sumOver = ArrayList<Double>()
-                val tempData = carData("bar", sumOver as List<String>,sumOver)
-                val dataList = arrayListOf(tempData)
-                val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
+
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.generateStatisticsOverVehicle(NAME()))
                 out.print(jsonData)
             }
             "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())/100} € per car")

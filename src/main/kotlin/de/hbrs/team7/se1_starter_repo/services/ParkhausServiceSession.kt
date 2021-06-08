@@ -2,6 +2,7 @@ package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
@@ -61,13 +62,6 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
-    override fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
-        val auto = Auto(params.hash,params.color,params.space,params.license)
-        this.DatabaseGlobal.persistEntity(auto)
-        // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
-        return auto
-    }
-
     override  fun initEbene(name: String): ParkhausEbene {
         val pe = ParkhausEbene(name, this.parkhaus)
         val pePersist = DatabaseGlobal.persistEntity(pe)
@@ -98,6 +92,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         //TODO add zieheTicket functionality
         // throw NotImplementedError()
         return ticket
+    }
+
+    override fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
+        val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
+        this.DatabaseGlobal.persistEntity(auto)
+        // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
+        return auto
     }
 
     override fun payForTicket(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
@@ -158,6 +159,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>{
         return DatabaseGlobal.autosInParkEbene(ParkhausEbeneID)
+    }
+
+    override fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto {
+        val parkhausEbeneID = getIdByName(ParkhausEbeneName)
+        val allCarsThatLeft = DatabaseGlobal.autosInParkEbene(parkhausEbeneID, false)
+        val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
+        val sumPricesOverVehilceTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
+        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehilceTypes)))
     }
 
 

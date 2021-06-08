@@ -15,7 +15,13 @@ open class Auto(
     var Platznummer: Int? = null,
 
     @Column(nullable = false)
-    open var Kennzeichen: String? = null
+    open var Kennzeichen: String? = null,
+
+    @Column(nullable = false)
+    var Typ: String = "",
+
+    @Column(nullable = false)
+    var Kategorie: String = ""
 
 
 ) {
@@ -24,8 +30,6 @@ open class Auto(
     @GeneratedValue
     open val Autonummer: Long = 0
 
-    @Column(nullable = true)
-    var Typ: String = ""
 
     @Column(nullable = false)
     var ImParkhaus: Boolean = true

@@ -101,7 +101,7 @@ public class ParkhausServiceSessionJavaTest {
         String parkhausName = "ForLoopsSindToll";
         parkhausServiceSession.initEbene(parkhausName);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -120,7 +120,7 @@ public class ParkhausServiceSessionJavaTest {
         String parkhausName = "ForLoopsSindToll";
         parkhausServiceSession.initEbene(parkhausName);
         int wieLange = 8;
-        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232");
+        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232","vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i = 0; i < wieLange; i++) {
@@ -138,7 +138,7 @@ public class ParkhausServiceSessionJavaTest {
     public void testGetTotalUsers() {
         parkhausServiceSession.initEbene("ForLoopsSindToll");
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -159,7 +159,7 @@ public class ParkhausServiceSessionJavaTest {
         String parkhausName = "ForLoopsSindToll";
         parkhausServiceSession.initEbene(parkhausName);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -179,7 +179,7 @@ public class ParkhausServiceSessionJavaTest {
         String parkhausName = "ForLoopsSindToll";
         parkhausServiceSession.initEbene(parkhausName);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){

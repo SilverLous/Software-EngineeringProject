@@ -132,7 +132,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-1 Relation")
     public void oneToOneTest(){
 
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
@@ -190,8 +190,8 @@ public class ParkhausDatabaseGlobalJavaTest {
         ebene2.setParkhaus(parkhaus);
 
 
-        Auto auto1 = new Auto("EchterHashEcht","REGENBOGEN",12,"y-232" );
-        Auto auto2 = new Auto("HashWert", "bunt", 3,"ACG-398");
+        Auto auto1 = new Auto("EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
+        Auto auto2 = new Auto("HashWert", "bunt", 3,"ACG-398","vehilkulaer","kategorisch");
 
         databaseServiceGlobal.persistEntity(ebene1);
         databaseServiceGlobal.persistEntity(ebene2);
@@ -242,7 +242,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.persistEntity(p_e);
         Assertions.assertNotNull(p_e.getId());
 
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
@@ -273,11 +273,11 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
-            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232" );
+            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
             t_test = new Ticket();
             t_test.setAuto(a_test);
             t_test.setPrice(500);
@@ -301,11 +301,11 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
-            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232" );
+            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
             t_test = new Ticket();
             t_test.setAuto(a_test);
             a_test.setTicket(t_test);
@@ -323,16 +323,16 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     @Test
     @DisplayName("Testen der Not vailable bei Data Base Funktion")
-    public void testGetAllCars() {
+    public void testGetAllCarsInLevel() {
         Parkhaus parkhaus = new Parkhaus("TestStadt");
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
-            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232" );
+            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
             t_test = new Ticket();
             t_test.setAuto(a_test);
             a_test.setTicket(t_test);
@@ -342,9 +342,13 @@ public class ParkhausDatabaseGlobalJavaTest {
             ebene1.setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-            Assertions.assertEquals(a_test.getHash(),databaseServiceGlobal.autosInParkEbene(ebene1.getId()).get(i).getHash());
+            Assertions.assertEquals(a_test.getHash(),databaseServiceGlobal.autosInParkEbene(ebene1.getId(), true).get(i).getHash());
 
         }
+        a_test.setImParkhaus(false);
+        databaseServiceGlobal.mergeUpdatedEntity(a_test);
+        Assertions.assertEquals(wieLange-1,databaseServiceGlobal.autosInParkEbene(ebene1.getId(), true).size());
+        Assertions.assertEquals(wieLange,databaseServiceGlobal.autosInParkEbeneHistoric(ebene1.getId()).size());
 
     }
 
