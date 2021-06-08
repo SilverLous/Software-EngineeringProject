@@ -114,7 +114,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun sumOverCars(ParkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
         //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
-        return DatabaseGlobal.getSumOfTicketPrices(parkhausEbeneID)
+        return DatabaseGlobal.getSumOfTicketPrices(parkhausEbeneID) !!
         // return price in Cent
     }
 
@@ -128,7 +128,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
     override fun getTotalUsers(ParkhausEbeneName: String):Int{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.getTotalUsersCount(parkhausEbeneID)
+        return DatabaseGlobal.getTotalUsersCount(parkhausEbeneID) !!
     }
     override fun getCurrenUsers(ParkhausEbeneName: String): Int{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)

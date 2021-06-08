@@ -104,27 +104,28 @@ open class DatabaseServiceGlobal {
 
                     " WHERE pe.ID = ? AND au.IMPARKHAUS = FALSE"
             )
-        query.setParameter(1, parkhausLevelID.toLong())
+        query.setParameter(1, parkhausLevelID)
 
-        val test = query.singleResult as Long
-        return Pair(test.toInt(), test.toInt())
+        val res: Long? = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { null }
+        return Pair(res!!.toInt(), res!!.toInt())
     }
 
     open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
-                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
+                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
 
-                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-            " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE"
+                    " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE"
             , Ticket::class.java)
-        query.setParameter(1, parkhausLevelID.toLong())
+        query.setParameter(1, parkhausLevelID)
         query.setParameter(2, placeNumber)
 
-        return query.singleResult as Ticket?
+        val res: Ticket? = try { query.singleResult as Ticket? } catch (e: jakarta.persistence.NoResultException ) { null }
+        return res
 
     }
 
@@ -132,17 +133,15 @@ open class DatabaseServiceGlobal {
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +
 
-                    " INNER JOIN TICKET_PARKHAUSEBENE ti_pe on TICKET.TICKETNUMMER = ti_pe.TICKET_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
-                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = ti_pe.PARKHAUSEBENEN_ID" +
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ?"
             )
-        query.setParameter(1, parkhausEbeneID.toLong())
+        query.setParameter(1, parkhausEbeneID)
 
-        val result = query.firstResult
-        print(result)
-        return result
+        return (query.singleResult ?: 0) as Int
     }
 
     open fun getTotalUsersCount(parkhausEbeneID: Long): Int {
@@ -151,18 +150,19 @@ open class DatabaseServiceGlobal {
         val query = em.createNativeQuery(
             "SELECT COUNT(*) FROM TICKET" +
 
-                    " INNER JOIN TICKET ti on ti.AUTO_AUTONUMMER = AUTO.AUTONUMMER" +
+                    " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
 
-                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on ti.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ?"
         )
-        query.setParameter(1, parkhausEbeneID.toLong())
+        query.setParameter(1, parkhausEbeneID)
 
-        val result = query.singleResult as Long
-        return result.toInt()
+        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        return res.toInt()
+
     }
 
     open fun getNotAvailableParkingSpaces(parkhausEbeneID: Long): Int {
