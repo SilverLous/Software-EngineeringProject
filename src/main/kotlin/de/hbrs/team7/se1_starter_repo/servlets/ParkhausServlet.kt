@@ -6,6 +6,7 @@ import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.carData
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
+import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import jakarta.inject.Inject
@@ -97,12 +98,20 @@ public abstract class ParkhausServlet : HttpServlet() {
             }
 
             "cars" -> {
+                val autosInParkhausEbene =  parkhausServiceSession.autosInParkEbene(NAME())
+                var printString = ""
+                for(e: Auto in autosInParkhausEbene ){
+                    printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
+                            "/_/_/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
+                            "/${e.Typ}/${e.Typ}/${e.Kennzeichen},")
+                }
+                out.println(printString.dropLast(1))
                 // TODO: Send list of cars stored on the server to the client.
                 // Cars are separated by comma.
                 // Values of a single car are separated by slash.
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
-                // out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2");
+                //out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2");
                 // TODO replace by real list of cars
 
             }
