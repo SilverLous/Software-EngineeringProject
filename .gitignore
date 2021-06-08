@@ -85,3 +85,4 @@ nb-configuration.xml
 ssl-key.log
 /tomcat_database/
 mydb*
+/git-quick-stats/

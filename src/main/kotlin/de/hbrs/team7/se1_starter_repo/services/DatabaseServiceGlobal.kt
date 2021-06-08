@@ -17,6 +17,7 @@ kotlin is final by default
  */
 
 // https://gist.github.com/jahe/18a4efe614fc73cf184d8ceef8cdc996
+// https://github.com/weld/core/blob/master/tests/src/test/java/org/jboss/weld/tests/unit/resource/TestTransactionServices.java
 
 @ApplicationScoped
 //@Singleton
