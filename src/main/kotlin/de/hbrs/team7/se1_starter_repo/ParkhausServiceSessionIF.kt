@@ -24,8 +24,6 @@ interface ParkhausServiceSessionIF {
 
     fun averageOverCars(ParkhausEbeneName: String): Int
 
-    fun statsToChart(ParkhausEbeneName: String): statisticsChartDto
-
     fun getLevelById(ParkhausEbeneID: Long): ParkhausEbene
 
     fun findTicketByPlace(ParkhausEbeneName: String, placeNumber: Int): Ticket?

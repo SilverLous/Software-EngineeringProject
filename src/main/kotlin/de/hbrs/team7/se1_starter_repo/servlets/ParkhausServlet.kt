@@ -33,7 +33,7 @@ import java.util.*
  */
 
 
-public abstract class ParkhausServlet : HttpServlet() {
+abstract class ParkhausServlet : HttpServlet() {
 
 
     /* abstract methods, to be defined in subclasses */
@@ -70,7 +70,7 @@ public abstract class ParkhausServlet : HttpServlet() {
 
     }
 
-    public override fun destroy() {
+    override fun destroy() {
         println("Destroyed Parkhaus ${NAME()} Base")
         super.destroy()
     }
@@ -103,16 +103,15 @@ public abstract class ParkhausServlet : HttpServlet() {
                 for(e: Auto in autosInParkhausEbene ){
                     printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
                             "/_/_/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
-                            "/${e.Typ}/${e.Typ}/${e.Kennzeichen},")
+                            "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")
                 }
                 out.println(printString.dropLast(1))
-                // TODO: Send list of cars stored on the server to the client.
-                // Cars are separated by comma.
-                // Values of a single car are separated by slash.
+                //Do not delete this line below, without it the Cars Button does not work properly
+                printString = ""
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
                 //out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2");
-                // TODO replace by real list of cars
+
 
             }
             "chart" -> {
@@ -140,7 +139,7 @@ public abstract class ParkhausServlet : HttpServlet() {
     override fun doPost(request: HttpServletRequest, response: HttpServletResponse) {
         val body = getBody(request)
         response.contentType = "text/html"
-        val out = response.writer
+        // val out = response.writer
         println(body)
 
         // toTypedArray() needed because return type is List not array as in original
@@ -149,14 +148,11 @@ public abstract class ParkhausServlet : HttpServlet() {
         when (event) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                //TODO: implement addCar
                 parkhausServiceSession.generateTicket(NAME(), data)
             }
             "leave" -> {
-                //TODO: implement leaveCar
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space) !!
-                // TODO fix possible nullpointer
                 parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
             "invalid", "occupied" -> {
@@ -184,7 +180,7 @@ public abstract class ParkhausServlet : HttpServlet() {
             if (inputStream != null) {
                 bufferedReader = BufferedReader(InputStreamReader(inputStream))
                 val charBuffer = CharArray(128)
-                var bytesRead = -1
+                var bytesRead: Int
                 while (bufferedReader.read(charBuffer).also { bytesRead = it } > 0) {
                     stringBuilder.append(charBuffer, 0, bytesRead)
                 }

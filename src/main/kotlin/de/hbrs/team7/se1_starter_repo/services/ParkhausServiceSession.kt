@@ -88,16 +88,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val saved = this.DatabaseGlobal.persistEntity(ticket)
         val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
         print(test.first().Ausstellungsdatum)
-
-        //TODO add zieheTicket functionality
-        // throw NotImplementedError()
         return ticket
     }
 
     override fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
         this.DatabaseGlobal.persistEntity(auto)
-        // print(this.DatabaseGlobal.queryAllEntities(Auto::class.java))
         return auto
     }
 
@@ -114,16 +110,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun sumOverCars(ParkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        //TODO("Not yet implemented") SQL Abfrage ImParkhaus False, Sum over Price
         return DatabaseGlobal.getSumOfTicketPrices(parkhausEbeneID) !!
-        // return price in Cent
     }
 
-    override fun statsToChart(ParkhausEbeneName: String): statisticsChartDto {
-        val ParkhausEbeneID = getIdByName(ParkhausEbeneName)
-        //TODO("Not yet implemented")
-        throw NotImplementedError()
-    }
     override fun getLevelById(ParkhausEbeneID: Long):ParkhausEbene{
         return parkhausEbenen.first{e-> e.id == ParkhausEbeneID }
     }
@@ -165,8 +154,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
         val allCarsThatLeft = DatabaseGlobal.autosInParkEbene(parkhausEbeneID, false)
         val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
-        val sumPricesOverVehilceTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
-        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehilceTypes)))
+        val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
+        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes)))
     }
 
 
