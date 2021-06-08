@@ -5,6 +5,7 @@ import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Named
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -15,6 +16,7 @@ open means not final
 kotlin is final by default
  */
 
+@Named
 @ApplicationScoped
 //@Singleton
 open class ParkhausServiceGlobal { // : ParkhausServiceIF {
@@ -31,6 +33,10 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     @PostConstruct
     open fun sessionInit() {
         print("Hello from Singleton Service")
+    }
+
+    open fun getOldGermanyData() : Pair<String,String> {
+        return Pair((1..10).random().toString(),(1..10).random().toString())
     }
 
 
