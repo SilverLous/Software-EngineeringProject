@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
@@ -183,6 +184,56 @@ open class DatabaseServiceGlobal {
 
         val belegtePlaetze = query.resultList as List<Auto>
         return belegtePlaetze
+    }
+
+    open fun getOldGermanyData(): oldGermanyStatisticsDTO {
+
+        val ddr = listOf("Saxony", "Thuringia", "Saxony-Anhalt", "Brandenburg", "Mecklenburg-Western Pomerania")
+        val ddr_str = "( 'Saxony', 'Thuringia', 'Saxony-Anhalt', 'Brandenburg', 'Mecklenburg-Western Pomerania')"
+        val brd = listOf("Bremen", "Schleswig-Holstein", "Berlin", "Saarland",  "North Rhine-Westphalia", "Hamburg", "Baden-Württemberg", "Lower Saxony", "Bavaria", "Hesse", "Rhineland-Palatinate")
+        val brd_str = "( 'Bremen', 'Schleswig-Holstein', 'Berlin', 'Saarland',  'North Rhine-Westphalia', 'Hamburg', 'Baden-Württemberg', 'Lower Saxony', 'Bavaria', 'Hesse', 'Rhineland-Palatinate')"
+
+        val queryString = "SELECT COUNT(*), SUM(TICKET.PRICE) FROM TICKET" +
+
+                " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+
+                " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
+
+                " INNER JOIN PARKHAUS pa on pa.ID = pe.PARKHAUS_ID" +
+
+                " WHERE pa.BUNDESLAND IN "
+
+        // val ddrQuery = em.createNativeQuery(queryString  + ddr_str, Ticket::class.java)
+        val ddrQuery = em.createNativeQuery(queryString + ddr_str)
+
+        // https://gist.github.com/arseto/f214e50917878dc31aec2ebb5af92d2e
+        val ddrValuesList = ddrQuery.resultList.toList()
+        val ddrResult = ddrValuesList.map {
+                it ->
+            val lst = it as Array<out Any>
+            Pair(
+                (lst[0] as? Long) ?: 0,
+                (lst[1] as? Long) ?: 0
+            )
+        }.first()
+
+        val brdQuery = em.createNativeQuery(queryString + brd_str)
+
+        val brdValues = brdQuery.resultList // .to(Long).first.first()
+        val brdResult = brdValues.map {
+                it ->
+            val lst = it as Array<out Any>
+            Pair(
+                (lst[0] as? Long) ?: 0,
+                (lst[1] as? Long) ?: 0
+            )
+        }.first()
+
+        return oldGermanyStatisticsDTO(
+            if(brdResult.toList().size == 1) Pair(0,0) else brdResult,
+            if(ddrResult.toList().size == 1) Pair(0,0) else ddrResult,
+        )
+
     }
 
 }

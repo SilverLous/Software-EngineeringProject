@@ -51,7 +51,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun sessionInit() {
         city = parkhausServiceGlobal.cities.random()
 
-        val ph = Parkhaus(city.name)
+        val ph = Parkhaus(city.name, city.bundesland, city.lat, city.lng, city.population, city.preisklasse)
         parkhaus = DatabaseGlobal.persistEntity(ph)
 
         if(parkhausServiceGlobal.levelSet.isNotEmpty()) {

@@ -1,10 +1,10 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
 import jakarta.inject.Named
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -21,6 +21,8 @@ kotlin is final by default
 //@Singleton
 open class ParkhausServiceGlobal { // : ParkhausServiceIF {
 
+    @Inject
+    private lateinit var databaseGlobal: DatabaseServiceGlobal
 
     open val levelSet = mutableSetOf<String>()
 
@@ -36,7 +38,12 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     }
 
     open fun getOldGermanyData() : Pair<String,String> {
-        return Pair((1..10).random().toString(),(1..10).random().toString())
+        val data = databaseGlobal.getOldGermanyData()
+        val brdString = "Autos: ${data.brd.first} Einnamen: ${data.brd.second} €"
+        val ddrString = "Autos: ${data.ddr.first} Einnamen: ${data.ddr.second} €"
+
+        return Pair( brdString, ddrString )
+
     }
 
 

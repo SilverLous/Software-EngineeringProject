@@ -2,17 +2,35 @@ package de.hbrs.team7.se1_starter_repo.entities
 
 import jakarta.persistence.*
 
+
 @Entity
 open class Parkhaus (
+    // Kombinierte Tabelle aus Stadt und Parkhaus
 
     @Column(nullable = false)
-    var name: String? = null
+    var stadtname: String? = null,
+
+    @Column(nullable = false)
+    var bundesland: String? = null,
+
+    @Column(nullable = false)
+    var lat: Double? = null,
+
+    @Column(nullable = false)
+    var lng: Double? = null,
+
+    @Column(nullable = false)
+    var population: Double? = null,
+
+    @Column(nullable = false)
+    var preisklasse: Int? = null,
 
         ) {
 
     @Id
     @GeneratedValue
     open val id: Long = 0
+
 
 
     @OneToMany(mappedBy="Parkhaus", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)

@@ -60,7 +60,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         public void insertTest(){
 
             // Problem: auf ID kann nicht direkt zugegriffen werden
-            Parkhaus p_test = new Parkhaus("TestStadt" );
+            Parkhaus p_test = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
             testEntity =  databaseServiceGlobal.persistEntity(p_test);
 
             Assertions.assertNotNull(testEntity.getId());
@@ -88,8 +88,8 @@ public class ParkhausDatabaseGlobalJavaTest {
             long p_id = testEntity.getId();
             Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
 
-            String ref = p_test.getName();
-            p_test.setName(ref + "Merge");
+            String ref = p_test.getStadtname();
+            p_test.setStadtname(ref + "Merge");
 
             Parkhaus p_merged = databaseServiceGlobal.mergeUpdatedEntity(p_test);
 
@@ -114,7 +114,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         @DisplayName("Testen der delete Funktion per Objekt")
         public void deleteObjectTest(){
 
-            Parkhaus p_test = new Parkhaus("TestStadt" );
+            Parkhaus p_test = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
             p_test =  databaseServiceGlobal.persistEntity(p_test);
             long p_id = p_test.getId();
             Assertions.assertNotNull(p_id);
@@ -155,7 +155,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
-        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
         ParkhausEbene ebene2 = new ParkhausEbene("Ebene 2", parkhaus);
 
@@ -181,7 +181,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
-        Parkhaus parkhaus = new Parkhaus("Parkhaus");
+        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         ParkhausEbene ebene1 = new ParkhausEbene();
         ebene1.setName("Ebene 1");
         ebene1.setParkhaus(parkhaus);
@@ -233,7 +233,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der Ticket Create funktion")
     public void deleteObjectTest(){
 
-        Parkhaus p = new Parkhaus("TestParkhaus");
+        Parkhaus p = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         databaseServiceGlobal.persistEntity(p);
         Assertions.assertNotNull(p.getId());
 
@@ -269,7 +269,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Get Sum bei Data Base Funktion")
     public void testGetSum() {
-        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
@@ -297,7 +297,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Total Users bei Data Base Funktion mit ner For Loop")
     public void testTotalUsersForLoop() {
-        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
@@ -324,7 +324,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Not vailable bei Data Base Funktion")
     public void testGetAllCarsInLevel() {
-        Parkhaus parkhaus = new Parkhaus("TestStadt");
+        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
