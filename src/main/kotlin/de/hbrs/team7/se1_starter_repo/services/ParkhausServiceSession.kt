@@ -90,7 +90,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         auto.Ticket = ticket
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
-        this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
+        // this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
         val saved = this.DatabaseGlobal.persistEntity(ticket)
         val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
         print(test.first().Ausstellungsdatum)

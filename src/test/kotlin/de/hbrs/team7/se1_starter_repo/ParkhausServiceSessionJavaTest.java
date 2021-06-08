@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
+import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
@@ -16,6 +17,7 @@ import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -66,17 +68,17 @@ public class ParkhausServiceSessionJavaTest {
     }
 
     @Test
-    public void sessionAddLevel2() {
+    public void sessionAddLevelInvalidateTest() {
         parkhausServiceSession.initEbene("TESTEBENE1");
         String stadtName = parkhausServiceSession.getCity().getName();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         parkhausServiceSession.initEbene("TESTEBENE2");
+        Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
         sessionContext.invalidate();
-        //Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
-        //Assertions.assertEquals(2,parkhausServiceSession.getParkhausEbenen().size());
-        parkhausServiceSession.initEbene("TESTEBENE1");
         String zweiterStadtName = parkhausServiceSession.getCity().getName();
         Assertions.assertNotEquals(stadtName, zweiterStadtName);
+        //Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
+        //Assertions.assertEquals(2,parkhausServiceSession.getParkhausEbenen().size());
         //Assertions.assertEquals(3,parkhausServiceSession.getParkhausEbenen().size());
 
     }
@@ -96,20 +98,21 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetSum() {
-        String parkhausId = "Test Ebene";
-        parkhausServiceSession.initEbene(parkhausId);
+        String parkhausName = "ForLoopsSindToll";
+        parkhausServiceSession.initEbene(parkhausName);
+        int wieLange = 8;
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Ticket t_test = new Ticket();
 
-        Long timeNow = System.currentTimeMillis();
-        ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
-        Assertions.assertEquals(0,parkhausServiceSession.sumOverCars(parkhausId));
-        Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
-        Assertions.assertEquals(0,parkhausServiceSession.getTotalUsers(parkhausId));
-        parkhausServiceSession.payForTicket(parkhausId,
-                parkhausServiceSession.findTicketByPlace(parkhausId, paramsErstesAuto.getSpace()),
-                new Date(erstesTestTicket.getAusstellungsdatum().getTime() + 100));
-        assert parkhausServiceSession.getTotalUsers(parkhausId) > 0;
-        Assertions.assertEquals(1,parkhausServiceSession.getTotalUsers(parkhausId));
+        for (int i=0;i<wieLange;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            t_test = parkhausServiceSession.generateTicket(parkhausName,paramsErstesAuto);
+            parkhausServiceSession.payForTicket(parkhausName,t_test,new Date(timeNow + 100));
+            Assertions.assertEquals((i+1)*100,parkhausServiceSession.sumOverCars(parkhausName));
+        }
+
     }
 
     @Test
@@ -128,20 +131,21 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetTotalUsers() {
-        String parkhausId = "Test Ebene";
-        parkhausServiceSession.initEbene(parkhausId);
+        parkhausServiceSession.initEbene("ForLoopsSindToll");
+        int wieLange = 8;
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" );
+        Ticket t_test = new Ticket();
 
-        Long timeNow = System.currentTimeMillis();
-        ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
-        int countUsers = parkhausServiceSession.getTotalUsers(parkhausId);
-        Assertions.assertEquals(0, countUsers);
+        for (int i=0;i<wieLange;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            t_test = parkhausServiceSession.generateTicket("ForLoopsSindToll",paramsErstesAuto);
 
-        parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
-        countUsers = parkhausServiceSession.getTotalUsers(parkhausId);
-        Assertions.assertEquals(1, countUsers);
-        parkhausServiceSession.payForTicket(parkhausId, parkhausServiceSession.findTicketByPlace(parkhausId, paramsErstesAuto.getSpace()), Date.from(Instant.now()));
-        Assertions.assertEquals(1, countUsers);
+            a_test = t_test.getAuto();
+            Assertions.assertEquals(i+1,parkhausServiceSession.getTotalUsers("ForLoopsSindToll"));
+        }
+
     }
 
     @Test

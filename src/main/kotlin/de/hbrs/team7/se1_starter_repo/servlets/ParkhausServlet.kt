@@ -93,7 +93,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.println(config())
 
             "sum" -> {
-                //TODO uncomment when implemented out.print(parkhausServiceSession.sumOverCars(NAME()))
+                out.print(parkhausServiceSession.sumOverCars(NAME()))
             }
 
             "cars" -> {
@@ -117,11 +117,10 @@ public abstract class ParkhausServlet : HttpServlet() {
                 val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
                 out.print(jsonData)
             }
-            //TODO: fix when corresponding functions are implemented again
-            ///TODO uncomment when implemented "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())} € per car")
+            "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())} € per car")
 
 
-            //TODO uncomment when implemented "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
+            "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
 
             else -> out.println("Invalid Command: " + request.queryString)
         }
