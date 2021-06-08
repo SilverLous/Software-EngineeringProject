@@ -93,7 +93,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 out.println(config())
 
             "sum" -> {
-                out.print(parkhausServiceSession.sumOverCars(NAME()))
+                out.print("${parkhausServiceSession.sumOverCars(NAME())/100} € insgesamt")
             }
 
             "cars" -> {
@@ -117,7 +117,7 @@ public abstract class ParkhausServlet : HttpServlet() {
                 val jsonData = Json.encodeToJsonElement(statisticsChartDto(dataList))
                 out.print(jsonData)
             }
-            "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())} € per car")
+            "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())/100} € per car")
 
 
             "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")

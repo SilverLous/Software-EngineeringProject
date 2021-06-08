@@ -103,8 +103,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun payForTicket(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
         ticket.Ausfahrdatum = timeCheckOut
-        val duration = ticket.Ausstellungsdatum.time - ticket.Ausfahrdatum!!.time
-        ticket.price = (duration/100).toInt()
+        val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
+        ticket.price = (duration).toInt()
         this.DatabaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
         this.DatabaseGlobal.mergeUpdatedEntity(ticket.Auto)
