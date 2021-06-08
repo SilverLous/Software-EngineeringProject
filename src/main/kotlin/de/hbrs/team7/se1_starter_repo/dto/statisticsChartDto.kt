@@ -14,5 +14,5 @@ data class carData(
     @SerialName("x")
     val x: List<String>,
     @SerialName("y")
-    val y: ArrayList<Double>
+    val y: List<Double>
 )

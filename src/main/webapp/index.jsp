@@ -1,5 +1,5 @@
 <%@ page import="jakarta.inject.Inject" %>
-<%@ page import="de.hbrs.team7.se1_starter_repo.ParkhausServiceSession" %>
+<%@ page import="de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -55,7 +55,7 @@
     private ParkhausServiceSession parkhausServiceSession;
 %>
 <div class="box center grey-background">
-    <h1>Parkhaus Team 7 ${parkhausServiceSession.city}</h1>
+    <h1>Parkhaus Team 7 ${parkhausServiceSession.city.name}, ${parkhausServiceSession.city.bundesland} </h1>
 </div>
 <div class="box lightblue">
     <h2><a href="kasse.jsp">Kasse</a></h2>
@@ -71,7 +71,7 @@
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
-                         extra_buttons='["Average","Sum","Total Users"]'
+                         extra_buttons='["Average","Sum","Total Users","Cars"]'
                          extra_charts='["Chart"]'>
     </ccm-parkhaus-10-1-0>
 </div>

@@ -8,9 +8,9 @@ open class ParkhausEbene (
     @Column(nullable = false)
     var name: String? = null,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST])
     @JoinColumn(name = "Parkhaus_id", nullable = false)
-    open val parkhaus: Parkhaus? = null
+    open var parkhaus: Parkhaus? = null
 
         ){
 
@@ -19,7 +19,7 @@ open class ParkhausEbene (
     val id: Long = 0
 
     @Column(nullable = false)
-    private var gesamtPlaetze: Int = 0
+    internal var gesamtPlaetze: Int = 0
 
 
 
@@ -27,6 +27,10 @@ open class ParkhausEbene (
     var tickets: ArrayList<Ticket> = ArrayList()
 
     private var freiePlaetze: Int = 0
+
+    fun getIdAsString(): String {
+        return id.toString()
+    }
 
     fun getGesamtPlaetze(): Int {
         return gesamtPlaetze
@@ -66,6 +70,11 @@ open class ParkhausEbene (
             freiePlaetze++
             return freiePlaetze
         }
+    }
+
+    fun assignParkhaus(parkhaus: Parkhaus) {
+        this.parkhaus = parkhaus;
+
     }
 
 }

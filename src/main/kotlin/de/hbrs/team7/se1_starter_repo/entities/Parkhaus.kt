@@ -15,9 +15,8 @@ open class Parkhaus (
     open val id: Long = 0
 
 
-
-    @OneToMany(mappedBy="Parkhaus")
-    var ebenen: ArrayList<ParkhausEbene> = ArrayList()
+    @OneToMany(mappedBy="Parkhaus", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)
+    var ebenen: MutableList<ParkhausEbene> = mutableListOf()
 
     fun addParkhausEbene(ebene: ParkhausEbene) {
         ebenen.add(ebene)
