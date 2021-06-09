@@ -27,20 +27,21 @@ BIG WARNING DURING LANG FEATURES ALL VALUES MUST BE OPEN!!!
 @SessionScoped
 open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
-    private lateinit var parkhaus: Parkhaus
+    open lateinit var parkhaus: Parkhaus
+        protected set
 
-    private val parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
+    private var parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
 
     // must be this way to ensure it is loaded and the injector has time to do its job
     @Inject private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
 
-    @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
+    @Inject private lateinit var databaseGlobal: DatabaseServiceGlobal
 
 
     // scrapped idea because it is not testable with junit
     //@Inject private lateinit var servletContext: ServletContext
 
-
+    @Deprecated("Nutze parkhaus.stadtname etc")
     open lateinit var city: citiesDTO
         protected set
 
@@ -49,28 +50,49 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     @PostConstruct
     // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
     override fun sessionInit() {
-        city = parkhausServiceGlobal.cities.random()
 
-        val ph = Parkhaus(city.name, city.bundesland, city.lat, city.lng, city.population, city.preisklasse)
-        parkhaus = DatabaseGlobal.persistEntity(ph)
-
-        if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
-            parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
-        }
-
-        print("Hello from $city (ParkhausEbeneID: ${parkhaus.id}) Service new User ")
+        createInitCity()
+        print("Hello from ${parkhaus.stadtname} (ParkhausEbeneID: ${parkhaus.id}) Service new User ")
 
     }
 
-    override  fun initEbene(name: String): ParkhausEbene {
-        val pe = ParkhausEbene(name, this.parkhaus)
-        val pePersist = DatabaseGlobal.persistEntity(pe)
+    open fun createInitCity() {
+        val city = parkhausServiceGlobal.cities.random()
 
-        parkhaus = DatabaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
+        val pa = databaseGlobal.getParkhausByCityName(city.name)
+
+        if (pa != null) {
+            loadParkhausCity(pa.id)
+        } else {
+            val ph = Parkhaus(city.name, city.bundesland, city.lat, city.lng, city.population, city.preisklasse)
+            parkhaus = databaseGlobal.persistEntity(ph)
+
+            if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
+                parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
+            }
+        }
+
+
+    }
+
+    open fun loadParkhausCity(id: Long) {
+
+        val pa = databaseGlobal.findByID(id, Parkhaus::class.java);
+        if (pa != null) {
+            this.parkhaus = pa
+            this.parkhausEbenen = pa.ebenen
+            }
+    }
+
+    override fun initEbene(name: String): ParkhausEbene {
+        val pe = ParkhausEbene(name, this.parkhaus)
+        val pePersist = databaseGlobal.persistEntity(pe)
+
+        parkhaus = databaseGlobal.findByID(parkhaus.id, Parkhaus::class.java) !!
 
         this.parkhausServiceGlobal.levelSet.add(name)
         parkhausEbenen.add(pe)
-        return DatabaseGlobal.persistEntity(pe)
+        return databaseGlobal.persistEntity(pe)
     }
 
     override fun generateTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
@@ -85,15 +107,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
         // this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
-        val saved = this.DatabaseGlobal.persistEntity(ticket)
-        val test = this.DatabaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
+        val saved = this.databaseGlobal.persistEntity(ticket)
+        val test = this.databaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
         print(test.first().Ausstellungsdatum)
         return ticket
     }
 
     override fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
-        this.DatabaseGlobal.persistEntity(auto)
+        this.databaseGlobal.persistEntity(auto)
         return auto
     }
 
@@ -102,15 +124,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         ticket.Ausfahrdatum = timeCheckOut
         val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
         ticket.price = (duration).toInt()
-        this.DatabaseGlobal.mergeUpdatedEntity(ticket)
+        this.databaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
-        this.DatabaseGlobal.mergeUpdatedEntity(ticket.Auto)
+        this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
         return duration/100
     }
 
     override fun sumOverCars(ParkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.getSumOfTicketPrices(parkhausEbeneID) !!
+        return databaseGlobal.getSumOfTicketPrices(parkhausEbeneID) !!
     }
 
     override fun getLevelById(ParkhausEbeneID: Long):ParkhausEbene{
@@ -118,11 +140,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
     override fun getTotalUsers(ParkhausEbeneName: String):Int{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.getTotalUsersCount(parkhausEbeneID) !!
+        return databaseGlobal.getTotalUsersCount(parkhausEbeneID) !!
     }
     override fun getCurrenUsers(ParkhausEbeneName: String): Int{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.autosInParkEbene(parkhausEbeneID).size
+        return databaseGlobal.autosInParkEbene(parkhausEbeneID).size
     }
 
     override fun averageOverCars(ParkhausEbeneName: String): Int {
@@ -131,7 +153,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun findTicketByPlace(ParkhausEbeneName: String, placeNumber: Int): Ticket? {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return DatabaseGlobal.findTicketByPlace(parkhausEbeneID, placeNumber)
+        return databaseGlobal.findTicketByPlace(parkhausEbeneID, placeNumber)
     }
     override fun getIdByName(ParkhausEbeneName: String):Long{
         return parkhausEbenen.first{e-> e.name == ParkhausEbeneName }.id
@@ -147,12 +169,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>{
-        return DatabaseGlobal.autosInParkEbene(ParkhausEbeneID)
+        return databaseGlobal.autosInParkEbene(ParkhausEbeneID)
     }
 
     override fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto {
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        val allCarsThatLeft = DatabaseGlobal.autosInParkEbene(parkhausEbeneID, false)
+        val allCarsThatLeft = databaseGlobal.autosInParkEbene(parkhausEbeneID, false)
         val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
         val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
         return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes)))

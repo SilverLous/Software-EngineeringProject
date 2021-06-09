@@ -3,6 +3,7 @@ package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO
 import de.hbrs.team7.se1_starter_repo.entities.Auto
+import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -63,7 +64,12 @@ open class DatabaseServiceGlobal {
         val query = em.createNativeQuery("SELECT * FROM TICKET WHERE TICKETNUMMER = ?", Ticket::class.java)
         query.setParameter(1, id.toString())
         return query.resultList as MutableList<Ticket>
+    }
 
+    open fun getParkhausByCityName(name: String): Parkhaus? {
+        val query = em.createNativeQuery("SELECT * FROM PARKHAUS WHERE STADTNAME = ?", Parkhaus::class.java)
+        query.setParameter(1, name)
+        return try { query.singleResult as Parkhaus } catch (e: jakarta.persistence.NoResultException ) { null }
     }
 
     open fun <T> findByID(id: Long, classType: Class<T>): T? {

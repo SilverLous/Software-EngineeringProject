@@ -51,7 +51,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void sessionInitTest() {
-        Assertions.assertNotNull(parkhausServiceSession.getCity());
+        Assertions.assertNotNull(parkhausServiceSession.getParkhaus().getStadtname());
     }
 
     @Test
@@ -70,12 +70,12 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevelInvalidateTest() {
         parkhausServiceSession.initEbene("TESTEBENE1");
-        String stadtName = parkhausServiceSession.getCity().getName();
+        String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         parkhausServiceSession.initEbene("TESTEBENE2");
         Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
         sessionContext.invalidate();
-        String zweiterStadtName = parkhausServiceSession.getCity().getName();
+        String zweiterStadtName = parkhausServiceSession.getParkhaus().getStadtname();
         Assertions.assertNotEquals(stadtName, zweiterStadtName);
         //Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
         //Assertions.assertEquals(2,parkhausServiceSession.getParkhausEbenen().size());
