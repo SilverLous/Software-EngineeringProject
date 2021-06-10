@@ -139,7 +139,7 @@ abstract class ParkhausServlet : HttpServlet() {
     override fun doPost(request: HttpServletRequest, response: HttpServletResponse) {
         val body = getBody(request)
         response.contentType = "text/html"
-        // val out = response.writer
+        val out = response.writer
         println(body)
 
         // toTypedArray() needed because return type is List not array as in original
@@ -154,6 +154,11 @@ abstract class ParkhausServlet : HttpServlet() {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space) !!
                 parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
+            }
+            "welchsleParkhaus" -> {
+                val id = paramJson[1].toLong()
+                this.parkhausServiceSession.loadParkhausCity(id)
+                out.write("Ort gewechselt!");
             }
             "invalid", "occupied" -> {
                 println(body)
