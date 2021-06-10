@@ -19,6 +19,9 @@
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+
 
     <!-- production version, optimized for size and speed
     <script src="https://cdn.jsdelivr.net/npm/vue@2"></script> -->
@@ -56,6 +59,9 @@
 %>
 <div class="box center grey-background">
     <h1>Parkhaus Team 7 ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.bundesland} </h1>
+</div>
+<div>
+${parkhausServiceSession.zeigeHTMLParkhausListe()}
 </div>
 <div class="box lightblue">
     <h2><a href="kasse.jsp">Kasse</a></h2>
@@ -106,6 +112,14 @@
 </body>
 
 <script>
+    function wechsleStadt(elmnt , stadID ) {
+
+        axios.get('/team7Parkhaus/level1-servlet?cmd=wechsleParkhaus&stadt=' + stadID)
+            .then(function (response) {
+                alert(response.body)
+                //window.location.reload();
+            })
+    }
 
     const vm  = new Vue({
         el: '#main',

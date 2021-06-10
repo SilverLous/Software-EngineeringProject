@@ -180,6 +180,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes)))
     }
 
+    open fun zeigeHTMLParkhausListe(): String {
+        val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java);
+        val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""
+        }
+        val buttonVariable = parkhausButtons?.joinToString (separator="") ?: ""
+        return buttonVariable
+        //"""<button type="button" class="btn btn-outline-primary" data-cityid="${}">Primary</button>"""
+    }
+
 
 }
 

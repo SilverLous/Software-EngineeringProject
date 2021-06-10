@@ -127,6 +127,11 @@ abstract class ParkhausServlet : HttpServlet() {
 
 
             "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
+            "wechsleParkhaus" -> {
+                val stadtId = request.getParameter("Stadt")
+                this.parkhausServiceSession.loadParkhausCity(stadtId.toLong())
+                out.write("Ort gewechselt!");
+            }
 
             else -> out.println("Invalid Command: " + request.queryString)
         }
@@ -154,11 +159,6 @@ abstract class ParkhausServlet : HttpServlet() {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space) !!
                 parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
-            }
-            "welchsleParkhaus" -> {
-                val id = paramJson[1].toLong()
-                this.parkhausServiceSession.loadParkhausCity(id)
-                out.write("Ort gewechselt!");
             }
             "invalid", "occupied" -> {
                 println(body)
