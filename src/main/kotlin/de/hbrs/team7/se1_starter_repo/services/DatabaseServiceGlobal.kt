@@ -242,4 +242,18 @@ open class DatabaseServiceGlobal {
 
     }
 
+    open fun findeParkhausMitEbeneUeberId(id: Long): Parkhaus? {
+        val query = em.createNativeQuery(
+            "SELECT * FROM PARKHAUS" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on PARKHAUS.ID = pe.PARKHAUS_ID" +
+
+                    " WHERE PARKHAUS.ID = ? "
+            , Parkhaus::class.java)
+        query.setParameter(1, id)
+
+        val res: Parkhaus? = try { query.singleResult as Parkhaus? } catch (e: jakarta.persistence.NoResultException ) { null }
+        return res
+    }
+
 }

@@ -267,6 +267,25 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     @Test
+    @DisplayName("Test der findeParkhausMitEbeneUeberId-Funktion")
+    public void testFindeParkhausMitEbeneUeberId() {
+        Parkhaus p1 = new Parkhaus("EineStadt", "einBundesland", 0.0, 1.0, 0.0,  1);
+        Parkhaus p2 = new Parkhaus("ZweiteStadt", "einAnderesBundesland", 2.0, 3.0, 0.0,  1);
+        ParkhausEbene e11 = new ParkhausEbene("Ebene 1-1", p1);
+        ParkhausEbene e12 = new ParkhausEbene("Ebene 1-2", p1);
+        ParkhausEbene e21 = new ParkhausEbene("Ebene 2-1", p2);
+        ParkhausEbene e22 = new ParkhausEbene("Ebene 2-2", p2);
+
+        databaseServiceGlobal.persistEntity(p1);
+        databaseServiceGlobal.persistEntity(p2);
+
+        Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()));
+        Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()));
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()), p1);
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()), p2);
+    }
+
+    @Test
     @DisplayName("Testen der Get Sum bei Data Base Funktion")
     public void testGetSum() {
         Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );

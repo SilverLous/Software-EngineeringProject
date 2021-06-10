@@ -77,7 +77,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun loadParkhausCity(id: Long) {
 
-        val pa = databaseGlobal.findByID(id, Parkhaus::class.java);
+        val pa = databaseGlobal.findeParkhausMitEbeneUeberId(id);
         if (pa != null) {
             this.parkhaus = pa
             this.parkhausEbenen = pa.ebenen
