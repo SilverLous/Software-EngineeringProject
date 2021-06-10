@@ -127,8 +127,9 @@ abstract class ParkhausServlet : HttpServlet() {
 
 
             "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
-            "wechsleParkhaus" -> {
-                val stadtId = request.getParameter("Stadt")
+            "wechsleparkhaus" -> {
+                println("ParkhausWechsel")
+                val stadtId = request.getParameter("stadt")
                 this.parkhausServiceSession.loadParkhausCity(stadtId.toLong())
                 out.write("Ort gewechselt!");
             }

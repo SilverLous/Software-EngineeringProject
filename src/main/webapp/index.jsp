@@ -116,8 +116,8 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
 
         axios.get('/team7Parkhaus/level1-servlet?cmd=wechsleParkhaus&stadt=' + stadID)
             .then(function (response) {
-                alert(response.body)
-                //window.location.reload();
+                // alert(response.body)
+                window.location.reload();
             })
     }
 
