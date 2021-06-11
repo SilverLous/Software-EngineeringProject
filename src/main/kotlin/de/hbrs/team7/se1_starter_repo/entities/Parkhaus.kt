@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
+import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import jakarta.persistence.*
 
 
@@ -50,5 +51,20 @@ open class Parkhaus (
 
     fun autoAusfahren(ebene: Int): Int {
         return ebenen[ebene].autoAusfahren()
+    }
+
+    companion object {
+
+        fun fromCitiesDTO(city: citiesDTO): Parkhaus {
+
+            return Parkhaus(
+                city.name,
+                city.bundesland,
+                city.lat,
+                city.lng,
+                city.population,
+                city.preisklasse
+            )
+        }
     }
 }

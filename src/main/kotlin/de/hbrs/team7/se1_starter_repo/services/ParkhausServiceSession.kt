@@ -64,7 +64,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         if (pa != null) {
             loadParkhausCity(pa.id)
         } else {
-            val ph = Parkhaus(city.name, city.bundesland, city.lat, city.lng, city.population, city.preisklasse)
+            val ph = Parkhaus.fromCitiesDTO(city)
             parkhaus = databaseGlobal.persistEntity(ph)
 
             if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
