@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
 @EnableAutoWeld
@@ -51,14 +53,14 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void sessionInitTest() {
-        Assertions.assertNotNull(parkhausServiceSession.getParkhaus().getStadtname());
+        assertNotNull(parkhausServiceSession.getParkhaus().getStadtname());
     }
 
     @Test
     public void sessionAddLevel() {
         parkhausServiceSession.initEbene("TESTEBENE1");
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
-        Assertions.assertNotNull(temp);
+        assertNotNull(temp);
         Assertions.assertEquals("TESTEBENE1", parkhausServiceSession.getLevelById(temp.get(0).getId()).getName());
         parkhausServiceSession.initEbene("TESTEBENE2");
         Assertions.assertEquals("TESTEBENE2", parkhausServiceSession.getLevelById(temp.get(1).getId()).getName());
@@ -130,6 +132,7 @@ public class ParkhausServiceSessionJavaTest {
             t_test = parkhausServiceSession.generateTicket(parkhausName, paramsErstesAuto);
             parkhausServiceSession.payForTicket(parkhausName, t_test, new Date(timeNow + 100));
             Assertions.assertEquals(100, parkhausServiceSession.averageOverCars(parkhausName), 4);
+            Assertions.assertEquals((int)(parkhausServiceSession.sumOverCars(parkhausName)/parkhausServiceSession.getTotalUsers(parkhausName)), parkhausServiceSession.averageOverCars(parkhausName), 4);
         }
     }
 
@@ -193,6 +196,26 @@ public class ParkhausServiceSessionJavaTest {
 
     }
 
+    @Test
+    @DisplayName("Test der generateStatisticsOverVehicle-Funktion")
+    public void testGenerateStatisticsOverVehicle() {
+        String parkhausName = "ForLoopsSindToll";
+        parkhausServiceSession.initEbene(parkhausName);
+        int wieLange = 8;
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Ticket t_test = new Ticket();
+
+        for (int i=0;i<wieLange;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            t_test = parkhausServiceSession.generateTicket(parkhausName,paramsErstesAuto);
+            a_test = t_test.getAuto();
+            Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.autosInParkEbene(parkhausName).get(i).getHash());
+        }
+        assertNotNull(parkhausServiceSession.generateStatisticsOverVehicle(parkhausName));
+    }
+
     @Nested
     @DisplayName("Basic IO chain")
     @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -211,7 +234,7 @@ public class ParkhausServiceSessionJavaTest {
             parkhausServiceSession.initEbene(parkhausId);
 
             Ticket erstesTestTicket = parkhausServiceSession.generateTicket(parkhausId, paramsErstesAuto);
-            Assertions.assertNotNull(erstesTestTicket);
+            assertNotNull(erstesTestTicket);
         }
 
         public void bezahleTicketTest() {
