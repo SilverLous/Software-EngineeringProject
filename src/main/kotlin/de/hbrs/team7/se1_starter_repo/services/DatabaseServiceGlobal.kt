@@ -8,7 +8,11 @@ import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
-
+import java.sql.Time
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
+import java.util.*
 
 
 /*
@@ -255,5 +259,26 @@ open class DatabaseServiceGlobal {
         val res: Parkhaus? = try { query.singleResult as Parkhaus? } catch (e: jakarta.persistence.NoResultException ) { null }
         return res
     }
+
+    open fun errechneTagesEinnahmen(parkhausEbeneID: Long): Int? {
+
+        val nau = Date.from(Instant.now())
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        var timeZero = "'"+ sdf.format(nau)
+        timeZero += " 00:00:00.000000'"
+        val query = em.createNativeQuery(
+            "SELECT SUM(TICKET.PRICE) FROM TICKET" +
+
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ? and TICKET.AUSSTELLUNGSDATUM >= "+ timeZero //TODO fix Null error and change to Ausfahrdatum
+        )
+
+        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        return res.toInt()
+    }
+
 
 }

@@ -17,6 +17,8 @@ import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -369,6 +371,38 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertEquals(wieLange-1,databaseServiceGlobal.autosInParkEbene(ebene1.getId(), true).size());
         Assertions.assertEquals(wieLange,databaseServiceGlobal.autosInParkEbeneHistoric(ebene1.getId()).size());
 
+    }
+
+    @Test
+    @DisplayName("Testen der Not vailable bei Data Base Funktion")
+    public void testTagesEinnahmen() {
+        LocalTime nau = LocalDateTime.now().toLocalTime();
+        System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
+
+        Date nau2 = Date.from(Instant.now());
+        System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
+        Parkhaus parkhaus = new Parkhaus("Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1);
+        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        databaseServiceGlobal.persistEntity(ebene1);
+        int wieLange = 8;
+        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+        Ticket t_test = new Ticket();
+
+        for (int i = 0; i < wieLange; i++) {
+            a_test = new Auto("EchterHashEcht" + i, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+            t_test = new Ticket();
+            t_test.setAuto(a_test);
+            t_test.setPrice(500);
+            a_test.setTicket(t_test);
+            databaseServiceGlobal.persistEntity(t_test);
+            ArrayList<Ticket> ticketArray = ebene1.getTickets();
+            ticketArray.add(t_test);
+            ebene1.setTickets(ticketArray);
+            databaseServiceGlobal.mergeUpdatedEntity(t_test);
+            databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+            Assertions.assertEquals(500 * (i + 1), databaseServiceGlobal.errechneTagesEinnahmen(ebene1.getId()));
+
+        }
     }
 
 
