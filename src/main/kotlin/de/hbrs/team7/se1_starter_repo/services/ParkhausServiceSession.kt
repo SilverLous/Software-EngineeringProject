@@ -148,7 +148,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun averageOverCars(ParkhausEbeneName: String): Int {
-        return sumOverCars(ParkhausEbeneName) / (getTotalUsers(ParkhausEbeneName) - getCurrenUsers(ParkhausEbeneName))
+        val divisor = (getTotalUsers(ParkhausEbeneName) - getCurrenUsers(ParkhausEbeneName))
+        return if (divisor == 0) {
+            0;
+        } else
+            (sumOverCars(ParkhausEbeneName) / divisor)
     }
 
     override fun findTicketByPlace(ParkhausEbeneName: String, placeNumber: Int): Ticket? {
