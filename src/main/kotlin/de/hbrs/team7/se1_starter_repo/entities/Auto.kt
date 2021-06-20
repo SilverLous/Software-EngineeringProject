@@ -2,6 +2,8 @@ package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.CarIF
 import jakarta.persistence.*
+import java.time.Instant
+import java.util.*
 
 @Entity
 open class Auto(
@@ -41,6 +43,11 @@ open class Auto(
         // return params.contentToString()
         return "";
     }
+
+    fun getDuration():Long{
+        return Date.from(Instant.now()).time - (this.Ticket?.Ausstellungsdatum?.time ?: Date.from(Instant.now()).time)
+    }
+
     fun paramsToArray(): Array<String>? {
         return null
     }

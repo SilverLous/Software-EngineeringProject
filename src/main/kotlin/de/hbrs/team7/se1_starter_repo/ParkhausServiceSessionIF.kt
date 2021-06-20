@@ -51,4 +51,8 @@ interface ParkhausServiceSessionIF {
 
     fun showWeeksTakings(ParkhausEbeneName: Long): einnahmenBarDTO
 
+    fun getPrintStringCars(ParkhausEbeneName: String): String
+
+    fun getPrintStringCars(ParkhausEbeneName: Long): String
+
 }

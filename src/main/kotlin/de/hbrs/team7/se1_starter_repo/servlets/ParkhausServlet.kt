@@ -98,16 +98,8 @@ abstract class ParkhausServlet : HttpServlet() {
             }
 
             "cars" -> {
-                val autosInParkhausEbene =  parkhausServiceSession.autosInParkEbene(NAME())
-                var printString = ""
-                for(e: Auto in autosInParkhausEbene ){
-                    printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
-                            "/_/_/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
-                            "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")
-                }
-                out.println(printString.dropLast(1))
-                //Do not delete this line below, without it the Cars Button does not work properly
-                printString = ""
+                out.println(parkhausServiceSession.getPrintStringCars(NAME()))
+
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
                 //out.println("1/1619420863044/_/_/Ticket1/#0d1e0a/2/any/PKW/1,2/1619420863045/_/_/Ticket2/#dd10aa/3/any/PKW/2");

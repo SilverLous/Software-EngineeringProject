@@ -205,6 +205,22 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
+    override fun getPrintStringCars(ParkhausEbeneName: String): String {
+        val parkhausEbeneID = getIdByName(ParkhausEbeneName)
+        return getPrintStringCars(parkhausEbeneID)
+    }
+
+    override fun getPrintStringCars(ParkhausEbeneName: Long): String {
+        val autosInParkhausEbene =  autosInParkEbene(ParkhausEbeneName)
+        var printString = ""
+        for(e: Auto in autosInParkhausEbene ){
+            printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
+                    "/${e.getDuration()}/${e.getDuration()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
+                    "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")
+        }
+        return printString.dropLast(1)
+    }
+
     open fun zeigeHTMLParkhausListe(): String {
         val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java);
         val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""
