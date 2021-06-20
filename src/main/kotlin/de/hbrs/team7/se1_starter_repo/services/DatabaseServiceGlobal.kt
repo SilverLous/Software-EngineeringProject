@@ -290,7 +290,7 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-                    " WHERE pe.ID = ? AND TICKET.AUSFAHRDATUM >= " + timeZero //TODO fix Null error and change to Ausfahrdatum
+                    " WHERE pe.ID = ? AND TICKET.AUSFAHRDATUM >= " + timeZero
         )
         query.setParameter(1, parkhausEbeneID)
 

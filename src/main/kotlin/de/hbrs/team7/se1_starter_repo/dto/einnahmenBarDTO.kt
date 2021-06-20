@@ -9,10 +9,10 @@ data class einnahmenBarDTO(
 )
 @Serializable
 data class BarData(
-
-    val type: String = "bar",
+    @SerialName("type")
+    val type: String,
     @SerialName("x")
-    val x: String,
+    val x: List<String>,
     @SerialName("y")
-    val y: Double
+    val y: List<Double>
 )

@@ -1,10 +1,7 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
-import de.hbrs.team7.se1_starter_repo.dto.carData
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
-import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
+import de.hbrs.team7.se1_starter_repo.dto.*
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
@@ -182,6 +179,18 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
         val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
         return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes)))
+    }
+
+    override fun showDaysTakings(ParkhausEbeneName: String): einnahmenBarDTO {
+        val parkhausEbeneID = getIdByName(ParkhausEbeneName)
+        return showDaysTakings(parkhausEbeneID)
+    }
+
+    override fun showDaysTakings(ParkhausEbeneName: Long): einnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneTagesEinnahmen(ParkhausEbeneName)
+            return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Tages Einnahmen"),
+                listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
+
     }
 
     open fun zeigeHTMLParkhausListe(): String {

@@ -78,7 +78,7 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
                          json_format="true"
                          max="11"
                          extra_buttons='["Average","Sum","Total Users","Cars"]'
-                         extra_charts='["Chart"]'>
+                         extra_charts='["Chart","TagesEinnahmen"]'>
     </ccm-parkhaus-10-1-0>
 </div>
 <div class="box lightgreen">

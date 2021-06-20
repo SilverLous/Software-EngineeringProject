@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
+import de.hbrs.team7.se1_starter_repo.dto.einnahmenBarDTO
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
@@ -41,5 +42,9 @@ interface ParkhausServiceSessionIF {
     fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>
 
     fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto
+
+    fun showDaysTakings(ParkhausEbeneName: String): einnahmenBarDTO
+
+    fun showDaysTakings(ParkhausEbeneName: Long): einnahmenBarDTO
 
 }
