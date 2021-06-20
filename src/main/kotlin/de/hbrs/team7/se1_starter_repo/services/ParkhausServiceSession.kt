@@ -193,6 +193,18 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
+    override fun showWeeksTakings(ParkhausEbeneName: String): einnahmenBarDTO {
+        val parkhausEbeneID = getIdByName(ParkhausEbeneName)
+        return showWeeksTakings(parkhausEbeneID)
+    }
+
+    override fun showWeeksTakings(ParkhausEbeneName: Long): einnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneWochenEinnahmen(ParkhausEbeneName)
+        return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Wochen Einnahmen"),
+            listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
+
+    }
+
     open fun zeigeHTMLParkhausListe(): String {
         val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java);
         val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""

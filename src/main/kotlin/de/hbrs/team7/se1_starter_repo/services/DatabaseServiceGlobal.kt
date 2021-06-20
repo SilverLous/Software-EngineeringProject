@@ -13,6 +13,7 @@ import jakarta.persistence.criteria.CriteriaQuery
 import jakarta.persistence.criteria.Root
 import java.text.SimpleDateFormat
 import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -282,6 +283,27 @@ open class DatabaseServiceGlobal {
         val nau = Date.from(Instant.now())
         val sdf = SimpleDateFormat("yyyy-MM-dd")
         var timeZero = "'"+ sdf.format(nau)
+        timeZero += " 00:00:00.000000'"
+        val query = em.createNativeQuery(
+            "SELECT SUM(TICKET.PRICE) FROM TICKET" +
+
+                    " INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER" +
+
+                    " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
+
+                    " WHERE pe.ID = ? AND TICKET.AUSFAHRDATUM >= " + timeZero
+        )
+        query.setParameter(1, parkhausEbeneID)
+
+        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
+        return res.toInt()
+    }
+
+    open fun errechneWochenEinnahmen(parkhausEbeneID: Long): Int? {
+
+        val vorigeWoche = Date.from(Instant.now().minus(7, ChronoUnit.DAYS))
+        val sdf = SimpleDateFormat("yyyy-MM-dd")
+        var timeZero = "'"+ sdf.format(vorigeWoche)
         timeZero += " 00:00:00.000000'"
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +

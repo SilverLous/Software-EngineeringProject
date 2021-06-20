@@ -19,6 +19,7 @@ import org.junit.jupiter.api.*;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -374,7 +375,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     @Test
-    @DisplayName("Testen der Not vailable bei Data Base Funktion")
+    @DisplayName("Testen der Tages Einnahmen Funktion")
     public void testTagesEinnahmen() {
         LocalTime nau = LocalDateTime.now().toLocalTime();
         System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
@@ -416,6 +417,64 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.mergeUpdatedEntity(t_test);
         databaseServiceGlobal.mergeUpdatedEntity(ebene1);
         Assertions.assertEquals(500 * (wieLange), databaseServiceGlobal.errechneTagesEinnahmen(ebene1.getId()));
+    }
+
+    @Test
+    @DisplayName("Testen der Wochen Einnahmen Funktion")
+    public void testWochenEinnahmen() {
+        LocalTime nau = LocalDateTime.now().toLocalTime();
+        System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
+
+        Date nau2 = Date.from(Instant.now());
+        System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
+        Parkhaus parkhaus = new Parkhaus("Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1);
+        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        databaseServiceGlobal.persistEntity(ebene1);
+        int wieLange = 8;
+        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+        Ticket t_test = new Ticket();
+
+        for (int i = 0; i < wieLange; i++) {
+            a_test = new Auto("EchterHashEcht" + i, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+            t_test = new Ticket();
+            t_test.setAuto(a_test);
+            t_test.setPrice(500);
+            t_test.setAusfahrdatum(Date.from(Instant.now()));
+            a_test.setTicket(t_test);
+            databaseServiceGlobal.persistEntity(t_test);
+            ArrayList<Ticket> ticketArray = ebene1.getTickets();
+            ticketArray.add(t_test);
+            ebene1.setTickets(ticketArray);
+            databaseServiceGlobal.mergeUpdatedEntity(t_test);
+            databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+            Assertions.assertEquals(500 * (i + 1), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
+        }
+        a_test = new Auto("EchterHashEcht" + wieLange+1, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+        t_test = new Ticket();
+        t_test.setAuto(a_test);
+        t_test.setPrice(500);
+        t_test.setAusfahrdatum(Date.from(Instant.parse("2018-11-30T18:35:24.00Z")));
+        a_test.setTicket(t_test);
+        databaseServiceGlobal.persistEntity(t_test);
+        ArrayList<Ticket> ticketArray = ebene1.getTickets();
+        ticketArray.add(t_test);
+        ebene1.setTickets(ticketArray);
+        databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+        Assertions.assertEquals(500 * (wieLange), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
+        a_test = new Auto("EchterHashEcht" + wieLange+2, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+        t_test = new Ticket();
+        t_test.setAuto(a_test);
+        t_test.setPrice(500);
+        t_test.setAusfahrdatum(Date.from(Instant.now().minus(1, ChronoUnit.DAYS)));
+        a_test.setTicket(t_test);
+        databaseServiceGlobal.persistEntity(t_test);
+        ticketArray = ebene1.getTickets();
+        ticketArray.add(t_test);
+        ebene1.setTickets(ticketArray);
+        databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+        Assertions.assertEquals(500 * (wieLange + 1), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
     }
 
 

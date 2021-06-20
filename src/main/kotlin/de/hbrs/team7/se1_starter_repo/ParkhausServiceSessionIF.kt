@@ -47,4 +47,8 @@ interface ParkhausServiceSessionIF {
 
     fun showDaysTakings(ParkhausEbeneName: Long): einnahmenBarDTO
 
+    fun showWeeksTakings(ParkhausEbeneName: String): einnahmenBarDTO
+
+    fun showWeeksTakings(ParkhausEbeneName: Long): einnahmenBarDTO
+
 }

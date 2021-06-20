@@ -124,14 +124,18 @@ abstract class ParkhausServlet : HttpServlet() {
                 out.print(jsonData)
             }
             "tageseinnahmen"-> {
-                // http://json-b.net/docs/user-guide.html
-
-                // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.showDaysTakings(NAME()))
                 out.print(jsonData)
             }
+            "wocheneinnahmen"-> {
+                response.contentType = "application/json;charset=UTF-8"
+
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.showWeeksTakings(NAME()))
+                out.print(jsonData)
+            }
+
             "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())/100} € per car")
 
 
