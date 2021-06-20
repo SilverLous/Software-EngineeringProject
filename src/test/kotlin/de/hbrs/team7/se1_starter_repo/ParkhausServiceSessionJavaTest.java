@@ -241,7 +241,7 @@ public class ParkhausServiceSessionJavaTest {
         }
     }
 
-    public ParkhausEbene[] generateEbenen(int anzahl) {
+    private ParkhausEbene[] generateEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
         for (int i = 0; i < anzahl; i++) {
             ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));

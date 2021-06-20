@@ -14,6 +14,8 @@ import kotlinx.serialization.descriptors.PrimitiveKind;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;
@@ -135,7 +137,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-1 Relation")
     public void oneToOneTest(){
 
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
+        Auto a_test = generateDefaultAuto();
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
@@ -158,7 +160,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
-        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
         ParkhausEbene ebene2 = new ParkhausEbene("Ebene 2", parkhaus);
 
@@ -184,7 +186,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
-        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene();
         ebene1.setName("Ebene 1");
         ebene1.setParkhaus(parkhaus);
@@ -193,7 +195,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         ebene2.setParkhaus(parkhaus);
 
 
-        Auto auto1 = new Auto("EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
+        Auto auto1 = generateDefaultAuto();
         Auto auto2 = new Auto("HashWert", "bunt", 3,"ACG-398","vehilkulaer","kategorisch");
 
         databaseServiceGlobal.persistEntity(ebene1);
@@ -236,7 +238,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der Ticket Create funktion")
     public void deleteObjectTest(){
 
-        Parkhaus p = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus p = generateDefaultParkhaus();
         databaseServiceGlobal.persistEntity(p);
         Assertions.assertNotNull(p.getId());
 
@@ -245,7 +247,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.persistEntity(p_e);
         Assertions.assertNotNull(p_e.getId());
 
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generateDefaultAuto();
         databaseServiceGlobal.persistEntity(a_test);
         Assertions.assertNotNull(a_test.getAutonummer());
 
@@ -291,7 +293,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Get Sum bei Data Base Funktion")
     public void testGetSum() {
-        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
@@ -319,12 +321,12 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Total Users bei Data Base Funktion mit ner For Loop")
     public void testTotalUsersForLoop() {
-        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
@@ -346,12 +348,12 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen der Not vailable bei Data Base Funktion")
     public void testGetAllCarsInLevel() {
-        Parkhaus parkhaus = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
-        Ticket t_test = new Ticket();
+        Auto a_test = generateDefaultAuto();
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
@@ -380,14 +382,14 @@ public class ParkhausDatabaseGlobalJavaTest {
         LocalTime nau = LocalDateTime.now().toLocalTime();
         System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
 
-        Date nau2 = Date.from(Instant.now());
+        //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
-        Parkhaus parkhaus = new Parkhaus("Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1);
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i = 0; i < wieLange; i++) {
             a_test = new Auto("EchterHashEcht" + i, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
@@ -425,9 +427,9 @@ public class ParkhausDatabaseGlobalJavaTest {
         LocalTime nau = LocalDateTime.now().toLocalTime();
         System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
 
-        Date nau2 = Date.from(Instant.now());
+        //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
-        Parkhaus parkhaus = new Parkhaus("Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1);
+        Parkhaus parkhaus = generateDefaultParkhaus();
         ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
@@ -477,8 +479,11 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertEquals(500 * (wieLange + 1), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
     }
 
+    private Parkhaus generateDefaultParkhaus() {
+        return new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+    }
 
-
-
-
+    private Auto generateDefaultAuto() {
+        return new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+    }
 }
