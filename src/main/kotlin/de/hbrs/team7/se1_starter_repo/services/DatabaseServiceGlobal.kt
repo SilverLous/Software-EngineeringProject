@@ -8,10 +8,11 @@ import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
-import java.sql.Time
+import jakarta.persistence.criteria.CriteriaBuilder
+import jakarta.persistence.criteria.CriteriaQuery
+import jakarta.persistence.criteria.Root
 import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -64,6 +65,12 @@ open class DatabaseServiceGlobal {
         return em.createQuery(query).resultList
     }
 
+    open fun <T> createCriteraQueryBuilder(classType: Class<T>): Pair<CriteriaBuilder, CriteriaQuery<T>> {
+        val qb: CriteriaBuilder = em.criteriaBuilder
+        val cq = qb.createQuery(classType)
+        return Pair(qb, cq)
+    }
+
     open fun nativeSQLQuerySample(id: Long): MutableList<Ticket> {
         val query = em.createNativeQuery("SELECT * FROM TICKET WHERE TICKETNUMMER = ?", Ticket::class.java)
         query.setParameter(1, id.toString())
@@ -102,6 +109,16 @@ open class DatabaseServiceGlobal {
 
     }
 
+    /*
+    open fun <T> joinTicketParkhausEbene(): Pair<CriteriaBuilder, CriteriaQuery<T>> {
+        val (qb, cq) = createCriteraQueryBuilder(Ticket::class.java)
+        val tickets: Root<Ticket> = cq.from(Ticket::class.java)
+        tickets.join(Ticket.parkhausEbenen)
+        return Pair(qb, cq)
+    }
+
+     */
+
     open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
@@ -133,7 +150,7 @@ open class DatabaseServiceGlobal {
             )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
         return res.toInt()
     }
 
@@ -153,7 +170,7 @@ open class DatabaseServiceGlobal {
         )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
         return res.toInt()
 
     }
@@ -276,7 +293,7 @@ open class DatabaseServiceGlobal {
                     " WHERE pe.ID = ? and TICKET.AUSSTELLUNGSDATUM >= "+ timeZero //TODO fix Null error and change to Ausfahrdatum
         )
 
-        val res: Long = try { query.singleResult as Long } catch (e: jakarta.persistence.NoResultException ) { 0 }
+        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
         return res.toInt()
     }
 
