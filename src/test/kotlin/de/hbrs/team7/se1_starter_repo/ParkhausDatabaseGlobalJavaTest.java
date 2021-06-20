@@ -393,6 +393,7 @@ public class ParkhausDatabaseGlobalJavaTest {
             t_test = new Ticket();
             t_test.setAuto(a_test);
             t_test.setPrice(500);
+            t_test.setAusfahrdatum(Date.from(Instant.now()));
             a_test.setTicket(t_test);
             databaseServiceGlobal.persistEntity(t_test);
             ArrayList<Ticket> ticketArray = ebene1.getTickets();
@@ -401,8 +402,20 @@ public class ParkhausDatabaseGlobalJavaTest {
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
             Assertions.assertEquals(500 * (i + 1), databaseServiceGlobal.errechneTagesEinnahmen(ebene1.getId()));
-
         }
+        a_test = new Auto("EchterHashEcht" + wieLange+1, "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
+        t_test = new Ticket();
+        t_test.setAuto(a_test);
+        t_test.setPrice(500);
+        t_test.setAusfahrdatum(Date.from(Instant.parse("2018-11-30T18:35:24.00Z")));
+        a_test.setTicket(t_test);
+        databaseServiceGlobal.persistEntity(t_test);
+        ArrayList<Ticket> ticketArray = ebene1.getTickets();
+        ticketArray.add(t_test);
+        ebene1.setTickets(ticketArray);
+        databaseServiceGlobal.mergeUpdatedEntity(t_test);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+        Assertions.assertEquals(500 * (wieLange), databaseServiceGlobal.errechneTagesEinnahmen(ebene1.getId()));
     }
 
 

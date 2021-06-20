@@ -290,8 +290,9 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-                    " WHERE pe.ID = ? and TICKET.AUSSTELLUNGSDATUM >= "+ timeZero //TODO fix Null error and change to Ausfahrdatum
+                    " WHERE pe.ID = ? AND TICKET.AUSFAHRDATUM >= " + timeZero //TODO fix Null error and change to Ausfahrdatum
         )
+        query.setParameter(1, parkhausEbeneID)
 
         val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
         return res.toInt()
