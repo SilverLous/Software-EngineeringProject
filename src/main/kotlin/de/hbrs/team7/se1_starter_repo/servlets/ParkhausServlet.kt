@@ -106,7 +106,7 @@ abstract class ParkhausServlet : HttpServlet() {
 
 
             }
-            "chart" -> {
+            "einnahmenueberautotyp" -> {
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
@@ -125,6 +125,15 @@ abstract class ParkhausServlet : HttpServlet() {
                 response.contentType = "application/json;charset=UTF-8"
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.showWeeksTakings(NAME()))
+                out.print(jsonData)
+            }
+            "einnahmenueberbundesland" -> {
+                // http://json-b.net/docs/user-guide.html
+
+                // https://github.com/Kotlin/kotlinx.serialization
+                response.contentType = "application/json;charset=UTF-8"
+
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.generatePriceByFederalState())
                 out.print(jsonData)
             }
 

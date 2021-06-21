@@ -55,4 +55,5 @@ interface ParkhausServiceSessionIF {
 
     fun getPrintStringCars(ParkhausEbeneName: Long): String
 
+    fun generatePriceByFederalState(): statisticsChartDto?
 }

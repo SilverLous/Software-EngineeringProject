@@ -234,6 +234,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         //"""<button type="button" class="btn btn-outline-primary" data-cityid="${}">Primary</button>"""
     }
 
+    override fun generatePriceByFederalState(): statisticsChartDto? {
+        val carMap = databaseGlobal.ticketPriceByBundesland()
+        if (carMap != null) {
+            return statisticsChartDto(data = listOf(carData("bar", carMap.keys.toList(), carMap.values.map{a -> a.toDouble()/100})))
+        }
+        return null
+
+
+    }
+
 
 }
 

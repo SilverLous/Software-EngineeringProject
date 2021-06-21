@@ -928,6 +928,12 @@
             <div class="col-md-6">
                 <div id='wochenEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
             </div>
+            <div class="col-md-6">
+                <div id='EinnahmenUeberAutoTyp'><!-- Plotly chart will be drawn inside this DIV --></div>
+            </div>
+            <div class="col-md-6">
+                <div id='EinnahmenUeberBundesland'><!-- Plotly chart will be drawn inside this DIV --></div>
+            </div>
         </div>
     </div>
 </div>
@@ -957,12 +963,36 @@
                 Plotly.newPlot('wochenEinnahmen', wocheneinnahmen,layout, {scrollZoom: true});
             })
     }
+
+
+    function plotEinnahmenUeberAutoTyp(){
+        axios.get('/team7Parkhaus/level1-servlet?cmd=einnahmenueberautotyp')
+            .then(function (response) {
+                EinnahmenUeberAutoTyp = response.data
+                Plotly.newPlot('EinnahmenUeberAutoTyp', EinnahmenUeberAutoTyp,layout, {scrollZoom: true});
+            })
+    }
+
+
+    function plotEinnahmenUeberBundesland(){
+        axios.get('/team7Parkhaus/level1-servlet?cmd=einnahmenueberbundesland')
+            .then(function (response) {
+                EinnahmenUeberBundesland = response.data
+                Plotly.newPlot('EinnahmenUeberBundesland', EinnahmenUeberBundesland,layout, {scrollZoom: true});
+            })
+    }
+
     plotTageseinnahmen()
     plotWocheneinnahmen()
+    plotEinnahmenUeberAutoTyp()
+    plotEinnahmenUeberBundesland()
 
     ws.onmessage = function (e) {
         plotTageseinnahmen()
         plotWocheneinnahmen()
+        plotEinnahmenUeberAutoTyp()
+        plotEinnahmenUeberBundesland()
+
         console.log("From Server:"+ e.data);
     };
 

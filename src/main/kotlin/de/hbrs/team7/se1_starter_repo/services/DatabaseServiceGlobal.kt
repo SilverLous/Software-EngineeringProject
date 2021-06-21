@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
+import kotlin.collections.HashMap
 
 
 /*
@@ -363,6 +364,33 @@ open class DatabaseServiceGlobal {
             0
         }
         return res.toInt()
+    }
+
+    open fun ticketPriceByBundesland(): Map<String, Int>? {
+        val query = em.createNativeQuery(
+            "" +
+                    "SELECT SUM(TICKET.PRICE),BUNDESLAND FROM TICKET\n" +
+
+                    "INNER JOIN PARKHAUSEBENE_TICKET pe_ti on TICKET.TICKETNUMMER = pe_ti.TICKETS_TICKETNUMMER\n" +
+
+                    "INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID\n" +
+
+                    "INNER JOIN PARKHAUS ph on ph.ID = pe.PARKHAUS_ID\n" +
+
+                    "GROUP BY ph.BUNDESLAND"
+        )
+
+
+        val ddrValuesList = query.resultList.toList()
+        val resMap = HashMap<String, Int>()
+        ddrValuesList.map { it ->
+            val lst = it as Array<out Any>
+
+            resMap.put(lst[1] as String , (lst[0] as Long).toInt())
+
+        }
+
+        return resMap
     }
 
 

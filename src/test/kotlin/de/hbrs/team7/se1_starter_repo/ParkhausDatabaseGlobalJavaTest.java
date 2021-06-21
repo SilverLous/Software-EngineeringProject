@@ -24,6 +24,8 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -512,6 +514,47 @@ public class ParkhausDatabaseGlobalJavaTest {
 
         }
 
+    }
+
+    @Test
+    @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
+    public void testGetCarsByFederalState(){
+        Parkhaus parkhaus = generateDefaultParkhaus();
+        Parkhaus parkhausBundesland2 = new Parkhaus( "Teststadt", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
+        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene2 = new ParkhausEbene("ForLoopsSindToll2", parkhausBundesland2);
+        databaseServiceGlobal.persistEntity(parkhaus);
+        databaseServiceGlobal.persistEntity(ebene1);
+        int wieLange = 8;
+        Auto a_test;
+        Ticket t_test;
+
+        for (int i=0;i<wieLange;i++){
+            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
+            t_test = new Ticket();
+            t_test.setAuto(a_test);
+            a_test.setTicket(t_test);
+            databaseServiceGlobal.persistEntity(t_test);
+
+            ArrayList<Ticket> ticketArray = i%2== 0 ? ebene1.getTickets() : ebene2.getTickets();
+
+            t_test.setPrice(500);
+            databaseServiceGlobal.mergeUpdatedEntity(t_test);
+            ticketArray.add(t_test);
+            if ( i%2 == 0){
+                ebene1.setTickets(ticketArray);
+                databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+            }
+            else{
+                ebene2.setTickets(ticketArray);
+                databaseServiceGlobal.mergeUpdatedEntity(ebene2);
+            }
+            a_test.setImParkhaus(false);
+            databaseServiceGlobal.mergeUpdatedEntity(a_test);
+
+        }
+        Map<String, Integer> map = databaseServiceGlobal.ticketPriceByBundesland();
+        Assertions.assertEquals(2, map.size());
     }
 
     private Parkhaus generateDefaultParkhaus() {
