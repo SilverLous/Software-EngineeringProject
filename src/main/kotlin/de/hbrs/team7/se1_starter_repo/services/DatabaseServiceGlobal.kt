@@ -10,7 +10,6 @@ import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
 import jakarta.persistence.criteria.CriteriaBuilder
 import jakarta.persistence.criteria.CriteriaQuery
-import jakarta.persistence.criteria.Root
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -37,26 +36,46 @@ open class DatabaseServiceGlobal {
     // @PersistenceContext(unitName = "hsqldb-eclipselink")
     // open var entityManager: EntityManager? = null
 
+    // @PersistenceContext(type = EXTENDED, ) private lateinit var entityManager: EntityManager
+
+
     // @PersistenceUnit
     // open var entityManagerFactory: EntityManagerFactory? = null
 
     private val emf = Persistence.createEntityManagerFactory("hsqldb-eclipselink")
     private val em = emf.createEntityManager()
-    private val et = em.transaction
+    // private val et = em.transaction
 
 
     open fun <T> persistEntity(e: T): T {
-        et.begin()
+        val tx = em.transaction
+        tx.begin()
         em.persist(e)
-        et.commit()
+        tx.commit()
         return e
     }
 
     open fun <T> mergeUpdatedEntity(e: T): T {
-        et.begin()
+        val tx = em.transaction
+        tx.begin()
         val newE = em.merge(e)
-        et.commit()
+        tx.commit()
         return newE
+    }
+
+    open fun <T> deleteByID(id: Long, classType: Class<T>) {
+        val tx = em.transaction
+        val toDelete = findByID(id, classType)
+        tx.begin()
+        em.remove(toDelete)
+        tx.commit()
+    }
+
+    open fun <T> deleteByObject(toDelete: T) {
+        val tx = em.transaction
+        tx.begin()
+        em.remove(toDelete)
+        tx.commit()
     }
 
     open fun <T> queryAllEntities(classType: Class<T>): MutableList<T>? {
@@ -81,24 +100,15 @@ open class DatabaseServiceGlobal {
     open fun getParkhausByCityName(name: String): Parkhaus? {
         val query = em.createNativeQuery("SELECT * FROM PARKHAUS WHERE STADTNAME = ?", Parkhaus::class.java)
         query.setParameter(1, name)
-        return try { query.singleResult as Parkhaus } catch (e: jakarta.persistence.NoResultException ) { null }
+        return try {
+            query.singleResult as Parkhaus
+        } catch (e: jakarta.persistence.NoResultException) {
+            null
+        }
     }
 
     open fun <T> findByID(id: Long, classType: Class<T>): T? {
         return em.find(classType, id)
-    }
-
-    open fun <T> deleteByID(id: Long, classType: Class<T>) {
-        val toDelete = findByID(id, classType)
-        et.begin()
-        em.remove(toDelete)
-        et.commit()
-    }
-
-    open fun <T> deleteByObject(toDelete: T) {
-        et.begin()
-        em.remove(toDelete)
-        et.commit()
     }
 
 
@@ -129,12 +139,16 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-                    " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE"
-            , Ticket::class.java)
+                    " WHERE pe.ID = ? AND au.Platznummer = ? AND au.IMPARKHAUS = TRUE", Ticket::class.java
+        )
         query.setParameter(1, parkhausLevelID)
         query.setParameter(2, placeNumber)
 
-        val res: Ticket? = try { query.singleResult as Ticket? } catch (e: jakarta.persistence.NoResultException ) { null }
+        val res: Ticket? = try {
+            query.singleResult as Ticket?
+        } catch (e: jakarta.persistence.NoResultException) {
+            null
+        }
         return res
 
     }
@@ -148,10 +162,14 @@ open class DatabaseServiceGlobal {
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
                     " WHERE pe.ID = ?"
-            )
+        )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
+        val res: Long = try {
+            query.singleResult as Long
+        } catch (e: Exception) {
+            0
+        }
         return res.toInt()
     }
 
@@ -171,7 +189,11 @@ open class DatabaseServiceGlobal {
         )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
+        val res: Long = try {
+            query.singleResult as Long
+        } catch (e: Exception) {
+            0
+        }
         return res.toInt()
 
     }
@@ -186,8 +208,8 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-                    " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = "+imParkhaus
-            , Auto::class.java)
+                    " WHERE pe.ID = ? AND AUTO.IMPARKHAUS = " + imParkhaus, Auto::class.java
+        )
 
         query.setParameter(1, parkhausEbeneID)
 
@@ -205,8 +227,8 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on pe.ID = pe_ti.PARKHAUSEBENEN_ID" +
 
-                    " WHERE pe.ID = ?"
-            , Auto::class.java)
+                    " WHERE pe.ID = ?", Auto::class.java
+        )
 
         query.setParameter(1, parkhausEbeneID)
 
@@ -218,8 +240,21 @@ open class DatabaseServiceGlobal {
 
         val ddr = listOf("Saxony", "Thuringia", "Saxony-Anhalt", "Brandenburg", "Mecklenburg-Western Pomerania")
         val ddr_str = "( 'Saxony', 'Thuringia', 'Saxony-Anhalt', 'Brandenburg', 'Mecklenburg-Western Pomerania')"
-        val brd = listOf("Bremen", "Schleswig-Holstein", "Berlin", "Saarland",  "North Rhine-Westphalia", "Hamburg", "Baden-Württemberg", "Lower Saxony", "Bavaria", "Hesse", "Rhineland-Palatinate")
-        val brd_str = "( 'Bremen', 'Schleswig-Holstein', 'Berlin', 'Saarland',  'North Rhine-Westphalia', 'Hamburg', 'Baden-Württemberg', 'Lower Saxony', 'Bavaria', 'Hesse', 'Rhineland-Palatinate')"
+        val brd = listOf(
+            "Bremen",
+            "Schleswig-Holstein",
+            "Berlin",
+            "Saarland",
+            "North Rhine-Westphalia",
+            "Hamburg",
+            "Baden-Württemberg",
+            "Lower Saxony",
+            "Bavaria",
+            "Hesse",
+            "Rhineland-Palatinate"
+        )
+        val brd_str =
+            "( 'Bremen', 'Schleswig-Holstein', 'Berlin', 'Saarland',  'North Rhine-Westphalia', 'Hamburg', 'Baden-Württemberg', 'Lower Saxony', 'Bavaria', 'Hesse', 'Rhineland-Palatinate')"
 
         val queryString = "SELECT COUNT(*), SUM(TICKET.PRICE) FROM TICKET" +
 
@@ -236,8 +271,7 @@ open class DatabaseServiceGlobal {
 
         // https://gist.github.com/arseto/f214e50917878dc31aec2ebb5af92d2e
         val ddrValuesList = ddrQuery.resultList.toList()
-        val ddrResult = ddrValuesList.map {
-                it ->
+        val ddrResult = ddrValuesList.map { it ->
             val lst = it as Array<out Any>
             Pair(
                 (lst[0] as? Long) ?: 0,
@@ -248,8 +282,7 @@ open class DatabaseServiceGlobal {
         val brdQuery = em.createNativeQuery(queryString + brd_str)
 
         val brdValues = brdQuery.resultList // .to(Long).first.first()
-        val brdResult = brdValues.map {
-                it ->
+        val brdResult = brdValues.map { it ->
             val lst = it as Array<out Any>
             Pair(
                 (lst[0] as? Long) ?: 0,
@@ -258,8 +291,8 @@ open class DatabaseServiceGlobal {
         }.first()
 
         return oldGermanyStatisticsDTO(
-            if(brdResult.toList().size == 1) Pair(0,0) else brdResult,
-            if(ddrResult.toList().size == 1) Pair(0,0) else ddrResult,
+            if (brdResult.toList().size == 1) Pair(0, 0) else brdResult,
+            if (ddrResult.toList().size == 1) Pair(0, 0) else ddrResult,
         )
 
     }
@@ -270,11 +303,15 @@ open class DatabaseServiceGlobal {
 
                     " INNER JOIN PARKHAUSEBENE pe on PARKHAUS.ID = pe.PARKHAUS_ID" +
 
-                    " WHERE PARKHAUS.ID = ? "
-            , Parkhaus::class.java)
+                    " WHERE PARKHAUS.ID = ? ", Parkhaus::class.java
+        )
         query.setParameter(1, id)
 
-        val res: Parkhaus? = try { query.singleResult as Parkhaus? } catch (e: jakarta.persistence.NoResultException ) { null }
+        val res: Parkhaus? = try {
+            query.singleResult as Parkhaus?
+        } catch (e: jakarta.persistence.NoResultException) {
+            null
+        }
         return res
     }
 
@@ -282,7 +319,7 @@ open class DatabaseServiceGlobal {
 
         val nau = Date.from(Instant.now())
         val sdf = SimpleDateFormat("yyyy-MM-dd")
-        var timeZero = "'"+ sdf.format(nau)
+        var timeZero = "'" + sdf.format(nau)
         timeZero += " 00:00:00.000000'"
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +
@@ -295,7 +332,11 @@ open class DatabaseServiceGlobal {
         )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
+        val res: Long = try {
+            query.singleResult as Long
+        } catch (e: Exception) {
+            0
+        }
         return res.toInt()
     }
 
@@ -303,7 +344,7 @@ open class DatabaseServiceGlobal {
 
         val vorigeWoche = Date.from(Instant.now().minus(7, ChronoUnit.DAYS))
         val sdf = SimpleDateFormat("yyyy-MM-dd")
-        var timeZero = "'"+ sdf.format(vorigeWoche)
+        var timeZero = "'" + sdf.format(vorigeWoche)
         timeZero += " 00:00:00.000000'"
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +
@@ -316,7 +357,11 @@ open class DatabaseServiceGlobal {
         )
         query.setParameter(1, parkhausEbeneID)
 
-        val res: Long = try { query.singleResult as Long } catch (e: Exception ) { 0 }
+        val res: Long = try {
+            query.singleResult as Long
+        } catch (e: Exception) {
+            0
+        }
         return res.toInt()
     }
 
