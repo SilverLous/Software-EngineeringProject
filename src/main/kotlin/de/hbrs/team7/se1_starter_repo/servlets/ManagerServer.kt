@@ -26,6 +26,7 @@ public open class ManagerServer : BasicWebsocketIF {
     data class UpdatedList(val updated: List<String>)
 
     init {
+        /*
         val timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
@@ -37,9 +38,9 @@ public open class ManagerServer : BasicWebsocketIF {
                     .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN,))
 
             }
-        }, 0, 10000)
+        }, 0, 10000) */
 
-        parkhausServiceGlobal.StatisticUpdateSubj.distinct()
+        parkhausServiceGlobal.StatisticUpdateSubj
             .buffer(5, TimeUnit.SECONDS)
             .map { it:  List<List<ManagerStatistikUpdateDTO>> -> it.flatten().toSet().toList() }
             .map { it:  List<ManagerStatistikUpdateDTO> -> it.map { ev -> ev.event } }

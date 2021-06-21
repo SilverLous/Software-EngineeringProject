@@ -124,6 +124,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.databaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
+
+        parkhausServiceGlobal.StatisticUpdateSubj
+            .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN,))
+
         return duration/100
     }
 
