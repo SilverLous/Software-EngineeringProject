@@ -940,19 +940,29 @@
         showlegend: false
     };
 
-    axios.get('/team7Parkhaus/level1-servlet?cmd=tageseinnahmen')
-        .then(function (response) {
-            Plotly.newPlot('tagesEinnahmen', response.data,layout, {scrollZoom: true});
-        })
-
-    axios.get('/team7Parkhaus/level1-servlet?cmd=wocheneinnahmen')
-        .then(function (response) {
-            Plotly.newPlot('wochenEinnahmen', response.data,layout, {scrollZoom: true});
-        })
-
     const ws = new WebSocket("ws://" + window.location.host + "/team7Parkhaus/manager");
 
+    function plotTageseinnahmen(){
+        axios.get('/team7Parkhaus/level1-servlet?cmd=tageseinnahmen')
+            .then(function (response) {
+                tageseinnahmen = response.data
+                Plotly.newPlot('tagesEinnahmen',tageseinnahmen ,layout, {scrollZoom: true});
+            })
+    }
+
+    function plotWocheneinnahmen(){
+        axios.get('/team7Parkhaus/level1-servlet?cmd=wocheneinnahmen')
+            .then(function (response) {
+                wocheneinnahmen = response.data
+                Plotly.newPlot('wochenEinnahmen', wocheneinnahmen,layout, {scrollZoom: true});
+            })
+    }
+    plotTageseinnahmen()
+    plotWocheneinnahmen()
+
     ws.onmessage = function (e) {
+        plotTageseinnahmen()
+        plotWocheneinnahmen()
         console.log("From Server:"+ e.data);
     };
 
