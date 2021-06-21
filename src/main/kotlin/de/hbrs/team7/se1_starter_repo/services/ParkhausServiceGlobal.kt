@@ -1,7 +1,11 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
+import io.reactivex.rxjava3.core.Observable
+import io.reactivex.rxjava3.subjects.PublishSubject
+import io.reactivex.rxjava3.subjects.Subject
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.inject.Inject
@@ -30,6 +34,7 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     open var globalCars: Int = 0
         protected set
 
+    open val StatisticUpdateSubj: PublishSubject<List<ManagerStatistikUpdateDTO>> = PublishSubject.create()
 
     // this is the constructor for own functionality (single called)
     @PostConstruct
