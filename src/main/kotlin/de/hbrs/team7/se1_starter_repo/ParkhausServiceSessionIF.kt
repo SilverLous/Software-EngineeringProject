@@ -37,9 +37,9 @@ interface ParkhausServiceSessionIF {
 
     fun getIdByName(ParkhausEbeneName: String):Long
 
-    fun autosInParkEbene(ParkhausEbeneName: String): List<Auto>
+    fun autosInParkEbene(ParkhausEbeneName: String, ImParkhaus: Boolean): List<Auto>
 
-    fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>
+    fun autosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>
 
     fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto
 

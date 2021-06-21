@@ -164,13 +164,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return parkhausEbenen
     }
 
-    override fun autosInParkEbene(ParkhausEbeneName: String): List<Auto>{
+    override fun autosInParkEbene(ParkhausEbeneName: String, ImParkhaus : Boolean): List<Auto>{
         val parkhausEbeneID = getIdByName(ParkhausEbeneName)
-        return autosInParkEbene(parkhausEbeneID)
+        return autosInParkEbene(parkhausEbeneID, ImParkhaus)
     }
 
-    override fun autosInParkEbene(ParkhausEbeneID: Long): List<Auto>{
-        return databaseGlobal.autosInParkEbene(ParkhausEbeneID)
+    override fun autosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>{
+        return databaseGlobal.autosInParkEbene(ParkhausEbeneID, ImParkhaus)
     }
 
     override fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto {
@@ -211,7 +211,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun getPrintStringCars(ParkhausEbeneName: Long): String {
-        val autosInParkhausEbene =  autosInParkEbene(ParkhausEbeneName)
+        val autosInParkhausEbene =  autosInParkEbene(ParkhausEbeneName,true)
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +

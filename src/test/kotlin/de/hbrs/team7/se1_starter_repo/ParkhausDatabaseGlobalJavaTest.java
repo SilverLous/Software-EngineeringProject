@@ -479,6 +479,41 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertEquals(500 * (wieLange + 1), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
     }
 
+
+
+
+    @Test
+    @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
+    public void testGetCarInLevel() {
+        Parkhaus parkhaus = generateDefaultParkhaus();
+        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        databaseServiceGlobal.persistEntity(ebene1);
+        int wieLange = 80;
+        Auto a_test;
+        Ticket t_test;
+
+        for (int i=0;i<wieLange;i++){
+            a_test = new Auto( "EchterHashEcht"+i,"REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
+            t_test = new Ticket();
+            t_test.setAuto(a_test);
+            a_test.setTicket(t_test);
+            databaseServiceGlobal.persistEntity(t_test);
+            ArrayList<Ticket> ticketArray = ebene1.getTickets();
+            ticketArray.add(t_test);
+            ebene1.setTickets(ticketArray);
+            databaseServiceGlobal.mergeUpdatedEntity(t_test);
+            databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+            Assertions.assertEquals(1,databaseServiceGlobal.autosInParkEbene(ebene1.getId(),true).size());
+            Assertions.assertEquals(i, databaseServiceGlobal.autosInParkEbene(ebene1.getId(),false).size());
+            a_test.setImParkhaus(false);
+            databaseServiceGlobal.mergeUpdatedEntity(a_test);
+            Assertions.assertEquals(0,databaseServiceGlobal.autosInParkEbene(ebene1.getId(),true).size());
+            Assertions.assertEquals(i+1, databaseServiceGlobal.autosInParkEbene(ebene1.getId(),false).size());
+
+        }
+
+    }
+
     private Parkhaus generateDefaultParkhaus() {
         return new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
     }

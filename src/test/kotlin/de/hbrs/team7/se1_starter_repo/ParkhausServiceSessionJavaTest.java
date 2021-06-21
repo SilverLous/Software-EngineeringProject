@@ -186,7 +186,30 @@ public class ParkhausServiceSessionJavaTest {
                     0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
             t_test = parkhausServiceSession.generateTicket(ebenen[0].getName(),paramsErstesAuto);
             a_test = t_test.getAuto();
-            Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.autosInParkEbene(ebenen[0].getName()).get(i).getHash());
+            Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.autosInParkEbene(ebenen[0].getName(),true).get(i).getHash());
+        }
+
+    }
+
+    @Test
+    @DisplayName("Test der autosInParkEbene-Funktion")
+    public void testGetCarsInEbene() {
+        ParkhausEbene[] ebenen = generateEbenen(1);
+        int wieLange = 8;
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Ticket t_test = new Ticket();
+
+        for (int i=0;i<wieLange;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            t_test = parkhausServiceSession.generateTicket(ebenen[0].getName(),paramsErstesAuto);
+            a_test = t_test.getAuto();
+            Assertions.assertEquals(1,parkhausServiceSession.autosInParkEbene(ebenen[0].getName(), true).size());
+            Assertions.assertEquals(i+0,parkhausServiceSession.autosInParkEbene(ebenen[0].getName(),false).size());
+            parkhausServiceSession.payForTicket(ebenen[0].getName(),t_test,Date.from(Instant.now()));
+            Assertions.assertEquals(0,parkhausServiceSession.autosInParkEbene(ebenen[0].getName(), true).size());
+            Assertions.assertEquals(i+1,parkhausServiceSession.autosInParkEbene(ebenen[0].getName(),false).size());
         }
 
     }
@@ -205,7 +228,7 @@ public class ParkhausServiceSessionJavaTest {
                     0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
             t_test = parkhausServiceSession.generateTicket(ebenen[0].getName(),paramsErstesAuto);
             a_test = t_test.getAuto();
-            Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.autosInParkEbene(ebenen[0].getName()).get(i).getHash());
+            Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.autosInParkEbene(ebenen[0].getName(),true).get(i).getHash());
         }
         assertNotNull(parkhausServiceSession.generateStatisticsOverVehicle(ebenen[0].getName()));
     }
