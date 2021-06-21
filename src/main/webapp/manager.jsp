@@ -10,6 +10,8 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.9.1/d3-tip.min.js" integrity="sha512-a+/SD0dbGeXTN4AA5F1dDZqsPvXKKyS1bvU2z5ElpKNJ4xQlOMUs/1+suA+j+kj5nAAya+VmT5HUKZmazluxVQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
 
 
@@ -918,9 +920,16 @@
         <p>{{plotData}}</p>
     </div>
     <p v-else="loaded">Your Plot is being generated</p>
-
-    <div id='tagesEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
-    <div id='wochenEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <div id='tagesEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
+            </div>
+            <div class="col-md-6">
+                <div id='wochenEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </body>
