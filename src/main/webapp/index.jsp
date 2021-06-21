@@ -14,7 +14,7 @@
     <meta property="og:description" content="Bachelor Course Software Engineering 1 (SE1), Hochschule Bonn-Rhein-Sieg.">
     <link rel="shortcut icon" href="https://kaul.inf.h-brs.de/favicon.ico" />
     <title>Tomcat Parkhaus</title>
-    <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.1.0.js"></script>
+    <script src="https://ccmjs.github.io/mkaul-components/parkhaus/versions/ccm.parkhaus-10.2.3.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -68,8 +68,8 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
 </div>
 <div class="box lightyellow">
     <h1>Parkhaus Etage 1</h1>
-    <ccm-parkhaus-10-1-0 server_url="./level1-servlet"
-                         hide_table="true"
+    <ccm-parkhaus-10-2-3 server_url="./level1-servlet"
+                         hide_table="false"
                          name="Etage1"
                          license_max="15"
                          client_categories='["any","Family"]'
@@ -79,22 +79,22 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
                          max="11"
                          extra_buttons='["Average","Sum","Total Users","Cars"]'
                          extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
-    </ccm-parkhaus-10-1-0>
+    </ccm-parkhaus-10-2-3>
 </div>
 <div class="box lightgreen">
     <h1>Parkhaus Etage 2</h1>
-    <ccm-parkhaus-10-1-0 server_url="./level2-servlet"
+    <ccm-parkhaus-10-2-3 server_url="./level2-servlet"
                          name="Etage2"
                          license_max="14"
-                         client_categories='["any","Business","Total Users"]'
-                         vehicle_types='["PKW","SUV"]'
+                         client_categories='["any","Business"]'
+                         vehicle_types='["PKW","SUV","UNSICHTBARES_BOOTMOBIL"]'
                          price_factor='{"SUV":2,"Business":1}'
                          random_start="2"
                          json_format="true"
                          debug="true"
                          max="12"
                          extra_buttons='["Average","Sum"]'>
-    </ccm-parkhaus-10-1-0>
+    </ccm-parkhaus-10-2-3>
 
 </div>
 

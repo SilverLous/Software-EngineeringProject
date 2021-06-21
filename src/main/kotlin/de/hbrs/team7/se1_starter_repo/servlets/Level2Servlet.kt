@@ -12,11 +12,11 @@ class Level2Servlet : ParkhausServlet() {
     @Throws(ServletException::class)
     override fun init(config: ServletConfig) {
         super.init(config)
-        println("Level 2 Servlet is Initialized")
+        println("Etage 2 Servlet is Initialized")
     }
 
     override fun NAME(): String {
-        return "Level2 Kt"
+        return "Etage2"
     }
 
     override fun MAX(): Int { // maximum number of parking slots on level 2

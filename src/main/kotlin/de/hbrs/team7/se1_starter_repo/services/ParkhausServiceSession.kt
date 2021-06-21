@@ -219,7 +219,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
-                    "/${e.getDuration()}/${e.getDuration()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
+                    "/${ if (e.ImParkhaus) 0 else e.getDuration()}/${e.getDuration()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
                     "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")
         }
         return printString.dropLast(1)

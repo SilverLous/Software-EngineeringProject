@@ -98,7 +98,8 @@ abstract class ParkhausServlet : HttpServlet() {
             }
 
             "cars" -> {
-                out.println(parkhausServiceSession.getPrintStringCars(NAME()))
+                val ebene = request.getParameter("name") ?: NAME()
+                out.println(parkhausServiceSession.getPrintStringCars(ebene))
 
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
