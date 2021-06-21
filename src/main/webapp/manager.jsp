@@ -918,10 +918,28 @@
         <p>{{plotData}}</p>
     </div>
     <p v-else="loaded">Your Plot is being generated</p>
+
+    <div id='tagesEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
+    <div id='wochenEinnahmen'><!-- Plotly chart will be drawn inside this DIV --></div>
 </div>
 
 </body>
 <script>
+
+    var layout = {
+        title: 'Scroll and Zoom',
+        showlegend: false
+    };
+
+    axios.get('/team7Parkhaus/level1-servlet?cmd=tageseinnahmen')
+        .then(function (response) {
+            Plotly.newPlot('tagesEinnahmen', response.data,layout, {scrollZoom: true});
+        })
+
+    axios.get('/team7Parkhaus/level1-servlet?cmd=wocheneinnahmen')
+        .then(function (response) {
+            Plotly.newPlot('wochenEinnahmen', response.data,layout, {scrollZoom: true});
+        })
 
     const ws = new WebSocket("ws://" + window.location.host + "/team7Parkhaus/manager");
 
@@ -944,6 +962,8 @@
                 })
         }
     });
+
+
 
 
 
