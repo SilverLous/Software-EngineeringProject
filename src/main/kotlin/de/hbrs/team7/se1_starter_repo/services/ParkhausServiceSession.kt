@@ -215,7 +215,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun getPrintStringCars(ParkhausEbeneName: Long): String {
-        val autosInParkhausEbene =  autosInParkEbene(ParkhausEbeneName,true)
+        val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneName)
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +

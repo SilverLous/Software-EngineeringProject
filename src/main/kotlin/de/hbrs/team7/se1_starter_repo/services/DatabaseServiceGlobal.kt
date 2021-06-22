@@ -4,6 +4,7 @@ package de.hbrs.team7.se1_starter_repo.services
 import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
+import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -310,6 +311,22 @@ open class DatabaseServiceGlobal {
 
         val res: Parkhaus? = try {
             query.singleResult as Parkhaus?
+        } catch (e: jakarta.persistence.NoResultException) {
+            null
+        }
+        return res
+    }
+
+    open fun findeParkhausEbene(parkhausEbeneID: Long): ParkhausEbene? {
+        val query = em.createNativeQuery(
+            "SELECT * FROM PARKHAUSEBENE" +
+
+                    " WHERE PARKHAUSEBENE.ID = ? ", ParkhausEbene::class.java
+        )
+        query.setParameter(1, parkhausEbeneID)
+
+        val res: ParkhausEbene? = try {
+            query.singleResult as ParkhausEbene?
         } catch (e: jakarta.persistence.NoResultException) {
             null
         }

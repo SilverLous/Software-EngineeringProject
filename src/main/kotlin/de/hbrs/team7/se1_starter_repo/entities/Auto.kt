@@ -45,7 +45,7 @@ open class Auto(
     }
 
     fun getDuration():Long{
-        return Date.from(Instant.now()).time - (this.Ticket?.Ausstellungsdatum?.time ?: Date.from(Instant.now()).time)
+        return this.Ticket!!.Ausfahrdatum?.time?.minus(this.Ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.Ticket!!.Ausstellungsdatum.time
     }
 
     fun paramsToArray(): Array<String>? {
