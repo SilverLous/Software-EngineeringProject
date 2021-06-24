@@ -935,6 +935,37 @@
                 <div id='EinnahmenUeberBundesland'><!-- Plotly chart will be drawn inside this DIV --></div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-6">
+
+                <!--<video>
+                    <source src="http://109.236.111.203:90/mjpg/video.mjpg">
+                </video>-->
+                <a rel="nofollow" href="http://109.236.111.203:90/" target="new">
+                    <img id="image1" src="http://109.236.111.203:90/mjpg/video.mjpg" class="img-responsive img-rounded detailimage img-fluid" alt="" title="Click here to enter the camera located in Russian Federation, region Sankt-Peterburg, Saint Petersburg"></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+
+                <!--<video>
+                    <source src="http://89.97.231.70:8083/cgi-bin/faststream.jpg?stream=half&amp;fps=15&amp;rand=COUNTER">
+                </video> -->
+                <a rel="nofollow" href="http://89.97.231.70:8083/" target="new">
+                    <img id="image2" src="http://89.97.231.70:8083/cgi-bin/faststream.jpg?stream=half&amp;fps=15&amp;rand=COUNTER" class="img-responsive img-rounded detailimage img-fluid" alt="" title="Click here to enter the camera located in Italy, region Lombardia, Milan"></a>
+            </div>
+
+            <div class="col-6">
+
+                <!-- <video>
+                    <source src="http://89.97.231.70:8082/cgi-bin/faststream.jpg?stream=half&amp;fps=15&amp;rand=COUNTER">
+                </video> -->
+                <a rel="nofollow" href="http://89.97.231.70:8082/" target="new">
+                    <img id="image3" src="http://89.97.231.70:8082/cgi-bin/faststream.jpg?stream=half&amp;fps=15&amp;rand=COUNTER" class="img-responsive img-rounded detailimage img-fluid" alt="" title="Click here to enter the camera located in Italy, region Lombardia, Milan"></a>
+
+
+        </div>
     </div>
 </div>
 
@@ -945,6 +976,7 @@
         title: 'Scroll and Zoom',
         showlegend: false
     };
+
 
     const ws = new WebSocket("ws://" + window.location.host + "/team7Parkhaus/manager");
 

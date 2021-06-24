@@ -2,7 +2,6 @@ package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
-import de.hbrs.team7.se1_starter_repo.entities.Parkhaus;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -17,11 +16,12 @@ import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -112,6 +112,20 @@ public class ParkhausServiceSessionJavaTest {
             parkhausServiceSession.payForTicket(ebenen[0].getName(),t_test,new Date(timeNow + 100));
             Assertions.assertEquals((i+1)*100,parkhausServiceSession.sumOverCars(ebenen[0].getName()),4*(i+1));
         }
+
+    }
+
+    @Test
+    public void StatisticUpdateSubjTest() {
+
+        // List<List<ManagerStatistikUpdateDTO>> l = Collections.emptyList();
+        AtomicInteger events = new AtomicInteger();
+        this.parkhausServiceGlobal.getStatisticUpdateSubj().subscribe(
+                s -> events.getAndIncrement()
+        );
+        testGetSum();
+
+        assertTrue(events.get() > 0);
 
     }
 

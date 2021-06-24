@@ -46,6 +46,7 @@ open class DatabaseServiceGlobal {
 
     private val emf = Persistence.createEntityManagerFactory("hsqldb-eclipselink")
     private val em = emf.createEntityManager()
+
     // private val et = em.transaction
 
 
