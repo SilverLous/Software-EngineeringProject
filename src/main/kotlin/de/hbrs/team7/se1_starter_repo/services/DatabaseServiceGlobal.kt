@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
 import java.util.*
-import kotlin.collections.HashMap
 
 
 /*
@@ -409,6 +408,20 @@ open class DatabaseServiceGlobal {
         }
 
         return resMap
+    }
+
+    open fun bobbyTruncateTables(){
+
+        val tx = em.transaction
+        tx.begin()
+        em.createNativeQuery(
+            "truncate schema PUBLIC and commit" ).executeUpdate()
+        tx.commit()
+
+
+
+        //query.executeUpdate()
+        //https://xkcd.com/327/
     }
 
 

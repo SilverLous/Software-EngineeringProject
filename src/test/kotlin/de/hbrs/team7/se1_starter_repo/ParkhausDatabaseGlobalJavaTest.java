@@ -1,7 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
 // import com.sun.org.apache.xpath.internal.operations.Equals;
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -9,13 +8,9 @@ import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
-import kotlin.Pair;
-import kotlinx.serialization.descriptors.PrimitiveKind;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.*;
 
 import java.time.Instant;
@@ -24,7 +19,6 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -51,6 +45,25 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     }
 
+    @AfterEach
+    public void dropTables(){
+        //databaseServiceGlobal.bobbyTruncateTables();
+    }
+
+    /*
+    @Test
+    @DisplayName("dropTableTest")
+    public void testDropTable() {
+        Parkhaus testP = generateDefaultParkhaus();
+
+        ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",testP);
+        testP.addParkhausEbene(p_e);
+        databaseServiceGlobal.persistEntity(p_e);
+        databaseServiceGlobal.persistEntity(testP);
+        databaseServiceGlobal.bobbyTruncateTables();
+        Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
+    }
+*/
     @Test
     public void sessionInitTest() {
         assert databaseServiceGlobal != null;
