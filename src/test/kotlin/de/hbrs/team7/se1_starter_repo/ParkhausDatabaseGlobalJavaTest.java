@@ -94,7 +94,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         public void findTest(){
 
             long p_id = testEntity.getId();
-            Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
+            Parkhaus p_test = databaseServiceGlobal.findeUeberID(p_id, Parkhaus.class);
 
             Assertions.assertEquals(testEntity.getId(), p_test.getId());
             Assertions.assertEquals(testEntity.getId(), p_test.getId());
@@ -106,7 +106,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         public void mergeTest(){
 
             long p_id = testEntity.getId();
-            Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
+            Parkhaus p_test = databaseServiceGlobal.findeUeberID(p_id, Parkhaus.class);
 
             String ref = p_test.getStadtname();
             p_test.setStadtname(ref + "Merge");
@@ -124,7 +124,7 @@ public class ParkhausDatabaseGlobalJavaTest {
 
             long p_id = testEntity.getId();
             databaseServiceGlobal.deleteByID(p_id, Parkhaus.class);
-            Parkhaus p_test = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
+            Parkhaus p_test = databaseServiceGlobal.findeUeberID(p_id, Parkhaus.class);
 
             Assertions.assertNull(p_test);
         }
@@ -140,7 +140,7 @@ public class ParkhausDatabaseGlobalJavaTest {
             Assertions.assertNotNull(p_id);
 
             databaseServiceGlobal.deleteByObject(p_test);
-            Parkhaus p_test_ref = databaseServiceGlobal.findByID(p_id, Parkhaus.class);
+            Parkhaus p_test_ref = databaseServiceGlobal.findeUeberID(p_id, Parkhaus.class);
 
             Assertions.assertNull(p_test_ref);
         }
@@ -164,8 +164,8 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.persistEntity(t_test);
         Assertions.assertNotNull(t_test.getTicketnummer());
 
-        Ticket saved_ticket = databaseServiceGlobal.findByID(t_test.getTicketnummer(), Ticket.class);
-        Auto saved_Auto = databaseServiceGlobal.findByID(a_test.getAutonummer(), Auto.class);
+        Ticket saved_ticket = databaseServiceGlobal.findeUeberID(t_test.getTicketnummer(), Ticket.class);
+        Auto saved_Auto = databaseServiceGlobal.findeUeberID(a_test.getAutonummer(), Auto.class);
 
         Assertions.assertNotNull(saved_ticket.getAuto());
         Assertions.assertNotNull(saved_Auto.getTicket());
@@ -179,18 +179,18 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
         ParkhausEbene ebene2 = new ParkhausEbene("Ebene 2", parkhaus);
 
-        parkhaus.addParkhausEbene(ebene1);
-        parkhaus.addParkhausEbene(ebene2);
-        ebene1.assignParkhaus(parkhaus); databaseServiceGlobal.persistEntity(parkhaus);
-        ebene2.assignParkhaus(parkhaus); databaseServiceGlobal.persistEntity(ebene1);
+        parkhaus.parkhausEbeneHinzufügen(ebene1);
+        parkhaus.parkhausEbeneHinzufügen(ebene2);
+        ebene1.parkhausZuweisen(parkhaus); databaseServiceGlobal.persistEntity(parkhaus);
+        ebene2.parkhausZuweisen(parkhaus); databaseServiceGlobal.persistEntity(ebene1);
         databaseServiceGlobal.persistEntity(ebene2);
         Assertions.assertNotNull(parkhaus.getId(), "Parkhaus wurde nicht gespeichert");
         Assertions.assertNotNull(ebene1.getId(), "Ebene 1 wurde nicht gespeichert");
         Assertions.assertNotNull(ebene2.getId(), "Ebene 2 wurde nicht gespeichert");
 
-        Parkhaus saved_Parkhaus = databaseServiceGlobal.findByID(parkhaus.getId(), Parkhaus.class);
-        ParkhausEbene saved_ebene1 = databaseServiceGlobal.findByID(ebene1.getId(), ParkhausEbene.class);
-        ParkhausEbene saved_ebene2 = databaseServiceGlobal.findByID(ebene2.getId(), ParkhausEbene.class);
+        Parkhaus saved_Parkhaus = databaseServiceGlobal.findeUeberID(parkhaus.getId(), Parkhaus.class);
+        ParkhausEbene saved_ebene1 = databaseServiceGlobal.findeUeberID(ebene1.getId(), ParkhausEbene.class);
+        ParkhausEbene saved_ebene2 = databaseServiceGlobal.findeUeberID(ebene2.getId(), ParkhausEbene.class);
 
         Assertions.assertNotNull(saved_Parkhaus.getEbenen(), "Dem Parkhaus wurden die Ebenen nicht zugewiesen");
         Assertions.assertNotNull(saved_ebene1.getParkhaus(), "Ebene 1 hat kein Parkhaus erhalten");
@@ -258,7 +258,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertNotNull(p.getId());
 
         ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",p);
-        p.addParkhausEbene(p_e);
+        p.parkhausEbeneHinzufügen(p_e);
         databaseServiceGlobal.persistEntity(p_e);
         Assertions.assertNotNull(p_e.getId());
 
@@ -278,8 +278,8 @@ public class ParkhausDatabaseGlobalJavaTest {
         Ticket merged_ticket = databaseServiceGlobal.mergeUpdatedEntity(t_test);
 
 
-        Parkhaus saved_p = databaseServiceGlobal.findByID(p.getId(), Parkhaus.class);
-        ParkhausEbene saved_pe = databaseServiceGlobal.findByID(p_e.getId(), ParkhausEbene.class);
+        Parkhaus saved_p = databaseServiceGlobal.findeUeberID(p.getId(), Parkhaus.class);
+        ParkhausEbene saved_pe = databaseServiceGlobal.findeUeberID(p_e.getId(), ParkhausEbene.class);
 
         Assertions.assertEquals(1,saved_p.getEbenen().size());
 
@@ -327,7 +327,7 @@ public class ParkhausDatabaseGlobalJavaTest {
             ebene1.setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-            Assertions.assertEquals(500*(i+1),databaseServiceGlobal.getSumOfTicketPrices(ebene1.getId()));
+            Assertions.assertEquals(500*(i+1),databaseServiceGlobal.getSummeDerTicketpreise(ebene1.getId()));
 
         }
 
@@ -354,7 +354,7 @@ public class ParkhausDatabaseGlobalJavaTest {
             ebene1.setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-            Assertions.assertEquals(i+1,databaseServiceGlobal.getTotalUsersCount(ebene1.getId()));
+            Assertions.assertEquals(i+1,databaseServiceGlobal.getAnzahlAllerUser(ebene1.getId()));
 
         }
 
@@ -381,12 +381,12 @@ public class ParkhausDatabaseGlobalJavaTest {
             ebene1.setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-            Assertions.assertEquals(a_test.getHash(),databaseServiceGlobal.autosInParkEbene(ebene1.getId(), true).get(i).getHash());
+            Assertions.assertEquals(a_test.getHash(),databaseServiceGlobal.getautosInParkEbene(ebene1.getId(), true).get(i).getHash());
 
         }
         a_test.setImParkhaus(false);
         databaseServiceGlobal.mergeUpdatedEntity(a_test);
-        Assertions.assertEquals(wieLange-1,databaseServiceGlobal.autosInParkEbene(ebene1.getId(), true).size());
+        Assertions.assertEquals(wieLange-1,databaseServiceGlobal.getautosInParkEbene(ebene1.getId(), true).size());
         Assertions.assertEquals(wieLange,databaseServiceGlobal.autosInParkEbeneHistoric(ebene1.getId()).size());
 
     }
@@ -518,12 +518,12 @@ public class ParkhausDatabaseGlobalJavaTest {
             ebene1.setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(t_test);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-            Assertions.assertEquals(1,databaseServiceGlobal.autosInParkEbene(ebene1.getId(),true).size());
-            Assertions.assertEquals(i, databaseServiceGlobal.autosInParkEbene(ebene1.getId(),false).size());
+            Assertions.assertEquals(1,databaseServiceGlobal.getautosInParkEbene(ebene1.getId(),true).size());
+            Assertions.assertEquals(i, databaseServiceGlobal.getautosInParkEbene(ebene1.getId(),false).size());
             a_test.setImParkhaus(false);
             databaseServiceGlobal.mergeUpdatedEntity(a_test);
-            Assertions.assertEquals(0,databaseServiceGlobal.autosInParkEbene(ebene1.getId(),true).size());
-            Assertions.assertEquals(i+1, databaseServiceGlobal.autosInParkEbene(ebene1.getId(),false).size());
+            Assertions.assertEquals(0,databaseServiceGlobal.getautosInParkEbene(ebene1.getId(),true).size());
+            Assertions.assertEquals(i+1, databaseServiceGlobal.getautosInParkEbene(ebene1.getId(),false).size());
 
         }
 
@@ -566,7 +566,7 @@ public class ParkhausDatabaseGlobalJavaTest {
             databaseServiceGlobal.mergeUpdatedEntity(a_test);
 
         }
-        Map<String, Integer> map = databaseServiceGlobal.ticketPriceByBundesland();
+        Map<String, Integer> map = databaseServiceGlobal.getTicketpreiseProBundesland();
         Assertions.assertEquals(2, map.size());
     }
 

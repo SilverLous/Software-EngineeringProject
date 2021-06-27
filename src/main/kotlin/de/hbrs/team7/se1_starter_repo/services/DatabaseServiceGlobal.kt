@@ -67,7 +67,7 @@ open class DatabaseServiceGlobal {
 
     open fun <T> deleteByID(id: Long, classType: Class<T>) {
         val tx = em.transaction
-        val toDelete = findByID(id, classType)
+        val toDelete = findeUeberID(id, classType)
         tx.begin()
         em.remove(toDelete)
         tx.commit()
@@ -99,7 +99,7 @@ open class DatabaseServiceGlobal {
         return query.resultList as MutableList<Ticket>
     }
 
-    open fun getParkhausByCityName(name: String): Parkhaus? {
+    open fun getParkhausüberStandtnamen(name: String): Parkhaus? {
         val query = em.createNativeQuery("SELECT * FROM PARKHAUS WHERE STADTNAME = ?", Parkhaus::class.java)
         query.setParameter(1, name)
         return try {
@@ -109,7 +109,7 @@ open class DatabaseServiceGlobal {
         }
     }
 
-    open fun <T> findByID(id: Long, classType: Class<T>): T? {
+    open fun <T> findeUeberID(id: Long, classType: Class<T>): T? {
         return em.find(classType, id)
     }
 
@@ -132,7 +132,7 @@ open class DatabaseServiceGlobal {
 
      */
 
-    open fun findTicketByPlace(parkhausLevelID: Long, placeNumber: Int): Ticket? {
+    open fun findeTicketUeberParkplatz(parkhausLevelID: Long, placeNumber: Int): Ticket? {
         val query = em.createNativeQuery(
             "SELECT * FROM TICKET" +
                     " INNER JOIN AUTO au on TICKET.AUTO_AUTONUMMER = au.AUTONUMMER" +
@@ -155,7 +155,7 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun getSumOfTicketPrices(parkhausEbeneID: Long): Int {
+    open fun getSummeDerTicketpreise(parkhausEbeneID: Long): Int {
         val query = em.createNativeQuery(
             "SELECT SUM(TICKET.PRICE) FROM TICKET" +
 
@@ -175,7 +175,7 @@ open class DatabaseServiceGlobal {
         return res.toInt()
     }
 
-    open fun getTotalUsersCount(parkhausEbeneID: Long): Int {
+    open fun getAnzahlAllerUser(parkhausEbeneID: Long): Int {
         // returned Anzahl aller Benutzer außerhalb und innerhalb der Parkhaus Ebene
 
         val query = em.createNativeQuery(
@@ -200,7 +200,7 @@ open class DatabaseServiceGlobal {
 
     }
 
-    open fun autosInParkEbene(parkhausEbeneID: Long, imParkhaus: Boolean = true): List<Auto> {
+    open fun getautosInParkEbene(parkhausEbeneID: Long, imParkhaus: Boolean = true): List<Auto> {
         val query = em.createNativeQuery(
             "SELECT * FROM AUTO" +
 
@@ -238,7 +238,7 @@ open class DatabaseServiceGlobal {
         return belegtePlaetze
     }
 
-    open fun getOldGermanyData(): oldGermanyStatisticsDTO {
+    open fun getAlteDeutschlandDaten(): oldGermanyStatisticsDTO {
 
         val ddr = listOf("Saxony", "Thuringia", "Saxony-Anhalt", "Brandenburg", "Mecklenburg-Western Pomerania")
         val ddr_str = "( 'Saxony', 'Thuringia', 'Saxony-Anhalt', 'Brandenburg', 'Mecklenburg-Western Pomerania')"
@@ -383,7 +383,7 @@ open class DatabaseServiceGlobal {
         return res.toInt()
     }
 
-    open fun ticketPriceByBundesland(): Map<String, Int>? {
+    open fun getTicketpreiseProBundesland(): Map<String, Int>? {
         val query = em.createNativeQuery(
             "" +
                     "SELECT SUM(TICKET.PRICE),BUNDESLAND FROM TICKET\n" +

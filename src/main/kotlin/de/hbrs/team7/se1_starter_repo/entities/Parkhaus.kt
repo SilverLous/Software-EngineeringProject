@@ -37,11 +37,11 @@ open class Parkhaus (
     @OneToMany(mappedBy="Parkhaus", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)
     var ebenen: MutableList<ParkhausEbene> = mutableListOf()
 
-    fun addParkhausEbene(ebene: ParkhausEbene) {
+    fun parkhausEbeneHinzufügen(ebene: ParkhausEbene) {
         ebenen.add(ebene)
     }
 
-    fun removeParkhausEbene(ebene: ParkhausEbene): Boolean {
+    fun parkhausEbeneEntfernen(ebene: ParkhausEbene): Boolean {
         return ebenen.remove(ebene)
     }
 

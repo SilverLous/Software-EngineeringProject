@@ -4,9 +4,6 @@ package de.hbrs.team7.se1_starter_repo.servlets
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
-import de.hbrs.team7.se1_starter_repo.dto.carData
-import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
-import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import jakarta.inject.Inject
@@ -94,12 +91,12 @@ abstract class ParkhausServlet : HttpServlet() {
                 out.println(config())
 
             "sum" -> {
-                out.print("${parkhausServiceSession.sumOverCars(NAME())/100} € insgesamt")
+                out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(NAME())/100} € insgesamt")
             }
 
             "cars" -> {
                 val ebene = request.getParameter("name") ?: NAME()
-                out.println(parkhausServiceSession.getPrintStringCars(ebene))
+                out.println(parkhausServiceSession.getPrintStringAutos(ebene))
 
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
                 // For example:
@@ -113,19 +110,19 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.generateStatisticsOverVehicle(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(NAME()))
                 out.print(jsonData)
             }
             "tageseinnahmen"-> {
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.showDaysTakings(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getTageseinnahmen(NAME()))
                 out.print(jsonData)
             }
             "wocheneinnahmen"-> {
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.showWeeksTakings(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getWocheneinnahmen(NAME()))
                 out.print(jsonData)
             }
             "einnahmenueberbundesland" -> {
@@ -134,18 +131,18 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.generatePriceByFederalState())
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstellePreiseFürBundesländer())
                 out.print(jsonData)
             }
 
-            "average" ->  out.println("${parkhausServiceSession.averageOverCars(NAME())/100} € per car")
+            "average" ->  out.println("${parkhausServiceSession.getDurchschnittUeberAutos(NAME())/100} € per car")
 
 
-            "total users" -> out.println("${parkhausServiceSession.getTotalUsers(NAME())} Users")
+            "total users" -> out.println("${parkhausServiceSession.getAlleUser(NAME())} Users")
             "wechsleparkhaus" -> {
                 println("ParkhausWechsel")
                 val stadtId = request.getParameter("stadt")
-                this.parkhausServiceSession.loadParkhausCity(stadtId.toLong())
+                this.parkhausServiceSession.ladeParkhausStadt(stadtId.toLong())
                 out.write("Ort gewechselt!");
             }
 
@@ -169,12 +166,12 @@ abstract class ParkhausServlet : HttpServlet() {
         when (event) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                parkhausServiceSession.generateTicket(NAME(), data)
+                parkhausServiceSession.erstelleTicket(NAME(), data)
             }
             "leave" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                val zustaendigesTicket = parkhausServiceSession.findTicketByPlace(NAME(),data.space) !!
-                parkhausServiceSession.payForTicket(NAME(),zustaendigesTicket, Date.from(Instant.now()))
+                val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(NAME(),data.space) !!
+                parkhausServiceSession.ticketBezahlen(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
             "invalid", "occupied" -> {
                 println(body)

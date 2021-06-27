@@ -28,7 +28,7 @@ open class ParkhausEbene (
 
     private var freiePlaetze: Int = 0
 
-    fun getIdAsString(): String {
+    fun getIdAlsString(): String {
         return id.toString()
     }
 
@@ -72,7 +72,7 @@ open class ParkhausEbene (
         }
     }
 
-    fun assignParkhaus(parkhaus: Parkhaus) {
+    fun parkhausZuweisen(parkhaus: Parkhaus) {
         this.parkhaus = parkhaus;
 
     }

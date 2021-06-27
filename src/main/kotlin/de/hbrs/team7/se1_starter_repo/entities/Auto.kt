@@ -44,7 +44,7 @@ open class Auto(
         return "";
     }
 
-    fun getDuration():Long{
+    fun getParkdauer():Long{
         return this.Ticket!!.Ausfahrdatum?.time?.minus(this.Ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.Ticket!!.Ausstellungsdatum.time
     }
 

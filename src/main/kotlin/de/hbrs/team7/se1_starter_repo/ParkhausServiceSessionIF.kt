@@ -13,47 +13,47 @@ import java.util.*
 interface ParkhausServiceSessionIF {
     fun sessionInit()
 
-    fun addCar(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Auto
+    fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Auto
 
     fun initEbene(name: String): ParkhausEbene
 
-    fun generateTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
+    fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
 
-    fun payForTicket(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
+    fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
 
-    fun sumOverCars(ParkhausEbeneName: String): Int
+    fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int
 
-    fun averageOverCars(ParkhausEbeneName: String): Int
+    fun getDurchschnittUeberAutos(ParkhausEbeneName: String): Int
 
-    fun getLevelById(ParkhausEbeneID: Long): ParkhausEbene
+    fun getEbeneUeberId(ParkhausEbeneID: Long): ParkhausEbene
 
-    fun findTicketByPlace(ParkhausEbeneName: String, placeNumber: Int): Ticket?
+    fun findeTicketUeberParkplatz(ParkhausEbeneName: String, placeNumber: Int): Ticket?
 
-    fun getTotalUsers(ParkhausEbeneName: String): Int
+    fun getAlleUser(ParkhausEbeneName: String): Int
 
-    fun getCurrenUsers(ParkhausEbeneName: String): Int
+    fun getAktuelleUser(ParkhausEbeneName: String): Int
 
     fun getParkhausEbenen():List<ParkhausEbene>
 
-    fun getIdByName(ParkhausEbeneName: String):Long
+    fun getIdUeberName(ParkhausEbeneName: String):Long
 
-    fun autosInParkEbene(ParkhausEbeneName: String, ImParkhaus: Boolean): List<Auto>
+    fun getAutosInParkEbene(ParkhausEbeneName: String, ImParkhaus: Boolean): List<Auto>
 
-    fun autosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>
+    fun getAutosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>
 
-    fun generateStatisticsOverVehicle(ParkhausEbeneName: String): statisticsChartDto
+    fun erstelleStatistikenUeberFahrzeuge(ParkhausEbeneName: String): statisticsChartDto
 
-    fun showDaysTakings(ParkhausEbeneName: String): einnahmenBarDTO
+    fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
 
-    fun showDaysTakings(ParkhausEbeneName: Long): einnahmenBarDTO
+    fun getTageseinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO
 
-    fun showWeeksTakings(ParkhausEbeneName: String): einnahmenBarDTO
+    fun getWocheneinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
 
-    fun showWeeksTakings(ParkhausEbeneName: Long): einnahmenBarDTO
+    fun getWocheneinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO
 
-    fun getPrintStringCars(ParkhausEbeneName: String): String
+    fun getPrintStringAutos(ParkhausEbeneName: String): String
 
-    fun getPrintStringCars(ParkhausEbeneName: Long): String
+    fun getPrintStringAutos(ParkhausEbeneName: Long): String
 
-    fun generatePriceByFederalState(): statisticsChartDto?
+    fun erstellePreiseFürBundesländer(): statisticsChartDto?
 }
