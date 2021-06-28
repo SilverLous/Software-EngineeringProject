@@ -415,8 +415,9 @@ open class DatabaseServiceGlobal {
         val tx = em.transaction
         tx.begin()
         em.createNativeQuery(
-            "truncate schema PUBLIC and commit" ).executeUpdate()
+            "truncate SCHEMA PUBLIC and commit" ).executeUpdate()
         tx.commit()
+        print(tx.isActive)
 
 
 
