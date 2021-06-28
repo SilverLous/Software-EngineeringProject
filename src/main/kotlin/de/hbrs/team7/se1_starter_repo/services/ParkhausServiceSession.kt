@@ -34,6 +34,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     @Inject private lateinit var databaseGlobal: DatabaseServiceGlobal
 
+    @Inject private lateinit var logGlobal: LoggerServiceGlobal
+
 
     // scrapped idea because it is not testable with junit
     //@Inject private lateinit var servletContext: ServletContext
@@ -113,6 +115,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
         this.databaseGlobal.persistEntity(auto)
+        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.Autonummer}")
         return auto
     }
 

@@ -4,6 +4,7 @@ import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
+import de.hbrs.team7.se1_starter_repo.services.LoggerServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -42,6 +43,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @Inject
     ParkhausServiceGlobal parkhausServiceGlobal;
+
 
     String etage = "test";
 
