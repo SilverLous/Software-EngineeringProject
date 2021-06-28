@@ -2,6 +2,7 @@ package de.hbrs.team7.se1_starter_repo.services
 
 
 import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import io.reactivex.rxjava3.subjects.PublishSubject
 import jakarta.annotation.PostConstruct
@@ -26,7 +27,10 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     @Inject
     private lateinit var databaseGlobal: DatabaseServiceGlobal
 
+    @Deprecated("use ebenenSet")
     open val levelSet = mutableSetOf<String>()
+
+    open val ebenenSet = mutableSetOf<ParkhausEbeneConfigDTO>()
 
     // private is currently not possible due to Kotlins "feature" private must be final
     open var globalCars: Int = 0

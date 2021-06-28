@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo.servlets
 
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
@@ -36,8 +37,9 @@ abstract class ParkhausServlet : HttpServlet() {
     /* abstract methods, to be defined in subclasses */
     abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
     abstract fun MAX(): Int // maximum number of parking slots of a single parking level
-    abstract fun config(): String? // configuration of a single parking level
+    abstract fun config(): String // configuration of a single parking level
 
+    internal abstract var config: ParkhausEbeneConfigDTO // configuration of a single parking level
 
     private lateinit var parkhausEbene: ParkhausEbene
 
@@ -62,7 +64,8 @@ abstract class ParkhausServlet : HttpServlet() {
         println(context.getAttribute("carsHaveLeft" + NAME()))
 
 
-        this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
+        // this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
+        this.parkhausEbene = this.parkhausServiceSession.initEbene(this.config)
 
 
     }
@@ -88,7 +91,7 @@ abstract class ParkhausServlet : HttpServlet() {
             "config" ->
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
-                out.println(config())
+                out.println(config.toCSV())
 
             "sum" -> {
                 out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(NAME())/100} € insgesamt")
@@ -173,6 +176,22 @@ abstract class ParkhausServlet : HttpServlet() {
                 val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(NAME(),data.space) !!
                 parkhausServiceSession.ticketBezahlen(NAME(),zustaendigesTicket, Date.from(Instant.now()))
             }
+
+            "change_max" -> {
+                parkhausServiceSession.wechsleEbeneMaxParkplätze(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                println(paramJson)
+            }
+
+            "change_open_from" -> {
+                parkhausServiceSession.wechsleEbeneÖffnungszeit(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                println(paramJson)
+            }
+
+            "change_open_to" -> {
+                parkhausServiceSession.wechsleEbeneLadenschluss(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                println(paramJson)
+            }
+
             "invalid", "occupied" -> {
                 println(body)
             }

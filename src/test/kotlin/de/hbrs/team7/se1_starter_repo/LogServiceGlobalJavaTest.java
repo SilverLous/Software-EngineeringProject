@@ -54,7 +54,7 @@ public class LogServiceGlobalJavaTest {
     public void LoggerInitTest() {
 
         // List<List<ManagerStatistikUpdateDTO>> l = Collections.emptyList();
-        List<LogEintragDTO> events = new ArrayList<>(Collections.emptyList());
+        List<LogEintragDTO> events = new ArrayList<>();
         this.loggerServiceGlobal.getLogSubject().subscribe(
                 s -> events.add(s)
         );

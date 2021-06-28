@@ -9,7 +9,7 @@ public data class ParkhausServletPostDto(
     val price : Double,
     val hash : String,
     val color : String,
-    val space : Int,
+    var space : Int,
     @SerialName("client_category") val clientCategory : String,
     @SerialName("vehicle_type") val vehicleType : String,
     val license : String

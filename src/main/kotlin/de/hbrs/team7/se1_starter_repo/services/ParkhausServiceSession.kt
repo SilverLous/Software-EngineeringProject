@@ -72,8 +72,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             val ph = Parkhaus.fromCitiesDTO(city)
             parkhaus = databaseGlobal.persistEntity(ph)
 
-            if(parkhausServiceGlobal.levelSet.isNotEmpty()) {
-                parkhausEbenen.addAll(parkhausServiceGlobal.levelSet.map { e -> initEbene(e) })
+            if(parkhausServiceGlobal.ebenenSet.isNotEmpty()) {
+                parkhausEbenen.addAll(parkhausServiceGlobal.ebenenSet.map { e -> initEbene(e) })
             }
         }
 
@@ -89,8 +89,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             }
     }
 
+    @Deprecated("use config")
     override fun initEbene(name: String): ParkhausEbene {
-        val pe = ParkhausEbene(name, this.parkhaus)
+        val pe = ParkhausEbene(name, this.parkhaus, )
         val pePersist = databaseGlobal.persistEntity(pe)
 
         parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
@@ -100,19 +101,38 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return databaseGlobal.persistEntity(pe)
     }
 
+    open fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
+        config.parkhaus = this.parkhaus
+        val pe = ParkhausEbene.ausEbenenConfig(config)
+        val pePersist = databaseGlobal.persistEntity(pe)
+
+        parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
+
+        this.parkhausServiceGlobal.ebenenSet.add(config)
+        parkhausEbenen.add(pe)
+        return databaseGlobal.persistEntity(pe)
+    }
+
     override fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
         val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+        val belegtePlätze = getAutosInParkEbene(parkhausEbeneID, true)
+            .map { auto -> auto.Platznummer !! }.toSet()
+
+        val gesamtPlätze = (1..this.parkhausEbenen.find { pe -> pe.id == parkhausEbeneID }!!.maxPlätze).toSet()
+
+        val verfügbarePlätze = gesamtPlätze.subtract(belegtePlätze)
+
+        if(params.space !in verfügbarePlätze) {
+            params.space = verfügbarePlätze.random()
+        }
+
         val auto = autoHinzufügen(parkhausEbeneID, params)
-        val curParkhausEbene = databaseGlobal.findeParkhausEbene(parkhausEbeneID)
 
         val ticket = Ticket()
         // ticket.Ausstellungsdatum = Date.from(Instant.now())
         ticket.Preisklasse = 2
         ticket.Auto = auto
         auto.Ticket = ticket
-        if (curParkhausEbene != null) {
-            ticket.parkhausEbenen.add(curParkhausEbene)
-        }
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
         // this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
@@ -298,6 +318,19 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             autoHinzufügen(toRedo.Ticket?.parkhausEbenen?.last()?.id!!,pSPdto)
             databaseGlobal.persistEntity(toRedo.Ticket)
         }
+    }
+
+    open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
+
+
+    }
+
+    open fun wechsleEbeneÖffnungszeit(name: String, aktuell: Int, neu: Int) {
+
+    }
+
+    open fun wechsleEbeneLadenschluss(name: String, aktuell: Int, neu: Int) {
+
     }
 
 
