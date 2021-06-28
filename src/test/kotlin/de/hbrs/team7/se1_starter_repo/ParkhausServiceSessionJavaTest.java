@@ -4,6 +4,7 @@ import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
+import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.LoggerServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
@@ -248,6 +249,41 @@ public class ParkhausServiceSessionJavaTest {
         }
         assertNotNull(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(ebenen[0].getName()));
     }
+
+    @Test
+    @DisplayName("Test der undo Funktion")
+    public void testUndo(){
+        ParkhausEbene[] ebenen = generateEbenen(1);
+        int wieLange = 8;
+        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Ticket t_test = new Ticket();
+
+        for (int i=0;i<wieLange;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
+            a_test = t_test.getAuto();
+        }
+        parkhausServiceSession.ticketBezahlen(ebenen[0].getName(),t_test,Date.from(Instant.now()));
+        parkhausServiceSession.undo();
+        Assertions.assertEquals(wieLange,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
+        parkhausServiceSession.undo();
+        Assertions.assertEquals(wieLange-1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
+    }
+    @Test
+    @DisplayName("Test der undo Funktion")
+    public void testRedo(){
+        testUndo();
+        String ParkhausName = "Generierte Ebene Nr. 0";
+        int anzahlAutosInParkEbene = parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size();
+        parkhausServiceSession.redo();
+        Assertions.assertEquals(anzahlAutosInParkEbene+1,parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
+        parkhausServiceSession.redo();
+        Assertions.assertEquals(anzahlAutosInParkEbene,parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
+
+    }
+
 
     @Nested
     @DisplayName("Basic IO chain")

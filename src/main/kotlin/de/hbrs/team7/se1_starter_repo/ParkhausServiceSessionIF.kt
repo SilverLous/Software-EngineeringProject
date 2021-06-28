@@ -56,4 +56,8 @@ interface ParkhausServiceSessionIF {
     fun getPrintStringAutos(ParkhausEbeneName: Long): String
 
     fun erstellePreiseFürBundesländer(): statisticsChartDto?
+
+    fun undo()
+
+    fun redo()
 }

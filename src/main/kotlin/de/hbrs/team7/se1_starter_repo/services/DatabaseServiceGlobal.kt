@@ -332,6 +332,22 @@ open class DatabaseServiceGlobal {
         }
         return res
     }
+/*
+    open fun findeParkhausEbeneByAutoNummer(AutoNummer: Long): ParkhausEbene? {
+        val query = em.createNativeQuery(
+            "SELECT * FROM PARKHAUSEBENE" +
+
+                    " WHERE PARKHAUSEBENE.ID = ? ", ParkhausEbene::class.java
+        )
+        query.setParameter(1, AutoNummer)
+
+        val res: ParkhausEbene? = try {
+            query.singleResult as ParkhausEbene?
+        } catch (e: jakarta.persistence.NoResultException) {
+            null
+        }
+        return res
+    }*/
 
     open fun errechneTagesEinnahmen(parkhausEbeneID: Long): Int? {
 

@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.CarIF
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
