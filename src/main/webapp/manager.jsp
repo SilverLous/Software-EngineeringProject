@@ -2,7 +2,8 @@
 <%@ page import="de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal" %>
 <%@ page import="kotlin.Pair" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<html>
+<!DOCTYPE html>
+<html lang="de">
 <head>
     <title>Manager</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>

@@ -2,7 +2,7 @@
 <%@ page import="de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
-<html>
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
@@ -71,6 +71,7 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
     <h1>Parkhaus Etage 1</h1>
     <ccm-parkhaus-10-2-3 server_url="./level1-servlet"
                          hide_table="false"
+                         simulation.delay="6"
                          name="Etage1"
                          license_max="15"
                          client_categories='["any","Family"]'
