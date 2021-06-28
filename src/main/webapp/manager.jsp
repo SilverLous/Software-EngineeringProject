@@ -915,6 +915,7 @@
 
 
 <div id="main">
+    <a class="btn btn-primary" href="index.jsp" role="button">Zurück zum Parkhaus</a>
     <h1> Vue.JS API Call Example</h1>
     <div v-if="loaded">
         <p>{{plotData}}</p>
