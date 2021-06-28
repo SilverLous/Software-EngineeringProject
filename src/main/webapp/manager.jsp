@@ -984,17 +984,20 @@
 </body>
 <script>
 
+    var WebsocketsslEncripted = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    var logContainer = document.getElementById('log');
+
     var layout = {
         title: 'Scroll and Zoom',
         showlegend: false
     };
 
-    var logContainer = document.getElementById('log');
 
 
-    const statistikUpdatews = new WebSocket("ws://" + window.location.host + "/team7Parkhaus/manager");
 
-    const managerLogws = new WebSocket("ws://" + window.location.host + "/team7Parkhaus/log");
+    const statistikUpdatews = new WebSocket(WebsocketsslEncripted + "://" + window.location.host + "/team7Parkhaus/manager");
+
+    const managerLogws = new WebSocket(WebsocketsslEncripted + "://"+ window.location.host + "/team7Parkhaus/log");
 
     function plotTageseinnahmen(){
         axios.get('/team7Parkhaus/level1-servlet?cmd=tageseinnahmen')
