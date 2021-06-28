@@ -18,9 +18,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
+import java.util.*;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -289,10 +287,14 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene e21 = ebenen2[0];
         ParkhausEbene e22 = ebenen2[1];
 
+        p1.setEbenen(Arrays.asList(ebenen) );
+        // List<ParkhausEbene> ebene2List = new LinkedList<ParkhausEbene>(ebenen2);
+        p2.setEbenen(Arrays.asList(ebenen2) );
 
         databaseServiceGlobal.persistEntity(p1);
         databaseServiceGlobal.persistEntity(p2);
 
+        Assertions.assertNotNull(p1.getId());
         Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()));
         Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()));
         Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()), p1);
