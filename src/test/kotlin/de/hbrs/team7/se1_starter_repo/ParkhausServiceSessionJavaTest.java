@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo;
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
@@ -319,7 +320,8 @@ public class ParkhausServiceSessionJavaTest {
     private ParkhausEbene[] generateEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
         for (int i = 0; i < anzahl; i++) {
-            ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
+            //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, null));
         }
         return ebenen;
     }

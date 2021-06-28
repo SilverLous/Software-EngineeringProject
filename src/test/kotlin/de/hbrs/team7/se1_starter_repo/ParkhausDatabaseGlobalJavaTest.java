@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 // import com.sun.org.apache.xpath.internal.operations.Equals;
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -161,8 +162,10 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
-        ParkhausEbene ebene2 = new ParkhausEbene("Ebene 2", parkhaus);
+        //ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
+        ParkhausEbene[] ebenen = generateEbenen(2,parkhaus);
+        ParkhausEbene ebene1 = ebenen[0];
+        ParkhausEbene ebene2 = ebenen[1];
 
         parkhaus.parkhausEbeneHinzufügen(ebene1);
         parkhaus.parkhausEbeneHinzufügen(ebene2);
@@ -187,10 +190,12 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene();
+
+        ParkhausEbene[] ebenen = generateEbenen(2,parkhaus);
+        ParkhausEbene ebene1 = ebenen[0];
         ebene1.setName("Ebene 1");
         ebene1.setParkhaus(parkhaus);
-        ParkhausEbene ebene2 = new ParkhausEbene();
+        ParkhausEbene ebene2 = ebenen[1];
         ebene2.setName("Ebene 2");
         ebene2.setParkhaus(parkhaus);
 
@@ -242,7 +247,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         databaseServiceGlobal.persistEntity(p);
         Assertions.assertNotNull(p.getId());
 
-        ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",p);
+        ParkhausEbene p_e = generateEbenen(1,p)[0];
         p.parkhausEbeneHinzufügen(p_e);
         databaseServiceGlobal.persistEntity(p_e);
         Assertions.assertNotNull(p_e.getId());
@@ -276,10 +281,14 @@ public class ParkhausDatabaseGlobalJavaTest {
     public void testFindeParkhausMitEbeneUeberId() {
         Parkhaus p1 = new Parkhaus("EineStadt", "einBundesland", 0.0, 1.0, 0.0,  1);
         Parkhaus p2 = new Parkhaus("ZweiteStadt", "einAnderesBundesland", 2.0, 3.0, 0.0,  1);
-        ParkhausEbene e11 = new ParkhausEbene("Ebene 1-1", p1);
-        ParkhausEbene e12 = new ParkhausEbene("Ebene 1-2", p1);
-        ParkhausEbene e21 = new ParkhausEbene("Ebene 2-1", p2);
-        ParkhausEbene e22 = new ParkhausEbene("Ebene 2-2", p2);
+
+        ParkhausEbene[] ebenen = generateEbenen(2,p1);
+        ParkhausEbene[] ebenen2 = generateEbenen(2,p2);
+        ParkhausEbene e11 = ebenen[0];
+        ParkhausEbene e12 = ebenen[1];
+        ParkhausEbene e21 = ebenen2[0];
+        ParkhausEbene e22 = ebenen2[1];
+
 
         databaseServiceGlobal.persistEntity(p1);
         databaseServiceGlobal.persistEntity(p2);
@@ -294,7 +303,8 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der Get Sum bei Data Base Funktion")
     public void testGetSum() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
         Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
@@ -322,7 +332,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der Total Users bei Data Base Funktion mit ner For Loop")
     public void testTotalUsersForLoop() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
         Auto a_test;
@@ -349,7 +359,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der Not vailable bei Data Base Funktion")
     public void testGetAllCarsInLevel() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
         Auto a_test = generateDefaultAuto();
@@ -385,7 +395,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
         Auto a_test;
@@ -430,7 +440,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
         Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232", "vehilkulaer", "kategorisch");
@@ -486,7 +496,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
     public void testGetCarInLevel() {
         Parkhaus parkhaus = generateDefaultParkhaus();
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
+        ParkhausEbene ebene1 = generateEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 80;
         Auto a_test;
@@ -513,28 +523,31 @@ public class ParkhausDatabaseGlobalJavaTest {
         }
 
     }
-/*
-    @Test
-    @DisplayName("dropTableTest")
-    public void testDropTable() {
-        Parkhaus testP = new Parkhaus( "Teststadt3", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
-        //Parkhaus testP = generateDefaultParkhaus();
+    /*
+        @Test
+        @DisplayName("dropTableTest")
+        public void testDropTable() {
+            Parkhaus testP = new Parkhaus( "Teststadt3", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
+            //Parkhaus testP = generateDefaultParkhaus();
 
-        ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",testP);
-        testP.parkhausEbeneHinzufügen(p_e);
-        databaseServiceGlobal.persistEntity(p_e);
-        databaseServiceGlobal.persistEntity(testP);
-        databaseServiceGlobal.bobbyTruncateTables();
-        Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
-    }
-*/
+            ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",testP);
+            testP.parkhausEbeneHinzufügen(p_e);
+            databaseServiceGlobal.persistEntity(p_e);
+            databaseServiceGlobal.persistEntity(testP);
+            databaseServiceGlobal.bobbyTruncateTables();
+            Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
+        }
+    */
     @Test
     @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
     public void testGetCarsByFederalState(){
         Parkhaus parkhaus = generateDefaultParkhaus();
         Parkhaus parkhausBundesland2 = new Parkhaus( "Teststadt", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
-        ParkhausEbene ebene1 = new ParkhausEbene("ForLoopsSindToll", parkhaus);
-        ParkhausEbene ebene2 = new ParkhausEbene("ForLoopsSindToll2", parkhausBundesland2);
+
+        ParkhausEbene[] ebenen = generateEbenen(2,parkhaus);
+        ParkhausEbene ebene1 = ebenen[0];
+        ParkhausEbene ebene2 = ebenen[1];
+
         databaseServiceGlobal.persistEntity(parkhaus);
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
@@ -575,5 +588,14 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     private Auto generateDefaultAuto() {
         return new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+    }
+
+    private ParkhausEbene[] generateEbenen(int anzahl, Parkhaus parkhaus) {
+        ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
+        for (int i = 0; i < anzahl; i++) {
+            //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, parkhaus));
+        }
+        return ebenen;
     }
 }
