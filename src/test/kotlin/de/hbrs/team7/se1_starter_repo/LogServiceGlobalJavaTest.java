@@ -39,12 +39,6 @@ public class LogServiceGlobalJavaTest {
     LoggerServiceGlobal loggerServiceGlobal;
 
 
-
-    @BeforeEach
-    public void setup() {
-
-    }
-
     @Test
     public void sessionInitTest() {
         assert loggerServiceGlobal != null;
