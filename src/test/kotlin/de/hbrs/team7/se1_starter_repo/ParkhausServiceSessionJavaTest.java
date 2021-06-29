@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -48,11 +49,11 @@ public class ParkhausServiceSessionJavaTest {
 
 
     String etage = "test";
+    Random zufallszahlengenerator;
 
     @BeforeEach
     public void setup() {
-        // sessionContext.invalidate();
-        // parkhausServiceSession = new ParkhausServiceSession();
+        zufallszahlengenerator = new Random();
     }
 
     @Test
@@ -322,6 +323,50 @@ public class ParkhausServiceSessionJavaTest {
             assert preisInCent > 0;
             assert preisInCent == 1;
         }
+    }
+
+    @Test
+    @DisplayName("Testen der wechsleEbeneMaxParkplätze-Funktion")
+    public void testWechsleEbeneMaxParkplätze() {
+        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene ebene = ebenen[0];
+        ParkhausEbene ebene2 = ebenen[1];
+        Assertions.assertEquals(12, ebene.getMaxPlätze());
+        int neuePlaetze = zufallszahlengenerator.nextInt(19);
+        neuePlaetze++;
+        parkhausServiceSession.wechsleEbeneMaxParkplätze(ebene.getName(),12,neuePlaetze);
+        Assertions.assertEquals(neuePlaetze, ebene.getMaxPlätze());
+        Assertions.assertEquals(12, ebene2.getMaxPlätze());
+    }
+
+    @Test
+    @DisplayName("Testen der wechsleEbeneÖffnungszeit-Funktion")
+    public void testWechsleEbeneÖffnungszeit() {
+        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene ebene = ebenen[0];
+        ParkhausEbene ebene2 = ebenen[1];
+        Assertions.assertEquals(6,ebene.getöffnungszeit());
+        Assertions.assertEquals(6,ebene2.getöffnungszeit());
+        int neueOeffnungszeit = zufallszahlengenerator.nextInt(22);
+        neueOeffnungszeit++;
+        parkhausServiceSession.wechsleEbeneÖffnungszeit(ebene.getName(),6,neueOeffnungszeit);
+        Assertions.assertEquals(neueOeffnungszeit,ebene.getöffnungszeit());
+        Assertions.assertEquals(6,ebene2.getöffnungszeit());
+    }
+
+    @Test
+    @DisplayName("Testen der wechsleEbeneLadenschluss-Funktion")
+    public void testWechsleEbeneLadenschluss() {
+        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene ebene = ebenen[0];
+        ParkhausEbene ebene2 = ebenen[1];
+        Assertions.assertEquals(24,ebene.getLadenschluss());
+        Assertions.assertEquals(24,ebene2.getLadenschluss());
+        int neuerLadenschluss = zufallszahlengenerator.nextInt(18);
+        neuerLadenschluss += 6; // verhindern, dass Ladenschluss vor Ladenöffnung ist
+        parkhausServiceSession.wechsleEbeneLadenschluss(ebene.getName(), 24, neuerLadenschluss);
+        Assertions.assertEquals(neuerLadenschluss,ebene.getLadenschluss());
+        Assertions.assertEquals(24,ebene2.getLadenschluss());
     }
 
     private ParkhausEbene[] generateEbenen(int anzahl) {
