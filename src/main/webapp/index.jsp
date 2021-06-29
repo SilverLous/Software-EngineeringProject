@@ -78,7 +78,7 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
-                         extra_buttons='["Average","Sum","Total Users","Cars"]'
+                         extra_buttons='["Average","Sum","Total Users","Cars","Undo","Redo"]'
                          extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
     </ccm-parkhaus-10-5-0>
 </div>

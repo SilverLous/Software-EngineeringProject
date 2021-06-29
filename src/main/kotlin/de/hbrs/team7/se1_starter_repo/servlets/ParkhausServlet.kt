@@ -144,6 +144,14 @@ abstract class ParkhausServlet : HttpServlet() {
                 out.write("Ort gewechselt!");
             }
 
+            "undo" -> {
+                parkhausServiceSession.undo()
+            }
+
+            "redo" -> {
+                parkhausServiceSession.redo()
+            }
+
             else -> out.println("Invalid Command: " + request.queryString)
         }
     }
