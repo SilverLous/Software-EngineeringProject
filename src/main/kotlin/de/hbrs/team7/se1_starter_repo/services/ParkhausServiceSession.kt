@@ -154,14 +154,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
-        val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
-        ticket.Ausfahrdatum = timeCheckOut
-        val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
-        val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
-                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
 
-        ticket.price = (duration * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
+        ticket.Ausfahrdatum = timeCheckOut
+
+
+        ticket.price = errechneTicketPreis(ParkhausEbeneName, ticket, ticket.Auto !!)
+
         this.databaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
@@ -175,8 +173,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return ticket.price.toLong()/100
     }
 
-    open fun errechneTicketPreis(): Int {
-        return 0
+    open fun errechneTicketPreis(ebenenName: String, ticket: Ticket, auto: Auto  ): Int {
+        val parkhausEbeneID = getIdUeberName(ebenenName)
+        val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
+        val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
+
+        val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
+        return (duration * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
@@ -266,7 +270,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneName)
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
-            val preis = e.getParkdauer()/100
+
+            // TODO Fix naming
+            // val preis = errechneTicketPreis(ParkhausEbeneName, e.Ticket !!, e)
 
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
                     "/${ if (e.ImParkhaus) 0 else e.getParkdauer()}/${e.getParkdauer()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
