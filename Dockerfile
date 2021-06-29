@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 RUN mvn clean install
 RUN mvn tomcat7:redeploy 
-RUN mvn package 
+#RUN mvn package 
 
 
 FROM arm64v8/tomcat

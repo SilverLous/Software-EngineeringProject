@@ -9,6 +9,7 @@ cache:
 
 build:
   stage: build
+  when: manual
   script:
     - mvn compile
     - mvn tomcat7:redeploy 
@@ -18,6 +19,7 @@ docker-build:
   # Use the official docker image.
   image: docker:latest
   stage: build
+  when: manual
   services:
     - docker:dind
   before_script:
