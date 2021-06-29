@@ -40,16 +40,8 @@ open class Auto(
     @OneToOne(mappedBy = "Auto")
     var Ticket: Ticket? = null
 
-    override fun toString(): String {
-        // return params.contentToString()
-        return "";
-    }
-
     fun getParkdauer():Long{
         return this.Ticket!!.Ausfahrdatum?.time?.minus(this.Ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.Ticket!!.Ausstellungsdatum.time
     }
 
-    fun paramsToArray(): Array<String>? {
-        return null
-    }
 }

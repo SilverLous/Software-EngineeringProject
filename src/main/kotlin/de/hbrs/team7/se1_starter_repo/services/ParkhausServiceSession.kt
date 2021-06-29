@@ -78,7 +78,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun ladeParkhausStadt(id: Long) {
 
-        val pa = databaseGlobal.findeParkhausMitEbeneUeberId(id);
+        val pa = databaseGlobal.findeParkhausMitEbeneUeberId(id)
         if (pa != null) {
             this.parkhaus = pa
             this.parkhausEbenen = pa.ebenen
@@ -336,12 +336,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun redo() {
         val toRedo = redoList.last()
         undoList.add(toRedo)
-        if (toRedo.ImParkhaus){/*
-            val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
-            parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
-            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)*/
-            //toRedo.ImParkhaus = false
-           //databaseGlobal.deleteByID(toRedo.Autonummer,Auto::class.java)
+        if (toRedo.ImParkhaus){
             toRedo.Ticket?.Auto = toRedo
             ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
             redoList.dropLast(1)
@@ -349,13 +344,6 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         else{
             toRedo.ImParkhaus = true
             val pSPdto = ParkhausServletPostDto(2,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
-            /*autoHinzufügen(getIdUeberName(deletedReferenceToLevelName.last()),pSPdto)
-            toRedo.ImParkhaus = true
-            toRedo.Ticket?.Auto = toRedo
-            val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
-            parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
-            databaseGlobal.mergeUpdatedEntity(toRedo)
-            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)*/
             val auto = erstelleTicket(deletedReferenceToLevelName.last(),pSPdto).Auto
             redoList.dropLast(1)
             if (redoList.last().Autonummer==toRedo.Autonummer){
