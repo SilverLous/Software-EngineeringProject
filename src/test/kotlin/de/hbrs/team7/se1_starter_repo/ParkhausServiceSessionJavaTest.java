@@ -226,8 +226,8 @@ public class ParkhausServiceSessionJavaTest {
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
-            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                    0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2+i, timeNow, 0,
+                    0, "echterHash"+i, "REGENBOGEN", 1+i, "Family", "SUV", "Y-123 456");
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
             a_test = t_test.getAuto();
             Assertions.assertEquals(1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
@@ -280,7 +280,7 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(wieLange-1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
     }
     @Test
-    @DisplayName("Test der undo Funktion")
+    @DisplayName("Test der redo Funktion")
     public void testRedo(){
         testUndo();
         String ParkhausName = "Generierte Ebene Nr. 0";
