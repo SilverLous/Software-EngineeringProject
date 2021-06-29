@@ -42,6 +42,9 @@ open class ParkhausEbene (
     @ManyToMany
     var tickets: ArrayList<Ticket> = ArrayList()
 
+    @OneToMany(mappedBy="ParkhausEbene", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)
+    var fahrzeugTypen: MutableList<FahrzeugTyp> = mutableListOf()
+
 
     fun toConfigCSV(): String {
         return listOf(maxPlätze, öffnungszeit, ladenschluss, verzögerung, simulationsGeschwindigkeit).joinToString(",")
@@ -111,7 +114,7 @@ open class ParkhausEbene (
                 ebenenConfig.öffnungszeit,
                 ebenenConfig.ladenschluss,
                 ebenenConfig.verzögerung,
-                ebenenConfig.simulationsGeschwindigkeit
+                ebenenConfig.simulationsGeschwindigkeit,
             )
         }
     }

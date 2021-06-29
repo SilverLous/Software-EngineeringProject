@@ -610,9 +610,11 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     private ParkhausEbene[] generateEbenen(int anzahl, Parkhaus parkhaus) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
+        HashMap<String, Double> preise = new HashMap<>();
+        preise.put("Auto", 1.0);
         for (int i = 0; i < anzahl; i++) {
             //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
-            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, parkhaus));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, preise, parkhaus));
         }
         return ebenen;
     }

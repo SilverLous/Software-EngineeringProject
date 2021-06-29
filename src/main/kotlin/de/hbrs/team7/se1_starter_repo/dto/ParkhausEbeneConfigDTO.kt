@@ -10,6 +10,8 @@ class ParkhausEbeneConfigDTO(
     var ladenschluss: Int = 0,
     var verzögerung: Int = 0,
     var simulationsGeschwindigkeit: Int = 0,
+    var FahrzeugPreise: HashMap<String, Double>,
+
     var parkhaus: Parkhaus? = null,
 
 

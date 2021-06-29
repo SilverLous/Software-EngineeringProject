@@ -15,7 +15,15 @@ public class Level1Servlet : ParkhausServlet()  {
         öffnungszeit = 6,
         ladenschluss = 24,
         verzögerung = 100,
-        simulationsGeschwindigkeit = 5
+        simulationsGeschwindigkeit = 5,
+        FahrzeugPreise = hashMapOf(
+            "PKW" to 1.0,
+            "Pickup" to 1.0,
+            "SUV" to 1.5,
+            "Zweirad" to 0.5,
+            "Trike" to 1.3,
+            "Quad" to 1.4,
+        )
     )
 
     @Throws(ServletException::class)

@@ -2,10 +2,7 @@ package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
 import de.hbrs.team7.se1_starter_repo.dto.*
-import de.hbrs.team7.se1_starter_repo.entities.Auto
-import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
-import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
-import de.hbrs.team7.se1_starter_repo.entities.Ticket
+import de.hbrs.team7.se1_starter_repo.entities.*
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
@@ -106,6 +103,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         config.parkhaus = parkhaus
         val pe = ParkhausEbene.ausEbenenConfig(config)
 
+        val fahrzeugTypen = config.FahrzeugPreise.map { eintrag ->  FahrzeugTyp.ausHashMapEintrag(eintrag, pe) }.toMutableList()
+        pe.fahrzeugTypen = fahrzeugTypen
+
         parkhaus.parkhausEbeneHinzufügen(pe)
 
         this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)
@@ -155,9 +155,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
         val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+        val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         ticket.Ausfahrdatum = timeCheckOut
         val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
-        ticket.price = (duration).toInt()
+        val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
+
+        ticket.price = (duration * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
         this.databaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
@@ -168,7 +172,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             undoList.add(ticket.Auto!!)
         }
 
-        return duration/100
+        return ticket.price.toLong()/100
+    }
+
+    open fun errechneTicketPreis(): Int {
+        return 0
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
@@ -258,6 +266,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneName)
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
+            val preis = e.getParkdauer()/100
+
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
                     "/${ if (e.ImParkhaus) 0 else e.getParkdauer()}/${e.getParkdauer()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
                     "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")

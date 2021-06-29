@@ -21,7 +21,9 @@ import org.junit.jupiter.api.*;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -51,6 +53,15 @@ public class ParkhausServiceSessionJavaTest {
     String etage = "test";
     SecureRandom zufallszahlengenerator;
 
+    HashMap<String, Double> fahrzeugPreise = new HashMap<String, Double>() {
+        {
+            put("PKW", 1.0);
+            put("Pickup", 1.2);
+            put("SUV", 1.5);
+        }
+    };
+
+
     @BeforeEach
     public void setup() {
         zufallszahlengenerator = new SecureRandom();
@@ -64,12 +75,12 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevel() {
 
-        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 1", 12, 6,24,0,5, null);
+        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 1", 12, 6,24,0,5, fahrzeugPreise, null);
         parkhausServiceSession.initEbene(conf);
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         assertNotNull(temp);
         Assertions.assertEquals("Generierte Ebene Nr. 1", parkhausServiceSession.getEbeneUeberId(temp.get(0).getId()).getName());
-        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 2", 12, 6,24,0,5, null);
+        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 2", 12, 6,24,0,5, fahrzeugPreise, null);
         parkhausServiceSession.initEbene(conf2);
         Assertions.assertEquals("Generierte Ebene Nr. 2", parkhausServiceSession.getEbeneUeberId(temp.get(1).getId()).getName());
         Assertions.assertEquals(2, parkhausServiceSession.getParkhausEbenen().size());
@@ -81,12 +92,12 @@ public class ParkhausServiceSessionJavaTest {
     public void sessionAddLevelInvalidateTest() {
 
         int i = 1;
-        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, null);
+        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, fahrzeugPreise, null);
 
         parkhausServiceSession.initEbene(conf);
         String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
-        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, null);
+        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, fahrzeugPreise, null);
         parkhausServiceSession.initEbene(conf2);
         Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
         sessionContext.invalidate();
@@ -135,6 +146,7 @@ public class ParkhausServiceSessionJavaTest {
         this.parkhausServiceGlobal.getStatisticUpdateSubj().subscribe(
                 s -> events.getAndIncrement()
         );
+
         testGetSum();
 
         assertTrue(events.get() > 0);
@@ -373,7 +385,7 @@ public class ParkhausServiceSessionJavaTest {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
         for (int i = 0; i < anzahl; i++) {
             //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
-            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, null));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, fahrzeugPreise, null));
         }
         return ebenen;
     }
