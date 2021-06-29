@@ -308,24 +308,24 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             val toUndo = undoList.last()
             redoList.add(toUndo)
             if (toUndo.ImParkhaus){
+                toUndo.ImParkhaus = false
                 val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)
                 deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
                 toUndo.Ticket?.Auto = null
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
                 databaseGlobal.deleteByID(toUndo?.Ticket?.Ticketnummer!!,Ticket::class.java)
-                toUndo.ImParkhaus = false
                 toUndo.Ticket?.parkhausEbenen?.dropLast(1)
                 parkhausEbene?.tickets?.dropLast(1)
                 databaseGlobal.mergeUpdatedEntity(parkhausEbene)
             }
             else{
+                toUndo.ImParkhaus = true
                 toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
                 deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
                 toUndo.Ticket?.Ausfahrdatum = null
                 toUndo.Ticket?.price = 0
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
-                toUndo.ImParkhaus = true
                 databaseGlobal.mergeUpdatedEntity(toUndo)
             }
             undoList.dropLast(1)
@@ -336,22 +336,32 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun redo() {
         val toRedo = redoList.last()
         undoList.add(toRedo)
-        if (toRedo.ImParkhaus){
+        if (toRedo.ImParkhaus){/*
             val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
             parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
-            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
+            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)*/
+            //toRedo.ImParkhaus = false
+           //databaseGlobal.deleteByID(toRedo.Autonummer,Auto::class.java)
+            toRedo.Ticket?.Auto = toRedo
             ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
+            redoList.dropLast(1)
         }
         else{
+            toRedo.ImParkhaus = true
             val pSPdto = ParkhausServletPostDto(2,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
-            autoHinzufügen(getIdUeberName(deletedReferenceToLevelName.last()),pSPdto)
+            /*autoHinzufügen(getIdUeberName(deletedReferenceToLevelName.last()),pSPdto)
             toRedo.ImParkhaus = true
             toRedo.Ticket?.Auto = toRedo
             val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
             parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
-            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
             databaseGlobal.mergeUpdatedEntity(toRedo)
-            //erstelleTicket(deletedReferenceToLevelName.last(),pSPdto)
+            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)*/
+            val auto = erstelleTicket(deletedReferenceToLevelName.last(),pSPdto).Auto
+            redoList.dropLast(1)
+            if (redoList.last().Autonummer==toRedo.Autonummer){
+                redoList.dropLast(1)
+                redoList.add(auto!!)
+            }
 
         }
         redoList.dropLast(1)

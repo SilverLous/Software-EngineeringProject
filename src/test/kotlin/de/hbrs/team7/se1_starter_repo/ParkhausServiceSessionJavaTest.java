@@ -12,6 +12,7 @@ import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
+import org.hsqldb.Database;
 import org.jboss.weld.context.bound.BoundSessionContext;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
@@ -296,14 +297,16 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der redo Funktion")
     public void testRedo(){
+        DatabaseServiceGlobal dataBase = new DatabaseServiceGlobal();
         testUndo();
         String ParkhausName = "Generierte Ebene Nr. 0";
+        Long ParkId = parkhausServiceSession.getIdUeberName(ParkhausName);
         List<Auto> autoliste = parkhausServiceSession.getAutosInParkEbene(ParkhausName, true);
 
         parkhausServiceSession.redo();
-        List<Auto> autolisteAfterRedo = parkhausServiceSession.getAutosInParkEbene(ParkhausName, true);
         Assertions.assertEquals(autoliste.size()+1,parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
         parkhausServiceSession.redo();
+        List<Auto> autolisteAfterRedo = dataBase.autosInParkEbeneHistoric(ParkId);
         Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
 
     }
