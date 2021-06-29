@@ -25,20 +25,4 @@ public class Level1Servlet : ParkhausServlet()  {
         println("Etage 1 Servlet is Initialized")
     }
 
-    @Deprecated("use config")
-    override fun NAME(): String {
-        return "Etage1"
-    }
-
-    @Deprecated("use config")
-    override fun MAX(): Int { // maximum number of parking slots on level 1
-        return 11
-    }
-
-    override fun config(): String {
-        return "" // use default config
-        // Config Format is "Max, open_from, open_to, delay, simulation_speed"
-        // e.g. return this.MAX() + ",5,23,100,10";  // TODO replace by your own parameters
-    }
-
 }

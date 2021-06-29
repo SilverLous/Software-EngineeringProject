@@ -303,7 +303,7 @@ open class DatabaseServiceGlobal {
         val query = em.createNativeQuery(
             "SELECT * FROM PARKHAUS" +
 
-                    " INNER JOIN PARKHAUSEBENE pe on PARKHAUS.ID = pe.PARKHAUS_ID" +
+                    // " INNER JOIN PARKHAUSEBENE pe on PARKHAUS.ID = pe.PARKHAUS_ID" +
 
                     " WHERE PARKHAUS.ID = ? ", Parkhaus::class.java
         )

@@ -287,18 +287,34 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene e21 = ebenen2[0];
         ParkhausEbene e22 = ebenen2[1];
 
-        p1.setEbenen(Arrays.asList(ebenen) );
+        p1.parkhausEbeneHinzufügen(ebenen[0]);
+        p1.parkhausEbeneHinzufügen(ebenen[1]);
+
+        p2.parkhausEbeneHinzufügen(ebenen2[0]);
+        p2.parkhausEbeneHinzufügen(ebenen2[1]);
+
+        // e11.setParkhaus(p1);
+        // e12.setParkhaus(p1);
+        // e21.setParkhaus(p2);
+        // e22.setParkhaus(p2);
+
+
+        // p1.setEbenen(Arrays.asList(ebenen) );
+
         // List<ParkhausEbene> ebene2List = new LinkedList<ParkhausEbene>(ebenen2);
-        p2.setEbenen(Arrays.asList(ebenen2) );
+        // p2.setEbenen(Arrays.asList(ebenen2) );
 
         databaseServiceGlobal.persistEntity(p1);
         databaseServiceGlobal.persistEntity(p2);
 
-        Assertions.assertNotNull(p1.getId());
         Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()));
         Assertions.assertNotNull(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()));
         Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()), p1);
         Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()), p2);
+
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()).getEbenen().size(), 2);
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()).getEbenen().size(), 2);
+
     }
 
     @Test

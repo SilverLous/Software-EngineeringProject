@@ -26,17 +26,4 @@ class Level2Servlet : ParkhausServlet() {
         println("Etage 2 Servlet is Initialized")
     }
 
-    override fun NAME(): String {
-        return "Etage2"
-    }
-
-    override fun MAX(): Int { // maximum number of parking slots on level 2
-        return 12
-    }
-
-    override fun config(): String {
-        return "" // use default config
-        // Config Format is "Max, open_from, open_to, delay, simulation_speed"
-        // e.g. return this.MAX() + ",10,20,50,20";  // TODO replace by your own parameters
-    }
 }

@@ -10,8 +10,6 @@ import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
-import jakarta.persistence.Tuple
-import jakarta.persistence.TupleElement
 import java.io.Serializable
 import java.util.*
 
@@ -91,7 +89,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     @Deprecated("use config")
     override fun initEbene(name: String): ParkhausEbene {
-        val pe = ParkhausEbene(name, this.parkhaus, )
+        val pe = ParkhausEbene(name, this.parkhaus)
         val pePersist = databaseGlobal.persistEntity(pe)
 
         parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
@@ -102,15 +100,18 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     open fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
-        config.parkhaus = this.parkhaus
-        val pe = ParkhausEbene.ausEbenenConfig(config)
-        val pePersist = databaseGlobal.persistEntity(pe)
+        val parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
 
-        parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
+        config.parkhaus = parkhaus
+        val pe = ParkhausEbene.ausEbenenConfig(config)
+
+        parkhaus.parkhausEbeneHinzufügen(pe)
+
+        this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)
 
         this.parkhausServiceGlobal.ebenenSet.add(config)
         parkhausEbenen.add(pe)
-        return databaseGlobal.persistEntity(pe)
+        return pe
     }
 
     override fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
@@ -160,7 +161,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
 
         parkhausServiceGlobal.statisticUpdateSubj
-            .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN,))
+            .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN))
         if (ticket.Auto != null){
             undoList.add(ticket.Auto!!)
         }
@@ -311,7 +312,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val toRedo = redoList.last()
         undoList.add(toRedo)
         if (toRedo.ImParkhaus){
-            toRedo.Ticket?.parkhausEbenen?.last()?.name?.let { ticketBezahlen(it, toRedo.Ticket!!,deletedDatum.last(),) }
+            toRedo.Ticket?.parkhausEbenen?.last()?.name?.let { ticketBezahlen(it, toRedo.Ticket!!, deletedDatum.last()) }
         }
         else{
             val pSPdto = ParkhausServletPostDto(-1,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)

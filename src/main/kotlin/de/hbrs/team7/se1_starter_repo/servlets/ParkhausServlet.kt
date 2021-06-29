@@ -33,12 +33,6 @@ import java.util.*
 
 abstract class ParkhausServlet : HttpServlet() {
 
-
-    /* abstract methods, to be defined in subclasses */
-    abstract fun NAME(): String // each ParkhausServlet should have a name, e.g. "Level1"
-    abstract fun MAX(): Int // maximum number of parking slots of a single parking level
-    abstract fun config(): String // configuration of a single parking level
-
     internal abstract var config: ParkhausEbeneConfigDTO // configuration of a single parking level
 
     private lateinit var parkhausEbene: ParkhausEbene
@@ -58,10 +52,10 @@ abstract class ParkhausServlet : HttpServlet() {
     override fun init(config: ServletConfig) {
         super.init(config)
 
-        println("Hello Parkhaus ${NAME()} Base")
+        println("Hello Parkhaus ${this.config.ebenenNamen} Base")
 
 
-        println(context.getAttribute("carsHaveLeft" + NAME()))
+        println(context.getAttribute("carsHaveLeft" + this.config.ebenenNamen))
 
 
         // this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
@@ -71,7 +65,7 @@ abstract class ParkhausServlet : HttpServlet() {
     }
 
     override fun destroy() {
-        println("Destroyed Parkhaus ${NAME()} Base")
+        println("Destroyed Parkhaus ${this.config.ebenenNamen} Base")
         super.destroy()
     }
 
@@ -94,11 +88,11 @@ abstract class ParkhausServlet : HttpServlet() {
                 out.println(config.toCSV())
 
             "sum" -> {
-                out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(NAME())/100} € insgesamt")
+                out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(config.ebenenNamen)/100} € insgesamt")
             }
 
             "cars" -> {
-                val ebene = request.getParameter("name") ?: NAME()
+                val ebene = request.getParameter("name") ?: config.ebenenNamen
                 out.println(parkhausServiceSession.getPrintStringAutos(ebene))
 
                 // Format: Nr, timer begin, duration, price, Ticket, color, space, client category, vehicle type, license (PKW Kennzeichen)
@@ -113,19 +107,19 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(config.ebenenNamen))
                 out.print(jsonData)
             }
             "tageseinnahmen"-> {
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getTageseinnahmen(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getTageseinnahmen(config.ebenenNamen))
                 out.print(jsonData)
             }
             "wocheneinnahmen"-> {
                 response.contentType = "application/json;charset=UTF-8"
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getWocheneinnahmen(NAME()))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getWocheneinnahmen(config.ebenenNamen))
                 out.print(jsonData)
             }
             "einnahmenueberbundesland" -> {
@@ -138,10 +132,10 @@ abstract class ParkhausServlet : HttpServlet() {
                 out.print(jsonData)
             }
 
-            "average" ->  out.println("${parkhausServiceSession.getDurchschnittUeberAutos(NAME())/100} € per car")
+            "average" ->  out.println("${parkhausServiceSession.getDurchschnittUeberAutos(config.ebenenNamen)/100} € per car")
 
 
-            "total users" -> out.println("${parkhausServiceSession.getAlleUser(NAME())} Users")
+            "total users" -> out.println("${parkhausServiceSession.getAlleUser(config.ebenenNamen)} Users")
             "wechsleparkhaus" -> {
                 println("ParkhausWechsel")
                 val stadtId = request.getParameter("stadt")
@@ -169,26 +163,26 @@ abstract class ParkhausServlet : HttpServlet() {
         when (event) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                parkhausServiceSession.erstelleTicket(NAME(), data)
+                parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
             }
             "leave" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(NAME(),data.space) !!
-                parkhausServiceSession.ticketBezahlen(NAME(),zustaendigesTicket, Date.from(Instant.now()))
+                val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(config.ebenenNamen,data.space) !!
+                parkhausServiceSession.ticketBezahlen(config.ebenenNamen,zustaendigesTicket, Date.from(Instant.now()))
             }
 
             "change_max" -> {
-                parkhausServiceSession.wechsleEbeneMaxParkplätze(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneMaxParkplätze(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
                 println(paramJson)
             }
 
             "change_open_from" -> {
-                parkhausServiceSession.wechsleEbeneÖffnungszeit(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneÖffnungszeit(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
                 println(paramJson)
             }
 
             "change_open_to" -> {
-                parkhausServiceSession.wechsleEbeneLadenschluss(NAME(), aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneLadenschluss(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
                 println(paramJson)
             }
 
