@@ -18,11 +18,11 @@ import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
+import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,11 +49,11 @@ public class ParkhausServiceSessionJavaTest {
 
 
     String etage = "test";
-    Random zufallszahlengenerator;
+    SecureRandom zufallszahlengenerator;
 
     @BeforeEach
     public void setup() {
-        zufallszahlengenerator = new Random();
+        zufallszahlengenerator = new SecureRandom();
     }
 
     @Test
