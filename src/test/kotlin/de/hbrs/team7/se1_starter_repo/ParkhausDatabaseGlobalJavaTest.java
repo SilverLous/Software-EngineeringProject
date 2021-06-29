@@ -25,12 +25,14 @@ import java.util.*;
 @AddBeanClasses({ ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
 public class ParkhausDatabaseGlobalJavaTest {
 
-    static Parkhaus testEntity;
+    Parkhaus testEntity;
     String eingabeVehikel = "vehikulaer";
     String eingabeKategorie = "kategorisch";
     String eingabeKennzeichen = "y-232";
     String eingabeFarbe = "REGENBOGEN";
     String eingabeHash = "EchterHashEcht";
+    String testStadt = "Teststadt";
+    String testBundesLand = "Testbundesland";
 
     @Inject
     ParkhausServiceSession parkhausServiceSession;
@@ -44,7 +46,7 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     @BeforeEach
     public void setup(){
-
+        //Not used yet
     }
 
     @AfterEach
@@ -67,7 +69,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         public void insertTest(){
 
             // Problem: auf ID kann nicht direkt zugegriffen werden
-            Parkhaus p_test = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+            Parkhaus p_test = new Parkhaus( testStadt, testBundesLand, 0.0, 0.0, 0.0, 1  );
             testEntity =  databaseServiceGlobal.persistEntity(p_test);
 
             Assertions.assertNotNull(testEntity.getId());

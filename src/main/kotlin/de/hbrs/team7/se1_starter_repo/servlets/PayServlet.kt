@@ -23,5 +23,7 @@ class PayServlet : HttpServlet() {
     }
 
     override fun destroy() {
+        println("Destroyed Pay Servlet");
+        super.destroy()
     }
 }
