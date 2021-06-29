@@ -334,27 +334,43 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun redo() {
-        val toRedo = redoList.last()
-        undoList.add(toRedo)
-        if (toRedo.ImParkhaus){
-            toRedo.Ticket?.Auto = toRedo
-            ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
-            redoList.dropLast(1)
-        }
-        else{
-            toRedo.ImParkhaus = true
-            val pSPdto = ParkhausServletPostDto(2,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
-            val auto = erstelleTicket(deletedReferenceToLevelName.last(),pSPdto).Auto
-            redoList.dropLast(1)
-            if (redoList.last().Autonummer==toRedo.Autonummer){
+        if (redoList.size>0) {
+            val toRedo = redoList.last()
+            undoList.add(toRedo)
+            if (toRedo.ImParkhaus) {
+                toRedo.Ticket?.Auto = toRedo
+                ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
                 redoList.dropLast(1)
-                redoList.add(auto!!)
-            }
+            } else {
+                toRedo.ImParkhaus = true
+                val pSPdto = ParkhausServletPostDto(
+                    2,
+                    deletedDatum.last().time,
+                    0,
+                    0.0,
+                    toRedo.Hash!!,
+                    toRedo.Farbe!!,
+                    toRedo.Platznummer!!,
+                    toRedo.Kategorie,
+                    toRedo.Typ,
+                    toRedo.Kennzeichen!!
+                )
+                val auto = erstelleTicket(deletedReferenceToLevelName.last(), pSPdto).Auto
+                redoList.dropLast(1)
+                if (redoList.last().Autonummer == toRedo.Autonummer) {
+                    redoList.dropLast(1)
+                    redoList.add(auto!!)
+                }
 
+            }
+            redoList.dropLast(1)
+            deletedReferenceToLevelName.dropLast(1)
+            deletedDatum.dropLast(1)
         }
-        redoList.dropLast(1)
-        deletedReferenceToLevelName.dropLast(1)
-        deletedDatum.dropLast(1)
+    }
+
+    open fun loescheRedoList(){
+        redoList.clear()
     }
 
     open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
