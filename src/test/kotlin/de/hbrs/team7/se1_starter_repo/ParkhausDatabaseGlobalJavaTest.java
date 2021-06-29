@@ -25,7 +25,7 @@ import java.util.*;
 @AddBeanClasses({ ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
 public class ParkhausDatabaseGlobalJavaTest {
 
-    Parkhaus testEntity;
+    static Parkhaus testEntity;
     String eingabeVehikel = "vehikulaer";
     String eingabeKategorie = "kategorisch";
     String eingabeKennzeichen = "y-232";
