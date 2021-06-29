@@ -6,26 +6,22 @@ import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
-import de.hbrs.team7.se1_starter_repo.services.LoggerServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.inject.Inject;
-import org.hsqldb.Database;
 import org.jboss.weld.context.bound.BoundSessionContext;
 import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
-import javax.security.auth.login.Configuration;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -74,7 +70,7 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevel() {
 
-        ParkhausEbeneConfigDTO[] configs = generateConfigDTOs(2);
+        ParkhausEbeneConfigDTO[] configs = generiereConfigDTOs(2);
         parkhausServiceSession.initEbene(configs[0]);
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         assertNotNull(temp);
@@ -89,7 +85,7 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevelInvalidateTest() {
 
-        ParkhausEbeneConfigDTO[] conf = generateConfigDTOs(2);
+        ParkhausEbeneConfigDTO[] conf = generiereConfigDTOs(2);
         parkhausServiceSession.initEbene(conf[0]);
         String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
@@ -106,7 +102,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testFindTicketByPlace() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                 0, "echterHash", "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
@@ -117,9 +113,8 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetSum() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232","vehilkulaer","kategorisch" );
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -150,9 +145,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetAverage() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto("EchterHashEcht", "REGENBOGEN", 12, "y-232","vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i = 0; i < wieLange; i++) {
@@ -169,9 +164,9 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetTotalUsers() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -189,9 +184,9 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der addCar-Funktion")
     public void testAddCar() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -208,9 +203,9 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der addCar-Funktion")
     public void testAllCars() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -227,9 +222,9 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der autosInParkEbene-Funktion")
     public void testGetCarsInEbene() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -250,9 +245,9 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der generateStatisticsOverVehicle-Funktion")
     public void testGenerateStatisticsOverVehicle() {
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -269,9 +264,9 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der undo Funktion")
     public void testUndo(){
-        ParkhausEbene[] ebenen = generateEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
+        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -330,14 +325,14 @@ public class ParkhausServiceSessionJavaTest {
         @Order(1)
         @DisplayName("Testen der addCar Funktion")
         public void zieheTicketTest() {
-            ParkhausEbene[] ebenen = generateEbenen(1);
+            ParkhausEbene[] ebenen = generiereEbenen(1);
 
             Ticket erstesTestTicket = parkhausServiceSession.erstelleTicket(ebenen[0].getName(), paramsErstesAuto);
             assertNotNull(erstesTestTicket);
         }
 
         public void bezahleTicketTest() {
-            ParkhausEbene[] ebenen = generateEbenen(1);
+            ParkhausEbene[] ebenen = generiereEbenen(1);
 
             Ticket erstesTestTicket = parkhausServiceSession.erstelleTicket(ebenen[0].getName(), paramsErstesAuto);
             Date timeCheckOut = new Date(erstesTestTicket.getAusstellungsdatum().getTime() + 100);
@@ -350,7 +345,7 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Testen der wechsleEbeneMaxParkplätze-Funktion")
     public void testWechsleEbeneMaxParkplätze() {
-        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene[] ebenen = generiereEbenen(2);
         ParkhausEbene ebene = ebenen[0];
         ParkhausEbene ebene2 = ebenen[1];
         Assertions.assertEquals(120, ebene.getMaxPlätze());
@@ -364,7 +359,7 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Testen der wechsleEbeneÖffnungszeit-Funktion")
     public void testWechsleEbeneÖffnungszeit() {
-        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene[] ebenen = generiereEbenen(2);
         ParkhausEbene ebene = ebenen[0];
         ParkhausEbene ebene2 = ebenen[1];
         Assertions.assertEquals(6,ebene.getöffnungszeit());
@@ -379,7 +374,7 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Testen der wechsleEbeneLadenschluss-Funktion")
     public void testWechsleEbeneLadenschluss() {
-        ParkhausEbene[] ebenen = generateEbenen(2);
+        ParkhausEbene[] ebenen = generiereEbenen(2);
         ParkhausEbene ebene = ebenen[0];
         ParkhausEbene ebene2 = ebenen[1];
         Assertions.assertEquals(24,ebene.getLadenschluss());
@@ -391,21 +386,25 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(24,ebene2.getLadenschluss());
     }
 
-    private ParkhausEbene[] generateEbenen(int anzahl) {
+    private ParkhausEbene[] generiereEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
-        ParkhausEbeneConfigDTO[] configs = generateConfigDTOs(anzahl);
+        ParkhausEbeneConfigDTO[] configs = generiereConfigDTOs(anzahl);
         for (int i = 0; i < anzahl; i++) {
             ebenen[i] = parkhausServiceSession.initEbene(configs[i]);
         }
         return ebenen;
     }
 
-    private ParkhausEbeneConfigDTO[] generateConfigDTOs(int anzahl) {
+    private ParkhausEbeneConfigDTO[] generiereConfigDTOs(int anzahl) {
         ParkhausEbeneConfigDTO[] configs = new ParkhausEbeneConfigDTO[anzahl];
         for (int i = 0; i < anzahl; i++) {
             configs[i] = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,5, fahrzeugPreise, null);
         }
         return configs;
+    }
+
+    private Auto generiereDefaultAuto() {
+        return new Auto( "EchterHashEcht","REGENBOGEN",12,"y-232" ,"vehilkulaer","kategorisch");
     }
 
 }
