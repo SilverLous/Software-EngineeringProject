@@ -541,23 +541,24 @@ public class ParkhausDatabaseGlobalJavaTest {
         }
 
     }
-    /*
+/*
         @Test
         @DisplayName("dropTableTest")
         public void testDropTable() {
             Parkhaus testP = new Parkhaus( "Teststadt3", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
             //Parkhaus testP = generateDefaultParkhaus();
 
-            ParkhausEbene p_e = new ParkhausEbene("TestParkhausEbene",testP);
+            ParkhausEbene[] ebenen = generateEbenen(2,testP);
+            ParkhausEbene p_e = ebenen[0];
             testP.parkhausEbeneHinzufügen(p_e);
             databaseServiceGlobal.persistEntity(p_e);
             databaseServiceGlobal.persistEntity(testP);
             databaseServiceGlobal.bobbyTruncateTables();
             Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
-        }
-    */
+        }*/
+
     @Test
-    @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
+    @DisplayName("Testen Autos nach Bundesland Funktion")
     public void testGetCarsByFederalState(){
         Parkhaus parkhaus = generateDefaultParkhaus();
         Parkhaus parkhausBundesland2 = new Parkhaus( "Teststadt", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
