@@ -11,10 +11,12 @@ open class ParkhausBetreiber(
 
 
     fun preisfaktorAendern(parkhaus: Parkhaus, newValue: Float) {
+        /* War geplant die Implementation war jedoch zeitlich nicht möglich.*/
 
     }
 
     fun preisfaktorAendern(parkhaus: Parkhaus, ebene: ParkhausEbene, newValue: Float) {
+        /* Siehe oben.*/
 
     }
 }

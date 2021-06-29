@@ -74,6 +74,7 @@ abstract class ParkhausServlet : HttpServlet() {
      */
     @Throws(IOException::class)
     public override fun doGet(request: HttpServletRequest, response: HttpServletResponse) {
+        val charset = "application/json;charset=UTF-8"
         response.contentType = "text/html"
         val out = response.writer
         // val == final
@@ -105,19 +106,19 @@ abstract class ParkhausServlet : HttpServlet() {
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
-                response.contentType = "application/json;charset=UTF-8"
+                response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(config.ebenenNamen))
                 out.print(jsonData)
             }
             "tageseinnahmen"-> {
-                response.contentType = "application/json;charset=UTF-8"
+                response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getTageseinnahmen(config.ebenenNamen))
                 out.print(jsonData)
             }
             "wocheneinnahmen"-> {
-                response.contentType = "application/json;charset=UTF-8"
+                response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getWocheneinnahmen(config.ebenenNamen))
                 out.print(jsonData)
@@ -126,7 +127,7 @@ abstract class ParkhausServlet : HttpServlet() {
                 // http://json-b.net/docs/user-guide.html
 
                 // https://github.com/Kotlin/kotlinx.serialization
-                response.contentType = "application/json;charset=UTF-8"
+                response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstellePreiseFürBundesländer())
                 out.print(jsonData)
