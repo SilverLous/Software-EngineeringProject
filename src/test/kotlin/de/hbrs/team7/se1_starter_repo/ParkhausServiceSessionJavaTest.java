@@ -55,18 +55,15 @@ public class ParkhausServiceSessionJavaTest {
     String etage = "test";
     SecureRandom zufallszahlengenerator;
 
-    HashMap<String, Double> fahrzeugPreise = new HashMap<String, Double>() {
-        {
-            put("PKW", 1.0);
-            put("Pickup", 1.2);
-            put("SUV", 1.5);
-        }
-    };
+    HashMap<String, Double> fahrzeugPreise = new HashMap<>();
 
 
     @BeforeEach
     public void setup() {
         zufallszahlengenerator = new SecureRandom();
+        fahrzeugPreise.put("PKW", 1.0);
+        fahrzeugPreise.put("Pickup", 1.2);
+        fahrzeugPreise.put("SUV", 1.5);
     }
 
     @Test
