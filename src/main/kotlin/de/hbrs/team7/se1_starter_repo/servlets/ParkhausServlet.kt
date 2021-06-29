@@ -166,27 +166,32 @@ abstract class ParkhausServlet : HttpServlet() {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val ticket = parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
+                parkhausServiceSession.loescheRedoList()
                 out.write((ticket.Auto!!.Platznummer!!).toString() )
 
             }
             "leave" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(config.ebenenNamen,data.space) !!
+                parkhausServiceSession.loescheRedoList()
                 parkhausServiceSession.ticketBezahlen(config.ebenenNamen,zustaendigesTicket, Date.from(Instant.now()))
             }
 
             "change_max" -> {
                 parkhausServiceSession.wechsleEbeneMaxParkplätze(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
             "change_open_from" -> {
                 parkhausServiceSession.wechsleEbeneÖffnungszeit(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
             "change_open_to" -> {
                 parkhausServiceSession.wechsleEbeneLadenschluss(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
