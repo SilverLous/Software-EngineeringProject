@@ -63,24 +63,31 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevel() {
 
-        parkhausServiceSession.initEbene("TESTEBENE1");
+        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 1", 12, 6,24,0,5, null);
+        parkhausServiceSession.initEbene(conf);
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         assertNotNull(temp);
-        Assertions.assertEquals("TESTEBENE1", parkhausServiceSession.getEbeneUeberId(temp.get(0).getId()).getName());
-        parkhausServiceSession.initEbene("TESTEBENE2");
-        Assertions.assertEquals("TESTEBENE2", parkhausServiceSession.getEbeneUeberId(temp.get(1).getId()).getName());
+        Assertions.assertEquals("Generierte Ebene Nr. 1", parkhausServiceSession.getEbeneUeberId(temp.get(0).getId()).getName());
+        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 2", 12, 6,24,0,5, null);
+        parkhausServiceSession.initEbene(conf2);
+        Assertions.assertEquals("Generierte Ebene Nr. 2", parkhausServiceSession.getEbeneUeberId(temp.get(1).getId()).getName());
         Assertions.assertEquals(2, parkhausServiceSession.getParkhausEbenen().size());
-        Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
+        Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
 
     }
 
     @Test
     public void sessionAddLevelInvalidateTest() {
-        parkhausServiceSession.initEbene("TESTEBENE1");
+
+        int i = 1;
+        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, null);
+
+        parkhausServiceSession.initEbene(conf);
         String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
-        parkhausServiceSession.initEbene("TESTEBENE2");
-        Assertions.assertEquals(2, parkhausServiceGlobal.getLevelSet().size());
+        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, null);
+        parkhausServiceSession.initEbene(conf2);
+        Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
         sessionContext.invalidate();
         String zweiterStadtName = parkhausServiceSession.getParkhaus().getStadtname();
         Assertions.assertNotEquals(stadtName, zweiterStadtName);

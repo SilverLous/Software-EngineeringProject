@@ -109,9 +109,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)
 
+        val peGespeichert = this.parkhaus.ebenen.find { pE -> pE.name == config.ebenenNamen } !!
         this.parkhausServiceGlobal.ebenenSet.add(config)
-        parkhausEbenen.add(pe)
-        return pe
+        parkhausEbenen.add(peGespeichert)
+        return peGespeichert
     }
 
     override fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
