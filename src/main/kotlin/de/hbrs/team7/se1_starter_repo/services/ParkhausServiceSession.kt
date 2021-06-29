@@ -30,6 +30,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     open val undoList: ArrayList<Auto> = ArrayList<Auto>()
     open val redoList: ArrayList<Auto> = ArrayList<Auto>()
     open val deletedDatum: ArrayList<Date> = ArrayList<Date>()
+    open val deletedReferenceToLevelName: ArrayList<String> = ArrayList<String>()
 
     private var parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
 
@@ -297,6 +298,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             }
             else{
                 toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
                 toUndo.Ticket?.Ausfahrdatum = null
                 toUndo.Ticket?.price = 0
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
@@ -316,8 +318,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         }
         else{
             val pSPdto = ParkhausServletPostDto(-1,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
-            autoHinzufügen(toRedo.Ticket?.parkhausEbenen?.last()?.id!!,pSPdto)
-            databaseGlobal.persistEntity(toRedo.Ticket)
+            erstelleTicket(deletedReferenceToLevelName.last(),pSPdto)
+
         }
     }
 

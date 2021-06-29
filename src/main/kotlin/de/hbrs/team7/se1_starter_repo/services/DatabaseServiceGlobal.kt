@@ -332,14 +332,16 @@ open class DatabaseServiceGlobal {
         }
         return res
     }
-/*
-    open fun findeParkhausEbeneByAutoNummer(AutoNummer: Long): ParkhausEbene? {
+
+    open fun findeParkhausEbeneByTicket(TicketId: Long): ParkhausEbene? {
         val query = em.createNativeQuery(
             "SELECT * FROM PARKHAUSEBENE" +
 
-                    " WHERE PARKHAUSEBENE.ID = ? ", ParkhausEbene::class.java
+                    " INNER JOIN PARKHAUSEBENE_TICKET peT on PARKHAUSEBENE.ID = peT.PARKHAUSEBENEN_ID" +
+
+                    " WHERE peT.TICKETS_TICKETNUMMER = ? ", ParkhausEbene::class.java
         )
-        query.setParameter(1, AutoNummer)
+        query.setParameter(1, TicketId)
 
         val res: ParkhausEbene? = try {
             query.singleResult as ParkhausEbene?
@@ -347,7 +349,7 @@ open class DatabaseServiceGlobal {
             null
         }
         return res
-    }*/
+    }
 
     open fun errechneTagesEinnahmen(parkhausEbeneID: Long): Int? {
 
