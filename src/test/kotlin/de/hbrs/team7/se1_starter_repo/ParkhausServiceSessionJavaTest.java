@@ -133,7 +133,7 @@ public class ParkhausServiceSessionJavaTest {
                     0, "echterHash"+i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
             parkhausServiceSession.ticketBezahlen(ebenen[0].getName(),t_test,new Date(timeNow + 100));
-            Assertions.assertEquals((i+1)*100,parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebenen[0].getName()),4*(i+1));
+            Assertions.assertEquals((i+1)*100,parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebenen[0].getName()),10*(i+1));
         }
 
     }
@@ -166,8 +166,8 @@ public class ParkhausServiceSessionJavaTest {
                     0, "echterHash" + i, "REGENBOGEN", 1, "Family", "SUV", "Y-123 456");
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(), paramsErstesAuto);
             parkhausServiceSession.ticketBezahlen(ebenen[0].getName(), t_test, new Date(timeNow + 100));
-            Assertions.assertEquals(100, parkhausServiceSession.getDurchschnittUeberAutos(ebenen[0].getName()), 4);
-            Assertions.assertEquals((int)(parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebenen[0].getName())/parkhausServiceSession.getAlleUser(ebenen[0].getName())), parkhausServiceSession.getDurchschnittUeberAutos(ebenen[0].getName()), 4);
+            Assertions.assertEquals(100, parkhausServiceSession.getDurchschnittUeberAutos(ebenen[0].getName()), 10);
+            Assertions.assertEquals((int)(parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebenen[0].getName())/parkhausServiceSession.getAlleUser(ebenen[0].getName())), parkhausServiceSession.getDurchschnittUeberAutos(ebenen[0].getName()), 10);
         }
     }
 
@@ -346,12 +346,12 @@ public class ParkhausServiceSessionJavaTest {
         ParkhausEbene[] ebenen = generateEbenen(2);
         ParkhausEbene ebene = ebenen[0];
         ParkhausEbene ebene2 = ebenen[1];
-        Assertions.assertEquals(12, ebene.getMaxPlätze());
+        Assertions.assertEquals(120, ebene.getMaxPlätze());
         int neuePlaetze = zufallszahlengenerator.nextInt(19);
         neuePlaetze++;
         parkhausServiceSession.wechsleEbeneMaxParkplätze(ebene.getName(),12,neuePlaetze);
         Assertions.assertEquals(neuePlaetze, ebene.getMaxPlätze());
-        Assertions.assertEquals(12, ebene2.getMaxPlätze());
+        Assertions.assertEquals(120, ebene2.getMaxPlätze());
     }
 
     @Test
@@ -388,7 +388,7 @@ public class ParkhausServiceSessionJavaTest {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
         for (int i = 0; i < anzahl; i++) {
             //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
-            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, fahrzeugPreise, null));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,5, fahrzeugPreise, null));
         }
         return ebenen;
     }

@@ -184,7 +184,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
                 entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
-        return (duration * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
+        return (duration + 0.5 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
