@@ -19,6 +19,7 @@ import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 
+import javax.security.auth.login.Configuration;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
@@ -76,14 +77,13 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevel() {
 
-        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 1", 12, 6,24,0,5, fahrzeugPreise, null);
-        parkhausServiceSession.initEbene(conf);
+        ParkhausEbeneConfigDTO[] configs = generateConfigDTOs(2);
+        parkhausServiceSession.initEbene(configs[0]);
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         assertNotNull(temp);
-        Assertions.assertEquals("Generierte Ebene Nr. 1", parkhausServiceSession.getEbeneUeberId(temp.get(0).getId()).getName());
-        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. 2", 12, 6,24,0,5, fahrzeugPreise, null);
-        parkhausServiceSession.initEbene(conf2);
-        Assertions.assertEquals("Generierte Ebene Nr. 2", parkhausServiceSession.getEbeneUeberId(temp.get(1).getId()).getName());
+        Assertions.assertEquals("Generierte Ebene Nr. 0", parkhausServiceSession.getEbeneUeberId(temp.get(0).getId()).getName());
+        parkhausServiceSession.initEbene(configs[1]);
+        Assertions.assertEquals("Generierte Ebene Nr. 1", parkhausServiceSession.getEbeneUeberId(temp.get(1).getId()).getName());
         Assertions.assertEquals(2, parkhausServiceSession.getParkhausEbenen().size());
         Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
 
@@ -92,14 +92,11 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     public void sessionAddLevelInvalidateTest() {
 
-        int i = 1;
-        ParkhausEbeneConfigDTO conf = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, fahrzeugPreise, null);
-
-        parkhausServiceSession.initEbene(conf);
+        ParkhausEbeneConfigDTO[] conf = generateConfigDTOs(2);
+        parkhausServiceSession.initEbene(conf[0]);
         String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
         List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
-        ParkhausEbeneConfigDTO conf2 = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. " + i++, 12, 6,24,0,5, fahrzeugPreise, null);
-        parkhausServiceSession.initEbene(conf2);
+        parkhausServiceSession.initEbene(conf[1]);
         Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
         sessionContext.invalidate();
         String zweiterStadtName = parkhausServiceSession.getParkhaus().getStadtname();
@@ -389,11 +386,19 @@ public class ParkhausServiceSessionJavaTest {
 
     private ParkhausEbene[] generateEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
+        ParkhausEbeneConfigDTO[] configs = generateConfigDTOs(anzahl);
         for (int i = 0; i < anzahl; i++) {
-            //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
-            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,5, fahrzeugPreise, null));
+            ebenen[i] = parkhausServiceSession.initEbene(configs[i]);
         }
         return ebenen;
+    }
+
+    private ParkhausEbeneConfigDTO[] generateConfigDTOs(int anzahl) {
+        ParkhausEbeneConfigDTO[] configs = new ParkhausEbeneConfigDTO[anzahl];
+        for (int i = 0; i < anzahl; i++) {
+            configs[i] = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,5, fahrzeugPreise, null);
+        }
+        return configs;
     }
 
 }
