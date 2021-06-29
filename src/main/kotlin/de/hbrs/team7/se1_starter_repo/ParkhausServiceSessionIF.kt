@@ -21,6 +21,8 @@ interface ParkhausServiceSessionIF {
 
     fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
 
+    fun ticketBezahlen(ParkhausEbeneId: Long, ticket: Ticket, timeCheckOut: Date): Long
+
     fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int
 
     fun getDurchschnittUeberAutos(ParkhausEbeneName: String): Int
@@ -45,15 +47,15 @@ interface ParkhausServiceSessionIF {
 
     fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
 
-    fun getTageseinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO
+    fun getTageseinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO
 
     fun getWocheneinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
 
-    fun getWocheneinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO
+    fun getWocheneinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO
 
     fun getPrintStringAutos(ParkhausEbeneName: String): String
 
-    fun getPrintStringAutos(ParkhausEbeneName: Long): String
+    fun getPrintStringAutos(ParkhausEbeneId: Long): String
 
     fun erstellePreiseFürBundesländer(): statisticsChartDto?
 

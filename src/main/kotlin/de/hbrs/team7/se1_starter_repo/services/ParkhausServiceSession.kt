@@ -154,11 +154,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
+        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+        return ticketBezahlen(parkhausEbeneID, ticket, timeCheckOut)
+    }
+
+    override fun ticketBezahlen(ParkhausEbeneId: Long, ticket: Ticket, timeCheckOut: Date): Long {
 
         ticket.Ausfahrdatum = timeCheckOut
 
 
-        ticket.price = errechneTicketPreis(ParkhausEbeneName, ticket, ticket.Auto !!)
+        ticket.price = errechneTicketPreis(ParkhausEbeneId, ticket, ticket.Auto !!)
 
         this.databaseGlobal.mergeUpdatedEntity(ticket)
         ticket.Auto?.ImParkhaus = false
@@ -173,8 +178,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return ticket.price.toLong()/100
     }
 
-    open fun errechneTicketPreis(ebenenName: String, ticket: Ticket, auto: Auto  ): Int {
-        val parkhausEbeneID = getIdUeberName(ebenenName)
+    open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto  ): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
 
@@ -242,8 +246,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return getTageseinnahmen(parkhausEbeneID)
     }
 
-    override fun getTageseinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO {
-        val sumOverDay = databaseGlobal.errechneTagesEinnahmen(ParkhausEbeneName)
+    override fun getTageseinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneTagesEinnahmen(ParkhausEbeneId)
             return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Tages Einnahmen"),
                 listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
 
@@ -254,8 +258,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return getWocheneinnahmen(parkhausEbeneID)
     }
 
-    override fun getWocheneinnahmen(ParkhausEbeneName: Long): einnahmenBarDTO {
-        val sumOverDay = databaseGlobal.errechneWochenEinnahmen(ParkhausEbeneName)
+    override fun getWocheneinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneWochenEinnahmen(ParkhausEbeneId)
         return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Wochen Einnahmen"),
             listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
 
@@ -266,13 +270,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return getPrintStringAutos(parkhausEbeneID)
     }
 
-    override fun getPrintStringAutos(ParkhausEbeneName: Long): String {
-        val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneName)
+    override fun getPrintStringAutos(ParkhausEbeneId: Long): String {
+        val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneId)
         var printString = ""
         for(e: Auto in autosInParkhausEbene ){
 
-            // TODO Fix naming
-            // val preis = errechneTicketPreis(ParkhausEbeneName, e.Ticket !!, e)
+            val preis = errechneTicketPreis(ParkhausEbeneId, e.Ticket !!, e)
 
             printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
                     "/${ if (e.ImParkhaus) 0 else e.getParkdauer()}/${e.getParkdauer()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
