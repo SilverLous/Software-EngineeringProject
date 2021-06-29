@@ -320,6 +320,9 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()).getEbenen().size(), 2);
         Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()).getEbenen().size(), 2);
 
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p1.getId()).getEbenen().get(0).getFahrzeugTypen().size(), 1);
+        Assertions.assertEquals(databaseServiceGlobal.findeParkhausMitEbeneUeberId(p2.getId()).getEbenen().get(1).getFahrzeugTypen().size(), 1);
+
     }
 
     @Test
