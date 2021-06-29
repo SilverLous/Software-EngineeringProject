@@ -123,7 +123,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         @DisplayName("Testen der delete Funktion per Objekt")
         public void deleteObjectTest(){
 
-            Parkhaus p_test = new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+            Parkhaus p_test = new Parkhaus( testStadt, testBundesLand, 0.0, 0.0, 0.0, 1  );
             p_test =  databaseServiceGlobal.persistEntity(p_test);
             long p_id = p_test.getId();
             Assertions.assertNotNull(p_id);
@@ -547,7 +547,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Testen Autos nach Bundesland Funktion")
     public void testGetCarsByFederalState(){
         Parkhaus parkhaus = generiereDefaultParkhaus();
-        Parkhaus parkhausBundesland2 = new Parkhaus( "Teststadt", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
+        Parkhaus parkhausBundesland2 = new Parkhaus( testStadt, "Testbundesland2", 0.0, 0.0, 0.0, 1  );
 
         ParkhausEbene[] ebenen = generiereEbenen(2,parkhaus);
         ParkhausEbene ebene1 = ebenen[0];
@@ -588,7 +588,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
     private Parkhaus generiereDefaultParkhaus() {
-        return new Parkhaus( "Teststadt", "Testbundesland", 0.0, 0.0, 0.0, 1  );
+        return new Parkhaus( testStadt, testBundesLand, 0.0, 0.0, 0.0, 1  );
     }
 
     private Auto generiereDefaultAuto() {
