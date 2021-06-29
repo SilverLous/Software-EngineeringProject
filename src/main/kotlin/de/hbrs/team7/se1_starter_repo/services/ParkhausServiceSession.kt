@@ -25,9 +25,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         protected set
 
     open val undoList: ArrayList<Auto> = ArrayList<Auto>()
-    //open val redoList: ArrayList<Auto> = ArrayList<Auto>()
-    //open val deletedDatum: ArrayList<Date> = ArrayList<Date>()
-    //open val deletedReferenceToLevelName: ArrayList<String> = ArrayList<String>()
+    open val redoList: ArrayList<Auto> = ArrayList<Auto>()
+    open val deletedDatum: ArrayList<Date> = ArrayList<Date>()
+    open val deletedReferenceToLevelName: ArrayList<String> = ArrayList<String>()
 
     private var parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
 
@@ -180,11 +180,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto  ): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
-        val duration = ticket.Ausfahrdatum!!.time - ticket.Ausstellungsdatum.time
+        val duration = (ticket.Ausfahrdatum?.time?.minus(ticket.Ausstellungsdatum.time))
 
         val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
                 entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
-        return (duration + 0.5 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
+        return ((duration?:0) + 0.5 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
@@ -306,10 +306,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun undo() {
         if (undoList.size>0){
             val toUndo = undoList.last()
-            //redoList.add(toUndo)
+            redoList.add(toUndo)
             if (toUndo.ImParkhaus){
                 val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)
-                //deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
+                deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
                 toUndo.Ticket?.Auto = null
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
@@ -320,8 +320,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 databaseGlobal.mergeUpdatedEntity(parkhausEbene)
             }
             else{
-                //toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
-                //deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
+                toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
                 toUndo.Ticket?.Ausfahrdatum = null
                 toUndo.Ticket?.price = 0
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
@@ -332,7 +332,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         }
     }
-/*
+
     override fun redo() {
         val toRedo = redoList.last()
         undoList.add(toRedo)
@@ -358,7 +358,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         deletedReferenceToLevelName.dropLast(1)
         deletedDatum.dropLast(1)
     }
-*/
+
     open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
         val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 

@@ -61,5 +61,5 @@ interface ParkhausServiceSessionIF {
 
     fun undo()
 
-    //fun redo()
+    fun redo()
 }

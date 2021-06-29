@@ -292,7 +292,7 @@ public class ParkhausServiceSessionJavaTest {
         parkhausServiceSession.undo();
         Assertions.assertEquals(wieLange-1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
     }
-    /*
+
     @Test
     @DisplayName("Test der redo Funktion")
     public void testRedo(){
@@ -307,7 +307,7 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
 
     }
-*/
+
 
     @Nested
     @DisplayName("Basic IO chain")
