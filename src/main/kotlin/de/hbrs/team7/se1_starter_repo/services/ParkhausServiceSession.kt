@@ -266,7 +266,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     open fun zeigeHTMLParkhausListe(): String {
-        val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java);
+        val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java)?.filter { pa -> pa.ebenen.size != 0 && pa.stadtname != parkhaus.stadtname}
         val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""
         }
         val buttonVariable = parkhausButtons?.joinToString (separator="") ?: ""
@@ -325,15 +325,34 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
+        val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 
+
+        this.parkhausEbenen[parkhausEbeneArrayPos].maxPlätze = neu
+
+        this.parkhausEbenen[parkhausEbeneArrayPos] =
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
 
     }
 
     open fun wechsleEbeneÖffnungszeit(name: String, aktuell: Int, neu: Int) {
+        val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 
+
+        this.parkhausEbenen[parkhausEbeneArrayPos].öffnungszeit = neu
+
+        this.parkhausEbenen[parkhausEbeneArrayPos] =
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
     }
 
     open fun wechsleEbeneLadenschluss(name: String, aktuell: Int, neu: Int) {
+        val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
+
+
+        this.parkhausEbenen[parkhausEbeneArrayPos].ladenschluss = neu
+
+        this.parkhausEbenen[parkhausEbeneArrayPos] =
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
 
     }
 

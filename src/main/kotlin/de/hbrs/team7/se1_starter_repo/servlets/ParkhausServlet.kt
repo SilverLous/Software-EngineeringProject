@@ -85,7 +85,7 @@ abstract class ParkhausServlet : HttpServlet() {
             "config" ->
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
-                out.println(config.toCSV())
+                out.println(parkhausServiceSession.getParkhausEbenen().find { pe -> pe.name == config.ebenenNamen }!!.toConfigCSV())
 
             "sum" -> {
                 out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(config.ebenenNamen)/100} € insgesamt")
@@ -159,11 +159,14 @@ abstract class ParkhausServlet : HttpServlet() {
 
         // toTypedArray() needed because return type is List not array as in original
         val paramJson = body.split(",", limit = 2).toTypedArray()
+        val paramsCSV = body.split(",").toTypedArray()
         val event = paramJson[0]
         when (event) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
+                val ticket = parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
+                out.write((ticket.Auto!!.Platznummer!!).toString() )
+
             }
             "leave" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
@@ -172,17 +175,21 @@ abstract class ParkhausServlet : HttpServlet() {
             }
 
             "change_max" -> {
-                parkhausServiceSession.wechsleEbeneMaxParkplätze(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneMaxParkplätze(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
                 println(paramJson)
             }
 
             "change_open_from" -> {
-                parkhausServiceSession.wechsleEbeneÖffnungszeit(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneÖffnungszeit(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
                 println(paramJson)
             }
 
             "change_open_to" -> {
-                parkhausServiceSession.wechsleEbeneLadenschluss(config.ebenenNamen, aktuell = paramJson[1].toInt(), neu = paramJson[2].toInt())
+                parkhausServiceSession.wechsleEbeneLadenschluss(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                println(paramJson)
+            }
+
+            "full" -> {
                 println(paramJson)
             }
 
