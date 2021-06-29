@@ -1,6 +1,5 @@
 package de.hbrs.team7.se1_starter_repo;
 
-// import com.sun.org.apache.xpath.internal.operations.Equals;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
@@ -13,7 +12,6 @@ import org.jboss.weld.junit5.auto.ActivateScopes;
 import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
-
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -165,7 +163,6 @@ public class ParkhausDatabaseGlobalJavaTest {
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
         Parkhaus parkhaus = generiereDefaultParkhaus();
-        //ParkhausEbene ebene1 = new ParkhausEbene("Ebene 1", parkhaus);
         ParkhausEbene[] ebenen = generiereEbenen(2,parkhaus);
         ParkhausEbene ebene1 = ebenen[0];
         ParkhausEbene ebene2 = ebenen[1];
@@ -268,15 +265,11 @@ public class ParkhausDatabaseGlobalJavaTest {
         tNewEbenen.add(p_e);
         t_test.setParkhausEbenen(tNewEbenen);
 
-        Ticket merged_ticket = databaseServiceGlobal.mergeUpdatedEntity(t_test);
-
-
+        databaseServiceGlobal.mergeUpdatedEntity(t_test);
         Parkhaus saved_p = databaseServiceGlobal.findeUeberID(p.getId(), Parkhaus.class);
-        ParkhausEbene saved_pe = databaseServiceGlobal.findeUeberID(p_e.getId(), ParkhausEbene.class);
+        databaseServiceGlobal.findeUeberID(p_e.getId(), ParkhausEbene.class);
 
         Assertions.assertEquals(1,saved_p.getEbenen().size());
-
-
     }
 
     @Test
@@ -287,10 +280,6 @@ public class ParkhausDatabaseGlobalJavaTest {
 
         ParkhausEbene[] ebenen = generiereEbenen(2,p1);
         ParkhausEbene[] ebenen2 = generiereEbenen(2,p2);
-        ParkhausEbene e11 = ebenen[0];
-        ParkhausEbene e12 = ebenen[1];
-        ParkhausEbene e21 = ebenen2[0];
-        ParkhausEbene e22 = ebenen2[1];
 
         p1.parkhausEbeneHinzufügen(ebenen[0]);
         p1.parkhausEbeneHinzufügen(ebenen[1]);
@@ -298,17 +287,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         p2.parkhausEbeneHinzufügen(ebenen2[0]);
         p2.parkhausEbeneHinzufügen(ebenen2[1]);
 
-        // e11.setParkhaus(p1);
-        // e12.setParkhaus(p1);
-        // e21.setParkhaus(p2);
-        // e22.setParkhaus(p2);
-
-
-        // p1.setEbenen(Arrays.asList(ebenen) );
-
         // List<ParkhausEbene> ebene2List = new LinkedList<ParkhausEbene>(ebenen2);
-        // p2.setEbenen(Arrays.asList(ebenen2) );
-
         databaseServiceGlobal.persistEntity(p1);
         databaseServiceGlobal.persistEntity(p2);
 
@@ -333,8 +312,8 @@ public class ParkhausDatabaseGlobalJavaTest {
         ParkhausEbene ebene1 = generiereEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             a_test = new Auto( eingabeHash+i,eingabeFarbe,12,eingabeKennzeichen,eingabeVehikel,eingabeKategorie);
@@ -418,7 +397,6 @@ public class ParkhausDatabaseGlobalJavaTest {
         LocalTime nau = LocalDateTime.now().toLocalTime();
         System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
 
-        //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
         Parkhaus parkhaus = generiereDefaultParkhaus();
         ParkhausEbene ebene1 = generiereEbenen(1,parkhaus)[0];
@@ -463,14 +441,13 @@ public class ParkhausDatabaseGlobalJavaTest {
         LocalTime nau = LocalDateTime.now().toLocalTime();
         System.out.println(LocalDateTime.now().minusSeconds(nau.toSecondOfDay()).toLocalDate());
 
-        //Date nau2 = Date.from(Instant.now());
         System.out.print((Date.from(Instant.parse(Instant.now().toString().substring(0, 10) + "T00:00:00.00Z"))).getTime());
         Parkhaus parkhaus = generiereDefaultParkhaus();
         ParkhausEbene ebene1 = generiereEbenen(1,parkhaus)[0];
         databaseServiceGlobal.persistEntity(ebene1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i = 0; i < wieLange; i++) {
             a_test = new Auto(eingabeHash+ i, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
@@ -516,8 +493,6 @@ public class ParkhausDatabaseGlobalJavaTest {
     }
 
 
-
-
     @Test
     @DisplayName("Testen der autosInParkEbeneHistoric Funktion")
     public void testGetCarInLevel() {
@@ -549,21 +524,22 @@ public class ParkhausDatabaseGlobalJavaTest {
         }
 
     }
-/*
+
+        @Disabled
         @Test
         @DisplayName("dropTableTest")
         public void testDropTable() {
             Parkhaus testP = new Parkhaus( "Teststadt3", "Testbundesland2", 0.0, 0.0, 0.0, 1  );
             //Parkhaus testP = generateDefaultParkhaus();
 
-            ParkhausEbene[] ebenen = generateEbenen(2,testP);
+            ParkhausEbene[] ebenen = generiereEbenen(2,testP);
             ParkhausEbene p_e = ebenen[0];
             testP.parkhausEbeneHinzufügen(p_e);
             databaseServiceGlobal.persistEntity(p_e);
             databaseServiceGlobal.persistEntity(testP);
             databaseServiceGlobal.bobbyTruncateTables();
             Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
-        }*/
+        }
 
     @Test
     @DisplayName("Testen Autos nach Bundesland Funktion")
@@ -622,7 +598,6 @@ public class ParkhausDatabaseGlobalJavaTest {
         HashMap<String, Double> preise = new HashMap<>();
         preise.put("Auto", 1.0);
         for (int i = 0; i < anzahl; i++) {
-            //ebenen[i] = parkhausServiceSession.initEbene("Generierte Ebene Nr. ".concat(String.valueOf(i)));
             ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, preise, parkhaus));
         }
         return ebenen;

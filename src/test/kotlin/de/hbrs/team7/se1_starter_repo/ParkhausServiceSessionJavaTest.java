@@ -93,7 +93,7 @@ public class ParkhausServiceSessionJavaTest {
         ParkhausEbeneConfigDTO[] conf = generiereConfigDTOs(2);
         parkhausServiceSession.initEbene(conf[0]);
         String stadtName = parkhausServiceSession.getParkhaus().getStadtname();
-        List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
+        //List<ParkhausEbene> temp = parkhausServiceSession.getParkhausEbenen();
         parkhausServiceSession.initEbene(conf[1]);
         Assertions.assertEquals(2, parkhausServiceGlobal.getEbenenSet().size());
         sessionContext.invalidate();
@@ -120,7 +120,7 @@ public class ParkhausServiceSessionJavaTest {
     public void testGetSum() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Ticket t_test = new Ticket();
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
@@ -135,8 +135,6 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void StatisticUpdateSubjTest() {
-
-        // List<List<ManagerStatistikUpdateDTO>> l = Collections.emptyList();
         AtomicInteger events = new AtomicInteger();
         this.parkhausServiceGlobal.getStatisticUpdateSubj().subscribe(
                 s -> events.getAndIncrement()
@@ -152,8 +150,7 @@ public class ParkhausServiceSessionJavaTest {
     public void testGetAverage() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Ticket t_test;
 
         for (int i = 0; i < wieLange; i++) {
             Long timeNow = System.currentTimeMillis();
@@ -171,16 +168,14 @@ public class ParkhausServiceSessionJavaTest {
     public void testGetTotalUsers() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                     0, eingabeHash+i, eingabeFarbe, 1, eingabeClientCategory, eingabeType, eingabeKennzeichen);
-            t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
-
-            a_test = t_test.getAuto();
+            parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
+            t_test.getAuto();
             Assertions.assertEquals(i+1,parkhausServiceSession.getAlleUser(ebenen[0].getName()));
         }
 
@@ -191,8 +186,8 @@ public class ParkhausServiceSessionJavaTest {
     public void testAddCar() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
@@ -210,8 +205,8 @@ public class ParkhausServiceSessionJavaTest {
     public void testAllCars() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
@@ -229,15 +224,14 @@ public class ParkhausServiceSessionJavaTest {
     public void testGetCarsInEbene() {
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2+i, timeNow, 0,
                     0, eingabeHash+i, eingabeFarbe, 1+i, eingabeClientCategory, eingabeType, eingabeKennzeichen);
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
-            a_test = t_test.getAuto();
+            t_test.getAuto();
             Assertions.assertEquals(1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
             Assertions.assertEquals(i+0,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(),false).size());
             parkhausServiceSession.ticketBezahlen(ebenen[0].getName(),t_test,Date.from(Instant.now()));
@@ -250,10 +244,10 @@ public class ParkhausServiceSessionJavaTest {
     @Test
     @DisplayName("Test der generateStatisticsOverVehicle-Funktion")
     public void testGenerateStatisticsOverVehicle() {
-        ParkhausEbene[] ebenen = generiereEbenen(1);
+        ParkhausEbene[] ebenen = generiereEbenen(1);/*
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
-        Ticket t_test = new Ticket();
+        Auto a_test;
+        Ticket t_test;
 
         for (int i=0;i<wieLange;i++){
             Long timeNow = System.currentTimeMillis();
@@ -263,6 +257,8 @@ public class ParkhausServiceSessionJavaTest {
             a_test = t_test.getAuto();
             Assertions.assertEquals(a_test.getHash(),parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(),true).get(i).getHash());
         }
+        */testAllCars();
+
         assertNotNull(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(ebenen[0].getName()));
     }
 
@@ -271,7 +267,6 @@ public class ParkhausServiceSessionJavaTest {
     public void testUndo(){
         ParkhausEbene[] ebenen = generiereEbenen(1);
         int wieLange = 8;
-        Auto a_test = generiereDefaultAuto();
         Ticket t_test = new Ticket();
 
         for (int i=0;i<wieLange;i++){
@@ -279,7 +274,7 @@ public class ParkhausServiceSessionJavaTest {
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                     0, eingabeHash+i, eingabeFarbe, 1, eingabeClientCategory, eingabeType, eingabeKennzeichen);
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
-            a_test = t_test.getAuto();
+            t_test.getAuto();
         }
         parkhausServiceSession.ticketBezahlen(ebenen[0].getName(),t_test,Date.from(Instant.now()));
         parkhausServiceSession.undo();
