@@ -305,6 +305,16 @@ public class ParkhausServiceSessionJavaTest {
         parkhausServiceSession.redo();
         List<Auto> autolisteAfterRedo = dataBase.autosInParkEbeneHistoric(ParkId);
         Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
+        parkhausServiceSession.undo();
+        parkhausServiceSession.redo();
+        Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
+        parkhausServiceSession.undo();
+        parkhausServiceSession.undo();
+        parkhausServiceSession.undo();
+        parkhausServiceSession.redo();
+        parkhausServiceSession.redo();
+        parkhausServiceSession.redo();
+        Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
 
     }
 
