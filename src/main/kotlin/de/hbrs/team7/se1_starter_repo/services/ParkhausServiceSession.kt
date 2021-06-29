@@ -25,9 +25,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         protected set
 
     open val undoList: ArrayList<Auto> = ArrayList<Auto>()
-    open val redoList: ArrayList<Auto> = ArrayList<Auto>()
-    open val deletedDatum: ArrayList<Date> = ArrayList<Date>()
-    open val deletedReferenceToLevelName: ArrayList<String> = ArrayList<String>()
+    //open val redoList: ArrayList<Auto> = ArrayList<Auto>()
+    //open val deletedDatum: ArrayList<Date> = ArrayList<Date>()
+    //open val deletedReferenceToLevelName: ArrayList<String> = ArrayList<String>()
 
     private var parkhausEbenen: MutableList<ParkhausEbene> = mutableListOf()
 
@@ -297,19 +297,22 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun undo() {
         if (undoList.size>0){
             val toUndo = undoList.last()
-            redoList.add(toUndo)
+            //redoList.add(toUndo)
             if (toUndo.ImParkhaus){
-                deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
+                val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)
+                //deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
                 toUndo.Ticket?.Auto = null
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
-                toUndo.Ticket?.Ticketnummer?.let { databaseGlobal.deleteByID(it,Ticket::class.java) }
+                databaseGlobal.deleteByID(toUndo?.Ticket?.Ticketnummer!!,Ticket::class.java)
                 toUndo.ImParkhaus = false
                 toUndo.Ticket?.parkhausEbenen?.dropLast(1)
+                parkhausEbene?.tickets?.dropLast(1)
+                databaseGlobal.mergeUpdatedEntity(parkhausEbene)
             }
             else{
-                toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
-                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
+                //toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
+                //deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
                 toUndo.Ticket?.Ausfahrdatum = null
                 toUndo.Ticket?.price = 0
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
@@ -320,20 +323,33 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         }
     }
-
+/*
     override fun redo() {
         val toRedo = redoList.last()
         undoList.add(toRedo)
         if (toRedo.ImParkhaus){
-            toRedo.Ticket?.parkhausEbenen?.last()?.name?.let { ticketBezahlen(it, toRedo.Ticket!!, deletedDatum.last()) }
+            val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
+            parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
+            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
+            ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
         }
         else{
-            val pSPdto = ParkhausServletPostDto(-1,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
-            erstelleTicket(deletedReferenceToLevelName.last(),pSPdto)
+            val pSPdto = ParkhausServletPostDto(2,deletedDatum.last().time,0,0.0,toRedo.Hash!!,toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!)
+            autoHinzufügen(getIdUeberName(deletedReferenceToLevelName.last()),pSPdto)
+            toRedo.ImParkhaus = true
+            toRedo.Ticket?.Auto = toRedo
+            val parkhausEbeneToAdd = databaseGlobal.findeParkhausEbene(getIdUeberName(deletedReferenceToLevelName.last()))
+            parkhausEbeneToAdd?.tickets?.add(toRedo.Ticket!!)
+            databaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
+            databaseGlobal.mergeUpdatedEntity(toRedo)
+            //erstelleTicket(deletedReferenceToLevelName.last(),pSPdto)
 
         }
+        redoList.dropLast(1)
+        deletedReferenceToLevelName.dropLast(1)
+        deletedDatum.dropLast(1)
     }
-
+*/
     open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
         val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 
