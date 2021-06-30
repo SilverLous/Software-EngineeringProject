@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
@@ -274,6 +275,31 @@ public class ParkhausDatabaseGlobalJavaTest {
 
         Assertions.assertEquals(1,saved_p.getEbenen().size());
     }
+
+    @Test
+    @DisplayName("Testen der query All Entities Funktion")
+    public void FindeAlleEntitiesTest() {
+
+        Ticket ticket = new Ticket();
+        databaseServiceGlobal.persistEntity(ticket);
+        List<Ticket> tickets =  this.databaseServiceGlobal.queryAllEntities(Ticket.class);
+
+        assert (tickets.size() > 0);
+    }
+
+    @Test
+    @DisplayName("Testen der finde Parkhaus Ebene Funktion")
+    public void findeParkhausEbeneTest() {
+
+        List<ParkhausEbene> parkhausEbenen = this.databaseServiceGlobal.queryAllEntities(ParkhausEbene.class);
+        ParkhausEbene parkhausEbene =  this.databaseServiceGlobal.findeParkhausEbene(parkhausEbenen.get(0).getId());
+        ParkhausEbene parkhausEbeneNotExisting =  this.databaseServiceGlobal.findeParkhausEbene(99999999);
+
+        Assertions.assertNotNull(parkhausEbene);
+        Assertions.assertNull(parkhausEbeneNotExisting);
+
+    }
+
 
     @Test
     @DisplayName("Test der findeParkhausMitEbeneUeberId-Funktion")

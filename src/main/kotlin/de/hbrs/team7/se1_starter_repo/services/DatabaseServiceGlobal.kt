@@ -87,12 +87,6 @@ open class DatabaseServiceGlobal {
         return em.createQuery(query).resultList
     }
 
-    open fun <T> createCriteraQueryBuilder(classType: Class<T>): Pair<CriteriaBuilder, CriteriaQuery<T>> {
-        val qb: CriteriaBuilder = em.criteriaBuilder
-        val cq = qb.createQuery(classType)
-        return Pair(qb, cq)
-    }
-
     open fun nativeSQLQuerySample(id: Long): MutableList<Ticket> {
         val query = em.createNativeQuery("SELECT * FROM TICKET WHERE TICKETNUMMER = ?", Ticket::class.java)
         query.setParameter(1, id.toString())
