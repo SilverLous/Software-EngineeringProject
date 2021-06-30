@@ -1,6 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
+import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -542,6 +543,20 @@ public class ParkhausDatabaseGlobalJavaTest {
             databaseServiceGlobal.bobbyTruncateTables();
             Assertions.assertNull(databaseServiceGlobal.findeParkhausEbene(testP.getEbenen().get(0).getId()));
         }
+
+    @Test
+    @DisplayName("Testen Autos nach Alte Deutschland Daten Funktion")
+    public void getAlteDeutschlandDaten(){
+        oldGermanyStatisticsDTO statisitk =  databaseServiceGlobal.getAlteDeutschlandDaten();
+
+        // Für genauere Abfragen müsste die Datenbank gelöscht werden
+        Assertions.assertNotNull(statisitk.getBrd().getFirst());
+        Assertions.assertNotNull(statisitk.getBrd().getSecond());
+        Assertions.assertNotNull(statisitk.getDdr().getFirst());
+        Assertions.assertNotNull(statisitk.getDdr().getSecond());
+    }
+
+
 
     @Test
     @DisplayName("Testen Autos nach Bundesland Funktion")
