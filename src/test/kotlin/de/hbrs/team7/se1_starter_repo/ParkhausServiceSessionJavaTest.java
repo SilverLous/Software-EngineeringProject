@@ -301,8 +301,11 @@ public class ParkhausServiceSessionJavaTest {
         parkhausServiceSession.redo();
         Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
         parkhausServiceSession.undo();
+        Assertions.assertEquals(autoliste.size()+1,parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
         parkhausServiceSession.undo();
+        Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
         parkhausServiceSession.undo();
+        //Assertions.assertEquals(autoliste.size()-1,parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
         parkhausServiceSession.redo();
         parkhausServiceSession.redo();
         parkhausServiceSession.redo();

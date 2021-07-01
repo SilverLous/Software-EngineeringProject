@@ -78,7 +78,7 @@ ${parkhausServiceSession.zeigeHTMLParkhausListe()}
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
-                         extra_buttons='["Average","Sum","Total Users","Cars","Undo","Redo"]'
+                         extra_buttons='["Average","Sum","Total Users","Cars",{"extra_class":"undo start","extra_inner":"Undo","extra_popup_title":"Undo and Restart"},{"extra_class":"redo start","extra_inner":"Redo","extra_popup_title":"Redo and Restart"}]'
                          extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
     </ccm-parkhaus-10-5-0>
 </div>
