@@ -1,6 +1,8 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.persistence.*
+import kotlinx.serialization.SerialName
 import java.time.Instant
 import java.util.*
 import kotlin.collections.ArrayList
@@ -35,5 +37,21 @@ open class Ticket {
 
     @Column(nullable = true)
     open var price: Int = 0
+
+
+    fun zuParkhausServletPostDto(): ParkhausServletPostDto {
+        return ParkhausServletPostDto(
+            nr = this.Auto!!.Autonummer.toInt(),
+            timer = this.Ausstellungsdatum.time,
+            duration = this.Ausstellungsdatum.time,
+            price = this.price.toDouble() / 100,
+            hash = this.Auto!!.Hash!!,
+            color = this.Auto!!.Farbe !!,
+            space = this.Auto!!.Platznummer !!,
+            clientCategory = this.Auto!!.Kategorie,
+            vehicleType = this.Auto!!.Typ,
+            license = this.Auto!!.Kennzeichen !!
+        )
+    }
 
 }

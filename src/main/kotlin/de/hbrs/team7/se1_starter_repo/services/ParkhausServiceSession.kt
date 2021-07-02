@@ -117,6 +117,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     override fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
+        val originalPlatz = params.space
         val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
         val belegtePlätze = getAutosInParkEbene(parkhausEbeneID, true)
             .map { auto -> auto.Platznummer !! }.toSet()
@@ -141,14 +142,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         // this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
         val saved = this.databaseGlobal.persistEntity(ticket)
         val test = this.databaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
-        print(test.first().Ausstellungsdatum)
+        // print(test.first().Ausstellungsdatum)
+        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.Autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.Platznummer}")
         return ticket
     }
 
     override fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
+
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
         this.databaseGlobal.persistEntity(auto)
-        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.Autonummer}")
         undoList.add(auto)
         return auto
     }

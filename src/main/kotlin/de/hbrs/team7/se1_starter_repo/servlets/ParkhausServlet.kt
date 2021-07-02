@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.encodeToJsonElement
 import java.io.BufferedReader
@@ -175,7 +176,7 @@ abstract class ParkhausServlet : HttpServlet() {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val ticket = parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
                 parkhausServiceSession.loescheRedoList()
-                out.write((ticket.Auto!!.Platznummer!!).toString() )
+                out.write( Json.encodeToString(ticket.zuParkhausServletPostDto())  )
 
             }
             "leave" -> {

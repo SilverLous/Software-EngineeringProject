@@ -14,8 +14,8 @@ public class Level1Servlet : ParkhausServlet()  {
         maxPlätze = 12,
         öffnungszeit = 6,
         ladenschluss = 24,
-        verzögerung = 100,
-        simulationsGeschwindigkeit = 5,
+        verzögerung = 200,
+        simulationsGeschwindigkeit = 1,
         FahrzeugPreise = hashMapOf(
             "PKW" to 1.0,
             "Pickup" to 1.0,
