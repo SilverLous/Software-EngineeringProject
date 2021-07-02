@@ -3,16 +3,10 @@ package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.dto.LogEintragDTO
 import de.hbrs.team7.se1_starter_repo.dto.LogKategorieDTO
-import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
-import io.reactivex.rxjava3.subjects.PublishSubject
 import io.reactivex.rxjava3.subjects.ReplaySubject
+import java.util.logging.*;
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
-import jakarta.inject.Inject
-import jakarta.inject.Named
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 
 
 /*
@@ -27,6 +21,14 @@ kotlin is final by default
 open class LoggerServiceGlobal { // : ParkhausServiceIF {
 
     open val logSubject: ReplaySubject<LogEintragDTO> = ReplaySubject.create()
+
+    private val logger: Logger = Logger.getLogger(Logger.GLOBAL_LOGGER_NAME)
+
+    private val logMapper = hashMapOf(
+        LogKategorieDTO.INFO to Level.INFO,
+        LogKategorieDTO.WARNING to Level.WARNING,
+        LogKategorieDTO.DEBUG to Level.FINE,
+    )
 
     // this is the constructor for own functionality (single called)
     @PostConstruct
@@ -50,6 +52,7 @@ open class LoggerServiceGlobal { // : ParkhausServiceIF {
     }
 
     open fun schreibeNachricht(kategorie: LogKategorieDTO, nachricht: String) {
+        logger.log(logMapper[kategorie],nachricht)
         logSubject.onNext(LogEintragDTO( kategorie = kategorie, nachricht = nachricht, zeitstempel = System.currentTimeMillis() ))
 
     }

@@ -5,7 +5,7 @@ import java.util.*
 
 @Serializable
 data class LogEintragDTO(
-    val zeitstempel: Long = System.currentTimeMillis(),
+    val zeitstempel: Long,
     val kategorie: LogKategorieDTO,
     val nachricht: String
 )

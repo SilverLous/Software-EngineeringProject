@@ -25,7 +25,7 @@ public open class LogServer : BasicWebsocketIF {
 
 
     init {
-        logService.logSubject.
+        logService.logSubject.doOnNext { it -> println(Json.encodeToString(it)) }.
             subscribe { it -> broadcastMessage(Json.encodeToString(it)) }
     }
 
