@@ -9,7 +9,6 @@ import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import java.util.*
-import kotlin.math.roundToInt
 
 
 /*
@@ -273,18 +272,31 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return getPrintStringAutos(parkhausEbeneID)
     }
 
+
+    /**
+     *
+     * Gibt die Autos im Parkaus als CSV wieder
+     * Notation: Nr/Timer/Duration/Price/Hash/Color/Space/client_category/vehicle_type/license
+     *
+     */
     override fun getPrintStringAutos(ParkhausEbeneId: Long): String {
         val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneId)
-        var printString = ""
-        for(e: Auto in autosInParkhausEbene ){
 
-            val preis = errechneTicketPreis(ParkhausEbeneId, e.Ticket !!, e)
-
-            printString += ("${e.Autonummer}/${e.Ticket?.Ausstellungsdatum?.time}" +
-                    "/${ if (e.ImParkhaus) 0 else e.getParkdauer()}/${e.getParkdauer()/100}/Ticket${e.Ticket?.Ticketnummer}/${e.Farbe}/${e.Platznummer}" +
-                    "/${e.Typ}/${e.Kategorie}/${e.Kennzeichen},")
+        var autoStringListe: List<String> = autosInParkhausEbene.map {
+                        "${it.Autonummer}/" +
+                        "${it.Ticket?.Ausstellungsdatum?.time}/" +
+                        "${if (it.ImParkhaus) 0 else it.getParkdauer()}/" +
+                        "${errechneTicketPreis(ParkhausEbeneId, it.Ticket!!, it)}/" +
+                        "Ticket${it.Ticket?.Ticketnummer}/" +
+                        "${it.Farbe}/" +
+                        "${it.Platznummer}/" +
+                        "${it.Typ}/" +
+                        "${it.Kategorie}/" +
+                        "${it.Kennzeichen}"
         }
-        return printString.dropLast(1)
+
+
+        return autoStringListe.joinToString (  "," )
     }
 
     open fun zeigeHTMLParkhausListe(): String {
