@@ -1,4 +1,4 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.interfaces
 
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import java.util.ArrayList

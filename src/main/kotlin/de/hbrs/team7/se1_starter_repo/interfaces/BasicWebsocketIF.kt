@@ -1,4 +1,4 @@
-package de.hbrs.team7.se1_starter_repo
+package de.hbrs.team7.se1_starter_repo.interfaces
 
 import jakarta.websocket.*
 import kotlinx.serialization.json.JsonElement
