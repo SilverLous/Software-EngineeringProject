@@ -314,6 +314,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 toUndo.ImParkhaus = false
                 val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)
                 deletedDatum.add(toUndo.Ticket!!.Ausstellungsdatum)
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)?.name!!)
                 toUndo.Ticket?.Auto = null
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
@@ -331,7 +332,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.mergeUpdatedEntity(toUndo)
             }
-            undoList.dropLast(1)
+            undoList.removeLast()
 
         }
     }
@@ -343,7 +344,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             if (toRedo.ImParkhaus) {
                 toRedo.Ticket?.Auto = toRedo
                 ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
-                redoList.dropLast(1)
+                deletedDatum.removeLast()
+                redoList.removeLast()
             } else {
                 toRedo.ImParkhaus = true
                 val pSPdto = ParkhausServletPostDto(
@@ -359,16 +361,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     toRedo.Kennzeichen!!
                 )
                 val auto = erstelleTicket(deletedReferenceToLevelName.last(), pSPdto).Auto
-                redoList.dropLast(1)
+                redoList.removeLast()
                 if (redoList.last().Autonummer == toRedo.Autonummer) {
-                    redoList.dropLast(1)
+                    redoList.removeLast()
                     redoList.add(auto!!)
                 }
 
             }
-            redoList.dropLast(1)
-            deletedReferenceToLevelName.dropLast(1)
-            deletedDatum.dropLast(1)
+            deletedReferenceToLevelName.removeLast()
         }
     }
 

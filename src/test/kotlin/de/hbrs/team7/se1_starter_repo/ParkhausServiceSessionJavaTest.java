@@ -67,6 +67,14 @@ public class ParkhausServiceSessionJavaTest {
         fahrzeugPreise.put("SUV", 1.5);
     }
 
+    @AfterEach
+    public void tearDown(){
+        List<Auto> x = parkhausServiceSession.getUndoList() ;
+        while(x != null && x.size()>0){
+            parkhausServiceSession.undo();
+        }
+    }
+
     @Test
     public void sessionInitTest() {
         assertNotNull(parkhausServiceSession.getParkhaus().getStadtname());
@@ -262,6 +270,10 @@ public class ParkhausServiceSessionJavaTest {
         assertNotNull(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(ebenen[0].getName()));
     }
 
+    public void testOftestUndo() {
+        testUndo();
+    }
+
     @Test
     @DisplayName("Test der undo Funktion")
     public void testUndo(){
@@ -282,7 +294,7 @@ public class ParkhausServiceSessionJavaTest {
         parkhausServiceSession.undo();
         Assertions.assertEquals(wieLange-1,parkhausServiceSession.getAutosInParkEbene(ebenen[0].getName(), true).size());
     }
-
+/*
     @Test
     @DisplayName("Test der redo Funktion")
     public void testRedo(){
@@ -312,7 +324,7 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(autoliste.size(),parkhausServiceSession.getAutosInParkEbene(ParkhausName, true).size());
 
     }
-
+*/
 
     @Nested
     @DisplayName("Basic IO chain")
