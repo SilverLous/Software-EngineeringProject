@@ -41,21 +41,11 @@ open class Parkhaus (
     }
 
     fun getUebersetztesBundesland(): String? {
-        var map: HashMap<String, String> = HashMap()
-        map.put("Munich", "München")
-        map.put("Bavaria", "Bayern")
-        map.put("North Rhine-Westphalia", "Nordrhein-Westfalen")
-        map.put("Hesse", "Hessen")
-        map.put("Mecklenburg-Western Pomerania", "Mecklenburg-Vorpommern")
-        map.put("Lower Saxony","Niedersachsen")
-        map.put("Rhineland-Palatinate","Rheinland-Pfalz")
-        map.put("Saxony","Sachsen")
-        map.put("Lower Saxony", "Sachsen-Anhalt")
-        map.put("Thuringia", "Thüringen")
-        if (map.containsKey(this.bundesland)) {
-            return map[bundesland]
+
+        return if (this.bundesland in BundeslandÜbersetzung) {
+            BundeslandÜbersetzung[bundesland]
         } else {
-            return bundesland
+            bundesland
         }
     }
 
@@ -72,6 +62,19 @@ open class Parkhaus (
     }
 
     companion object {
+
+        val BundeslandÜbersetzung = hashMapOf(
+            "Munich" to "München",
+            "Bavaria" to "Bayern",
+            "North Rhine-Westphalia" to "Nordrhein-Westfalen",
+            "Hesse" to "Hessen",
+            "Mecklenburg-Western Pomerania" to "Mecklenburg-Vorpommern",
+            "Lower Saxony" to "Niedersachsen",
+            "Rhineland-Palatinate" to "Rheinland-Pfalz",
+            "Saxony" to "Sachsen",
+            "Lower Saxony" to "Sachsen-Anhalt",
+            "Thuringia" to "Thüringen",
+        )
 
         fun fromCitiesDTO(city: citiesDTO): Parkhaus {
 
