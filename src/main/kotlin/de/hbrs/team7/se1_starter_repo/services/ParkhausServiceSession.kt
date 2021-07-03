@@ -9,6 +9,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import java.util.*
+import kotlin.math.roundToInt
 
 
 /*
@@ -182,11 +183,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto  ): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
-        val duration = (ticket.Ausfahrdatum?.time?.minus(ticket.Ausstellungsdatum.time))
+        val duration = (ticket.Auto?.getParkdauer())
 
         val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
                 entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
-        return ((duration?:0) + 0.5 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
+        return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
@@ -311,12 +312,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             redoList.add(toUndo)
             if (toUndo.ImParkhaus){
                 toUndo.ImParkhaus = false
-                val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)
-                deletedDatum.add(toUndo.Ticket?.Ausstellungsdatum!!)
+                val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)
+                deletedDatum.add(toUndo.Ticket!!.Ausstellungsdatum)
                 toUndo.Ticket?.Auto = null
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
-                databaseGlobal.deleteByID(toUndo?.Ticket?.Ticketnummer!!,Ticket::class.java)
+                databaseGlobal.deleteByID(toUndo.Ticket!!.Ticketnummer,Ticket::class.java)
                 toUndo.Ticket?.parkhausEbenen?.dropLast(1)
                 parkhausEbene?.tickets?.dropLast(1)
                 databaseGlobal.mergeUpdatedEntity(parkhausEbene)
@@ -324,7 +325,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             else{
                 toUndo.ImParkhaus = true
                 toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
-                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket?.Ticketnummer!!)?.name!!)
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)?.name!!)
                 toUndo.Ticket?.Ausfahrdatum = null
                 toUndo.Ticket?.price = 0
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)

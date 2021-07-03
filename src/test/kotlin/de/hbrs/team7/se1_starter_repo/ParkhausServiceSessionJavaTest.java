@@ -375,6 +375,25 @@ public class ParkhausServiceSessionJavaTest {
     }
 
     @Test
+    @DisplayName("Test von vernuenftigen Preis Funktion")
+    public void testNeuePreisFunktion() {
+        ParkhausEbene ebene = generiereEbenen(1)[0];
+        int wieOft = 8;
+        Auto a_test;
+        Ticket t_test;
+        Long timeNow = System.currentTimeMillis();
+        ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                0, eingabeHash, eingabeFarbe, 1, eingabeClientCategory, "bitteMult1", eingabeKennzeichen);
+        t_test = parkhausServiceSession.erstelleTicket(ebene.getName(),paramsErstesAuto);
+
+        for (int i=0;i<wieOft;i++){
+            parkhausServiceSession.ticketBezahlen(ebene.getName(),t_test,Date.from(Instant.ofEpochMilli(timeNow+1800000*(1+i))));
+            Assertions.assertEquals(100*(i+1) + 50 * ebene.getParkhaus().getPreisklasse(),t_test.getPrice());
+            parkhausServiceSession.undo();
+        }
+    }
+
+    @Test
     @DisplayName("Testen der wechsleEbeneLadenschluss-Funktion")
     public void testWechsleEbeneLadenschluss() {
         ParkhausEbene[] ebenen = generiereEbenen(2);
