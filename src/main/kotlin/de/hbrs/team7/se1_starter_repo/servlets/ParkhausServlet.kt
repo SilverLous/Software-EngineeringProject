@@ -46,17 +46,12 @@ abstract class ParkhausServlet : HttpServlet() {
 
     @Inject private lateinit var parkhausServiceSession: ParkhausServiceSession
 
-    @Inject private lateinit var context: ServletContext
-
 
     @Throws(ServletException::class)
     override fun init(config: ServletConfig) {
         super.init(config)
 
         println("Hello Parkhaus ${this.config.ebenenNamen} Base")
-
-
-        println(context.getAttribute("carsHaveLeft" + this.config.ebenenNamen))
 
 
         // this.parkhausEbene = this.parkhausServiceSession.initEbene(NAME())
