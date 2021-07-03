@@ -1,17 +1,12 @@
 package de.hbrs.team7.se1_starter_repo.servlets
 
-import de.hbrs.team7.se1_starter_repo.BasicWebsocketIF
-import de.hbrs.team7.se1_starter_repo.dto.LogEintragDTO
-import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
+import de.hbrs.team7.se1_starter_repo.interfaces.BasicWebsocketIF
 import de.hbrs.team7.se1_starter_repo.services.LoggerServiceGlobal
-import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import jakarta.enterprise.inject.spi.CDI
 import jakarta.websocket.*
 import jakarta.websocket.server.ServerEndpoint
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.concurrent.TimeUnit
 
 
 @ServerEndpoint("/log" )
