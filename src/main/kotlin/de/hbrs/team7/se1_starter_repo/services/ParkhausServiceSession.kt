@@ -186,7 +186,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
                 entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
-        return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt()
+        return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
     }
 
     override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
@@ -304,6 +304,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""
         }
         val buttonVariable = parkhausButtons?.joinToString (separator="") ?: ""
+        if (buttonVariable.length < 2) {
+            return "<h3>Wir sind bald an weiteren Standorten für Sie verfügbar!</h3>"
+        }
         return buttonVariable
         //"""<button type="button" class="btn btn-outline-primary" data-cityid="${}">Primary</button>"""
     }
@@ -314,8 +317,6 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             return statisticsChartDto(data = listOf(carData("bar", carMap.keys.toList(), carMap.values.map{a -> a.toDouble()/100})))
         }
         return null
-
-
     }
 
     override fun undo() {
