@@ -1,0 +1,22 @@
+@startuml
+title __Zustandsdiagramm Parkhaus-Ticket__
+[*] --> Datenerfassung: Betätigung des Knopfes
+Datenerfassung: do / Erstes zwischenspeichern von Daten
+Datenerfassung --> Datenpersistierung
+Datenpersistierung: do / Speichern des Tickets in die Datenbank
+Ausgegeben : do / Ausgeben des Tickets
+Datenpersistierung -> Ausgegeben
+
+
+
+Datenpersistierung -> Fehlerzustand: Fehler bei der Datenpersistierung
+
+Datenpersistierung -> Bezahlt : Bezahlung
+Ausgegeben -> Bezahlt : Bezahlung
+Ausgegeben -> Fehlerzustand : verloren gegangen
+Bezahlt : do / Abstempeln
+Bezahlt -> Datenaktualisierung
+Bezahlt --> Fehlerzustand: Fehler bei dem Bezahlvorgang
+Fehlerzustand --> Datenaktualisierung
+Datenaktualisierung --> [*]
+@enduml

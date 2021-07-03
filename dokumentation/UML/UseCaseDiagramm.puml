@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+actor Customer
+actor Manager
+
+rectangle Parkhaus {
+  Customer -- (Parkhaus verlassen)
+  Customer -- (freie Parkplaetze anzeigen)
+  Customer -- (Ticket ziehen)
+  Customer -- (Sprache einstellen)
+  Customer -- (Sprachverbindung mit Aufsicht herstellen)
+
+  (Parkhaus verlassen) .> (Ticket bezahlen) : <<include>>
+ note "<b>Condition</b>: Hilfe-Knopf wird gedrueckt \n<b>Extension point</b>: Hilfe" as N2
+(Parkhaus verlassen) <. N2
+N2 .. (gefuehrtes Menue anzeigen): <<extend>>
+  (Ticket bezahlen) ^-- (mit Bargeld bezahlen)
+  (Ticket bezahlen) ^-- (mit EC-Karte bezahlen)
+  (Ticket bezahlen) ^-- (mit Kreditkarte bezahlen)
+  (Ticket ziehen) ^-- (Einzelticket ziehen)
+  (Ticket ziehen) ^-- (Dauerticket ziehen)
+  Manager -- (Statistiken abrufen)
+  Manager -- (Schranken steuern)
+  Manager -- (Videoueberwachung auslesen)
+  Manager -- (Verbindung zu Personal aufbauen)
+  (Verbindung zu Personal aufbauen) ^-- (Sprachverbindung mit Aufsicht herstellen)
+  (Verbindung zu Personal aufbauen) ^-- (Stoerung melden)
+  Manager -- (Stoerung melden)
+  Manager -- (Preise anpassen)
+}
+@enduml

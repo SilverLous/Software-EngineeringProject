@@ -1,0 +1,27 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class TicketMaske {
+  +zieheTicket ( me: User )
+  +zeigeFehlermeldung ( fehler: Strings)
+}
+
+class WebsiteController {
+  -parkhausEbene: String
+  +zieheTicket ( me: User )
+}
+
+class ParkhausController {
+  -parkhausStandort: String
+  +zieheTicket ( me: User, ebene: String )
+}
+
+class DatenbankController {
+  +erstelleTicket ( me: User, ebene: String, standort: String ) : Ticket
+}
+
+DatenbankController "1..1" -- "1..*" ParkhausController
+ParkhausController "1..1" -- "1..*" WebsiteController
+WebsiteController "1..1" -- "1..1" TicketMaske
+
+@enduml
