@@ -57,10 +57,11 @@
     private ParkhausServiceSession parkhausServiceSession;
 %>
 <div class="box center grey-background">
-    <h1>Parkhaus Team 7 ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.bundesland} </h1>
+    <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()} </h1>
 </div>
-<div>
-${parkhausServiceSession.zeigeHTMLParkhausListe()}
+<div class="box center lightgreen">
+    <h2> <span style="color: navy; ">Unsere weiteren Standorte: </span></h2>
+    <h1> ${parkhausServiceSession.zeigeHTMLParkhausListe()}</h1>
 </div>
 <div class="box lightblue">
     <h2><a href="kasse.jsp">Kasse</a></h2>
