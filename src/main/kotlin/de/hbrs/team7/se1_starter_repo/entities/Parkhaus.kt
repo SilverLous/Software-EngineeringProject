@@ -3,7 +3,6 @@ package de.hbrs.team7.se1_starter_repo.entities
 import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import jakarta.persistence.*
 
-
 @Entity
 open class Parkhaus (
     // Kombinierte Tabelle aus Stadt und Parkhaus
@@ -39,6 +38,25 @@ open class Parkhaus (
 
     fun parkhausEbeneHinzufügen(ebene: ParkhausEbene) {
         ebenen.add(ebene)
+    }
+
+    fun getUebersetztesBundesland(): String? {
+        var map: HashMap<String, String> = HashMap()
+        map.put("Munich", "München")
+        map.put("Bavaria", "Bayern")
+        map.put("North Rhine-Westphalia", "Nordrhein-Westfalen")
+        map.put("Hesse", "Hessen")
+        map.put("Mecklenburg-Western Pomerania", "Mecklenburg-Vorpommern")
+        map.put("Lower Saxony","Niedersachsen")
+        map.put("Rhineland-Palatinate","Rheinland-Pfalz")
+        map.put("Saxony","Sachsen")
+        map.put("Lower Saxony", "Sachsen-Anhalt")
+        map.put("Thuringia", "Thüringen")
+        if (map.containsKey(this.bundesland)) {
+            return map[bundesland]
+        } else {
+            return bundesland
+        }
     }
 
     fun parkhausEbeneEntfernen(ebene: ParkhausEbene): Boolean {
