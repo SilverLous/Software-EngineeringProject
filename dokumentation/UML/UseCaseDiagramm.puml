@@ -1,20 +1,20 @@
 @startuml
 left to right direction
 skinparam packageStyle rectangle
-actor Customer
+actor Kunde
 actor Manager
 
 rectangle Parkhaus {
-  Customer -- (Parkhaus verlassen)
-  Customer -- (freie Parkplaetze anzeigen)
-  Customer -- (Ticket ziehen)
-  Customer -- (Sprache einstellen)
-  Customer -- (Sprachverbindung mit Aufsicht herstellen)
+  Kunde -- (Parkhaus verlassen)
+  Kunde -- (freie Parkplaetze anzeigen)
+  Kunde -- (Ticket ziehen)
+  Kunde -- (Sprache einstellen)
+  Kunde -- (Sprachverbindung mit Aufsicht herstellen)
 
   (Parkhaus verlassen) .> (Ticket bezahlen) : <<include>>
- note "<b>Condition</b>: Hilfe-Knopf wird gedrueckt \n<b>Extension point</b>: Hilfe" as N2
+ note "<b>Condition</b>: Hilfe-Knopf wird gedrückt \n<b>Extension point</b>: Hilfe" as N2
 (Parkhaus verlassen) <. N2
-N2 .. (gefuehrtes Menue anzeigen): <<extend>>
+N2 .. (geführtes Menü anzeigen): <<extend>>
   (Ticket bezahlen) ^-- (mit Bargeld bezahlen)
   (Ticket bezahlen) ^-- (mit EC-Karte bezahlen)
   (Ticket bezahlen) ^-- (mit Kreditkarte bezahlen)
@@ -22,11 +22,11 @@ N2 .. (gefuehrtes Menue anzeigen): <<extend>>
   (Ticket ziehen) ^-- (Dauerticket ziehen)
   Manager -- (Statistiken abrufen)
   Manager -- (Schranken steuern)
-  Manager -- (Videoueberwachung auslesen)
+  Manager -- (Videoüberwachung auslesen)
   Manager -- (Verbindung zu Personal aufbauen)
   (Verbindung zu Personal aufbauen) ^-- (Sprachverbindung mit Aufsicht herstellen)
-  (Verbindung zu Personal aufbauen) ^-- (Stoerung melden)
-  Manager -- (Stoerung melden)
+  (Verbindung zu Personal aufbauen) ^-- (Störung melden)
+  Manager -- (Störung melden)
   Manager -- (Preise anpassen)
 }
 @enduml
