@@ -25,6 +25,3 @@ Tb: Einrichten von Unit-Tests
 Tc: passende Datenanalysetools suchen
 Td: automatische Gitlab Pipeline um nach dem erfolgreichen Test die Seite direkt vom Master neu zu deployen
 Te: Recherche für verfügbare Framework-Addons zur Verringerung des Arbeitsaufwands
-
-Daraus resultierende Definition des MVP:
-Te, Ta, Tb, US12, US10

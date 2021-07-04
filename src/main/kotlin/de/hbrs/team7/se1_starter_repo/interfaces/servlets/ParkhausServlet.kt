@@ -1,4 +1,4 @@
-package de.hbrs.team7.se1_starter_repo.servlets
+package de.hbrs.team7.se1_starter_repo.interfaces.servlets
 
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
@@ -9,7 +9,6 @@ import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import jakarta.inject.Inject
 import jakarta.servlet.ServletConfig
-import jakarta.servlet.ServletContext
 import jakarta.servlet.ServletException
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest

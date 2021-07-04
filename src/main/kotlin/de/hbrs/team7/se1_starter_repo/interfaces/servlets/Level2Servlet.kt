@@ -1,21 +1,21 @@
-package de.hbrs.team7.se1_starter_repo.servlets
+package de.hbrs.team7.se1_starter_repo.interfaces.servlets
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.servlets.ParkhausServlet
 import jakarta.servlet.ServletConfig
 import jakarta.servlet.ServletException
 import jakarta.servlet.annotation.WebServlet
 
-@WebServlet(name = "level1Servlet", value = ["/level1-servlet"])
-public class Level1Servlet : ParkhausServlet()  {
+
+@WebServlet(name = "level2Servlet", value = ["/level2-servlet"])
+class Level2Servlet : ParkhausServlet() {
 
     override var config = ParkhausEbeneConfigDTO(
-        ebenenNamen = "Etage1",
-        maxPlätze = 12,
+        ebenenNamen = "Etage2",
+        maxPlätze = 10,
         öffnungszeit = 6,
         ladenschluss = 24,
-        verzögerung = 200,
-        simulationsGeschwindigkeit = 1,
+        verzögerung = 100,
+        simulationsGeschwindigkeit = 5,
         FahrzeugPreise = hashMapOf(
             "PKW" to 1.0,
             "Pickup" to 1.0,
@@ -26,11 +26,11 @@ public class Level1Servlet : ParkhausServlet()  {
         )
     )
 
-    @Throws(ServletException::class)
+        @Throws(ServletException::class)
     override fun init(config: ServletConfig) {
         super.init(config)
 
-        println("Etage 1 Servlet is Initialized")
+        println("Etage 2 Servlet is Initialized")
     }
 
 }
