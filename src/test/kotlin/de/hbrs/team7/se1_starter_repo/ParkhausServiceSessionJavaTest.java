@@ -289,7 +289,6 @@ public class ParkhausServiceSessionJavaTest {
     @DisplayName("Test der redo Funktion")
     @Disabled
     public void testRedo(){
-        DatabaseServiceGlobal dataBase = new DatabaseServiceGlobal();
         testUndo();
         String ParkhausName = "Generierte Ebene Nr. 0";
         List<Auto> autoliste = parkhausServiceSession.getAutosInParkEbene(ParkhausName, true);

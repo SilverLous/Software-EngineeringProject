@@ -218,7 +218,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val allVehicleTypes = allCarsThatLeft.map { a->a.typ }.toSet().toList()
         val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.typ==a }.fold(0.0) { acc, i -> acc + (i.ticket!!.price)/100 } }
         val farben = setzeFarben(sumPricesOverVehicleTypes)
-        return StatisticsChartDto(data = listOf(CarData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), layout = setzeTitel("Auto-Typen","Preis in Euro"))
+        return StatisticsChartDto(data = listOf(CarData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), Layout = setzeTitel("Auto-Typen","Preis in Euro"))
     }
 
     override fun getTageseinnahmen(parkhausEbeneName: String): EinnahmenBarDTO {
@@ -295,7 +295,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val farben = setzeFarben(carMap)
         if (carMap != null) {
             return StatisticsChartDto(data = listOf(CarData("bar",
-                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)), layout = setzeTitel("Bundesländer","Preis in Euro"))
+                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)), Layout = setzeTitel("Bundesländer","Preis in Euro"))
         }
         return null
     }
