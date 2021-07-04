@@ -39,16 +39,8 @@ public class ParkhausDatabaseGlobalJavaTest {
     ParkhausServiceSession parkhausServiceSession;
 
     @Inject
-    ParkhausServiceGlobal parkhausServiceGlobal;
-
-    @Inject
     DatabaseServiceGlobal databaseServiceGlobal;
 
-
-    @BeforeEach
-    public void setup(){
-        //Not used yet
-    }
 
     @Test
     public void sessionInitTest() {

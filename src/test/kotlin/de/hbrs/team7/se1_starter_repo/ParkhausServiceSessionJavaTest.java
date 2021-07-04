@@ -34,8 +34,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @AddBeanClasses({ParkhausServiceSession.class, ParkhausServiceGlobal.class})
 public class ParkhausServiceSessionJavaTest {
 
-
-
     @Inject
     BoundSessionContext sessionContext;
 
@@ -203,9 +201,14 @@ public class ParkhausServiceSessionJavaTest {
             t_test = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
             a_test = t_test.getAuto();
             Assertions.assertEquals(eingabeHash+i,a_test.getHash());
+
+            ParkhausServletPostDto t_dto_test = t_test.zuParkhausServletPostDto();
+
+            Assertions.assertNotNull(t_dto_test);
         }
 
     }
+
 
     @Test
     @DisplayName("Test der addCar-Funktion")

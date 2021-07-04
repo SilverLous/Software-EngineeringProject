@@ -10,14 +10,12 @@ open class FahrzeugTyp(
     var typ: String? = null,
 
     @Column(nullable = false)
-    var multiplikator: Double? = 1.0,
+    var multiplikator: Double = 1.0,
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST])
     @JoinColumn(name = "parkhausebene_id", nullable = false)
     open var parkhausEbene: ParkhausEbene? = null
 ) {
-
-
 
     @Id
     @GeneratedValue

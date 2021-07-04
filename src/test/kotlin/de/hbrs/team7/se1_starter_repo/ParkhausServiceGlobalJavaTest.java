@@ -19,21 +19,9 @@ import org.junit.jupiter.api.Test;
 @AddBeanClasses({ ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
 public class ParkhausServiceGlobalJavaTest {
 
-
-    @Inject
-    ParkhausServiceSession parkhausServiceSession;
-
     @Inject
     ParkhausServiceGlobal parkhausServiceGlobal;
 
-    @Inject
-    DatabaseServiceGlobal databaseServiceGlobal;
-
-
-    @BeforeEach
-    public void setup() {
-        //not yet implemented
-    }
 
     @Test
     public void sessionInitTest() {

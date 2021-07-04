@@ -20,7 +20,7 @@ Total loc: 7132
 
 git_data = {
   "Author": ["Thomas Gerlach", "Lukas Gerlach", "Alexander", "Eileen Hanz"],
-  "loc": [5250, 1139, 679, 64],
+  "loc": [5225, 1181, 594, 64],
   "coms": [99, 79, 65, 8],
   "fils": [45, 17, 26, 8]
 }
