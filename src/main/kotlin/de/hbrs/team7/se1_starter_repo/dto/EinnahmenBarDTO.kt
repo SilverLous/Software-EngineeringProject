@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class einnahmenBarDTO(
+data class EinnahmenBarDTO(
     @SerialName("data")
     val `data`: List<BarData>
 )

@@ -3,7 +3,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class statisticsChartDto(
+data class StatisticsChartDto(
     @SerialName("data")
     val `data`: List<carData>,
     @SerialName("layout")
