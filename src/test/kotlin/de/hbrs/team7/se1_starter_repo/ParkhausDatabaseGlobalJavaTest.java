@@ -369,62 +369,50 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     }
 
+
+    public ArrayList<Ticket> tagesEinnahmenDupliCode(int wieLange, int ticketPreis){
+        ArrayList<Ticket> ticketArray = generateDefaultTickets(wieLange);
+        ParkhausEbene ebene1 = ticketArray.get(0).getParkhausEbenen().get(0);
+        for (int i = 0;i<wieLange;i++){
+            ticketArray.get(wieLange-1-i).getAuto().setImParkhaus(false);
+            ticketArray.get(wieLange-1-i).setPrice(ticketPreis);
+            ticketArray.get(wieLange-1-i).setAusfahrdatum(Date.from(Instant.now()));
+            databaseServiceGlobal.mergeUpdatedEntity(ticketArray.get(wieLange-1-i).getAuto());
+        }
+        Auto aTest = new Auto(eingabeHash + wieLange+1, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
+        Ticket tTest = new Ticket();
+        tTest.setAuto(aTest);
+        tTest.setPrice(ticketPreis);
+        tTest.setAusfahrdatum(Date.from(Instant.parse("2018-11-30T18:35:24.00Z")));
+        aTest.setTicket(tTest);
+        databaseServiceGlobal.persistEntity(tTest);
+        ticketArray = ebene1.getTickets();
+        ticketArray.add(tTest);
+        ebene1.setTickets(ticketArray);
+        databaseServiceGlobal.mergeUpdatedEntity(tTest);
+        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
+        return ticketArray;
+
+    }
     @Test
     @DisplayName("Testen der Tages Einnahmen Funktion")
     public void testTagesEinnahmen() {
         int wieLange = 8;
         int ticketPreis = 500;
-        ArrayList<Ticket> ticketArray = generateDefaultTickets(8);
-        ParkhausEbene ebene1 = ticketArray.get(0).getParkhausEbenen().get(0);
-        for (int i = 0;i<8;i++){
-            ticketArray.get(7-i).getAuto().setImParkhaus(false);
-            ticketArray.get(7-i).setPrice(ticketPreis);
-            ticketArray.get(7-i).setAusfahrdatum(Date.from(Instant.now()));
-            databaseServiceGlobal.mergeUpdatedEntity(ticketArray.get(7-i).getAuto());
-        }
-        Auto aTest = new Auto(eingabeHash + wieLange+1, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
-        Ticket tTest = new Ticket();
-        tTest.setAuto(aTest);
-        tTest.setPrice(ticketPreis);
-        tTest.setAusfahrdatum(Date.from(Instant.parse("2018-11-30T18:35:24.00Z")));
-        aTest.setTicket(tTest);
-        databaseServiceGlobal.persistEntity(tTest);
-        ticketArray = ebene1.getTickets();
-        ticketArray.add(tTest);
-        ebene1.setTickets(ticketArray);
-        databaseServiceGlobal.mergeUpdatedEntity(tTest);
-        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
-        Assertions.assertEquals(ticketPreis * (wieLange), databaseServiceGlobal.errechneTagesEinnahmen(ebene1.getId()));
+        ArrayList<Ticket> ticketArray = tagesEinnahmenDupliCode(wieLange,ticketPreis);
+        Assertions.assertEquals(ticketPreis * (wieLange), databaseServiceGlobal.errechneTagesEinnahmen(ticketArray.get(0).getParkhausEbenen().get(0).getId()));
     }
 
     @Test
     @DisplayName("Testen der Wochen Einnahmen Funktion")
     public void testWochenEinnahmen() {
-        int wieLange = 8;
-        int ticketPreis = 500;
-        ArrayList<Ticket> ticketArray = generateDefaultTickets(8);
+        int wieLange = 4;
+        int ticketPreis = 200;
+        ArrayList<Ticket> ticketArray = tagesEinnahmenDupliCode(wieLange,ticketPreis);
         ParkhausEbene ebene1 = ticketArray.get(0).getParkhausEbenen().get(0);
-        for (int i = 0;i<8;i++){
-            ticketArray.get(7-i).getAuto().setImParkhaus(false);
-            ticketArray.get(7-i).setPrice(ticketPreis);
-            ticketArray.get(7-i).setAusfahrdatum(Date.from(Instant.now()));
-            databaseServiceGlobal.mergeUpdatedEntity(ticketArray.get(7-i).getAuto());
-        }
-        Auto aTest = new Auto(eingabeHash + wieLange+1, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
-        Ticket tTest = new Ticket();
-        tTest.setAuto(aTest);
-        tTest.setPrice(ticketPreis);
-        tTest.setAusfahrdatum(Date.from(Instant.parse("2018-11-30T18:35:24.00Z")));
-        aTest.setTicket(tTest);
-        databaseServiceGlobal.persistEntity(tTest);
-        ticketArray = ebene1.getTickets();
-        ticketArray.add(tTest);
-        ebene1.setTickets(ticketArray);
-        databaseServiceGlobal.mergeUpdatedEntity(tTest);
-        databaseServiceGlobal.mergeUpdatedEntity(ebene1);
         Assertions.assertEquals(ticketPreis * (wieLange), databaseServiceGlobal.errechneWochenEinnahmen(ebene1.getId()));
-        aTest = new Auto(eingabeHash + wieLange+2, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
-        tTest = new Ticket();
+        Auto aTest = new Auto(eingabeHash + wieLange+2, eingabeFarbe, 12, eingabeKennzeichen, eingabeVehikel, eingabeKategorie);
+        Ticket tTest = new Ticket();
         tTest.setAuto(aTest);
         tTest.setPrice(ticketPreis);
         tTest.setAusfahrdatum(Date.from(Instant.now().minus(1, ChronoUnit.DAYS)));
@@ -471,7 +459,6 @@ public class ParkhausDatabaseGlobalJavaTest {
             aTest.setTicket(tTest);
             databaseServiceGlobal.persistEntity(tTest);
             ticketArray.add(tTest);
-            System.out.print(ticketArray.size());
             ebene1.get(0).setTickets(ticketArray);
             databaseServiceGlobal.mergeUpdatedEntity(tTest);
             databaseServiceGlobal.mergeUpdatedEntity(ebene1.get(0));
@@ -515,7 +502,6 @@ public class ParkhausDatabaseGlobalJavaTest {
     public void testGetAutosByBundesLand(){
 
         Parkhaus parkhaus = generiereDefaultParkhaus();
-        Parkhaus parkhausBundesland2 = new Parkhaus( testStadt, "Testbundesland2", 0.0, 0.0, 0.0, 1  );
 
         ParkhausEbene[] ebenen = generiereEbenen(2,parkhaus);
         ParkhausEbene ebene1 = ebenen[0];

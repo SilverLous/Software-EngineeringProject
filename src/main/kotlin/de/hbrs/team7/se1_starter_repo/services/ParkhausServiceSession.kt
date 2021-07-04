@@ -184,8 +184,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         val duration = (ticket.Auto?.getParkdauer())
 
-        val fahrzeugMultiplikator: Double = ebene!!.fahrzeugTypen.find {
-                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator ?: 1.0
+        val fahrzeugMultiplikator: Double = (ebene?.fahrzeugTypen?.find {
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator) ?: 1.0
         return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
     }
 
