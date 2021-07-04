@@ -7,15 +7,15 @@ import org.junit.jupiter.api.Test;
 
 public class ParkhausTest {
 
-    static final String TestBundesland = "TestBundesland";
-    static final String TestStadtName = "TestStadt";
-    static final Double Testlat = 15.;
-    static final Double Testlong = 15.;
-    static final Double TestPop = 150.;
-    static final Integer TestPreis = 1;
+    static final String TESTBUNDESLAND = "TestBundesland";
+    static final String TESTSTADTNAME = "TestStadt";
+    static final Double TESTLAT = 15.;
+    static final Double TESTLONG = 15.;
+    static final Double TESTPOP = 150.;
+    static final Integer TESTPREIS = 1;
 
-    CitiesDTO testStadt = new CitiesDTO(TestBundesland, TestStadtName, 42,
-            Testlat, Testlong, TestPop, TestPreis);
+    CitiesDTO testStadt = new CitiesDTO(TESTBUNDESLAND, TESTSTADTNAME, 42,
+            TESTLAT, TESTLONG, TESTPOP, TESTPREIS);
 
     @Test
     @DisplayName("Teste Statischen Fabrikator")
@@ -23,12 +23,12 @@ public class ParkhausTest {
 
         Parkhaus pa = Parkhaus.Companion.fromCitiesDTO(testStadt);
 
-        Assertions.assertEquals(TestBundesland, pa.getBundesland());
-        Assertions.assertEquals(TestStadtName, pa.getStadtname());
-        Assertions.assertEquals(Testlat, pa.getLat());
-        Assertions.assertEquals(Testlong, pa.getLng());
-        Assertions.assertEquals(TestPop, pa.getPopulation());
-        Assertions.assertEquals(TestPreis, pa.getPreisklasse());
+        Assertions.assertEquals(TESTBUNDESLAND, pa.getBundesland());
+        Assertions.assertEquals(TESTSTADTNAME, pa.getStadtname());
+        Assertions.assertEquals(TESTLAT, pa.getLat());
+        Assertions.assertEquals(TESTLONG, pa.getLng());
+        Assertions.assertEquals(TESTPOP, pa.getPopulation());
+        Assertions.assertEquals(TESTPREIS, pa.getPreisklasse());
 
     }
 
