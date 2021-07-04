@@ -342,7 +342,7 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(120, ebene.getMaxPlätze());
         int neuePlaetze = zufallszahlengenerator.nextInt(19);
         neuePlaetze++;
-        parkhausServiceSession.wechsleEbeneMaxParkplätze(ebene.getName(),12,neuePlaetze);
+        parkhausServiceSession.wechsleEbeneMaxParkplaetze(ebene.getName(),12,neuePlaetze);
         Assertions.assertEquals(neuePlaetze, ebene.getMaxPlätze());
         Assertions.assertEquals(120, ebene2.getMaxPlätze());
     }
@@ -357,7 +357,7 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(6,ebene2.getöffnungszeit());
         int neueOeffnungszeit = zufallszahlengenerator.nextInt(22);
         neueOeffnungszeit++;
-        parkhausServiceSession.wechsleEbeneÖffnungszeit(ebene.getName(),6,neueOeffnungszeit);
+        parkhausServiceSession.wechsleEbeneOeffnungszeit(ebene.getName(),6,neueOeffnungszeit);
         Assertions.assertEquals(neueOeffnungszeit,ebene.getöffnungszeit());
         Assertions.assertEquals(6,ebene2.getöffnungszeit());
     }

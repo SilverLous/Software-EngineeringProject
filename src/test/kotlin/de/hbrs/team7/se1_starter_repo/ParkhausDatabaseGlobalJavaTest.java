@@ -1,7 +1,7 @@
 package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
-import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO;
+import de.hbrs.team7.se1_starter_repo.dto.OldGermanyStatisticsDTO;
 import de.hbrs.team7.se1_starter_repo.entities.*;
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal;
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal;
@@ -14,8 +14,6 @@ import org.jboss.weld.junit5.auto.AddBeanClasses;
 import org.jboss.weld.junit5.auto.EnableAutoWeld;
 import org.junit.jupiter.api.*;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -478,7 +476,7 @@ public class ParkhausDatabaseGlobalJavaTest {
     @Test
     @DisplayName("Testen Autos nach Alte Deutschland Daten Funktion")
     public void getAlteDeutschlandDaten(){
-        oldGermanyStatisticsDTO statisitk =  databaseServiceGlobal.getAlteDeutschlandDaten();
+        OldGermanyStatisticsDTO statisitk =  databaseServiceGlobal.getAlteDeutschlandDaten();
 
         // Für genauere Abfragen müsste die Datenbank gelöscht werden
         Assertions.assertNotNull(statisitk.getBrd().getFirst());

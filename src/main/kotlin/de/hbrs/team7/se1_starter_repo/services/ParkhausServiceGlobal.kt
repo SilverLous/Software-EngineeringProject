@@ -3,7 +3,7 @@ package de.hbrs.team7.se1_starter_repo.services
 
 import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
+import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import io.reactivex.rxjava3.subjects.PublishSubject
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -54,7 +54,7 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
     }
 
 
-    open var cities = Json.decodeFromString<List<citiesDTO>>("""
+    open var cities = Json.decodeFromString<List<CitiesDTO>>("""
         [
         {"ct":"Berlin","lat":52.5167,"lng":13.3833,"an":"Berlin","po":3644826,"id":1276451290,"pt":5},
         {"ct":"Hamburg","lat":53.55,"lng":10,"an":"Hamburg","po":1841179,"id":1276041799,"pt":5},

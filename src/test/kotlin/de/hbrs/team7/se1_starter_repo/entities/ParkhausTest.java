@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.entities;
 
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO;
+import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ public class ParkhausTest {
     final Double testPop = 150.;
     final Integer testPreis = 1;
 
-    citiesDTO testStadt = new citiesDTO(testBundesland, testStadtName, 42,
+    CitiesDTO testStadt = new CitiesDTO(testBundesland, testStadtName, 42,
             testlat, testlong, testPop, testPreis);
 
     @Test

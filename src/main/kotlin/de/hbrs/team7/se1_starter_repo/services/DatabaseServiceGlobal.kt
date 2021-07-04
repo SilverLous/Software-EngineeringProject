@@ -1,7 +1,7 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
-import de.hbrs.team7.se1_starter_repo.dto.oldGermanyStatisticsDTO
+import de.hbrs.team7.se1_starter_repo.dto.OldGermanyStatisticsDTO
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
@@ -9,8 +9,6 @@ import de.hbrs.team7.se1_starter_repo.entities.Ticket
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 import jakarta.persistence.Persistence
-import jakarta.persistence.criteria.CriteriaBuilder
-import jakarta.persistence.criteria.CriteriaQuery
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -232,7 +230,7 @@ open class DatabaseServiceGlobal {
         return belegtePlaetze
     }
 
-    open fun getAlteDeutschlandDaten(): oldGermanyStatisticsDTO {
+    open fun getAlteDeutschlandDaten(): OldGermanyStatisticsDTO {
 
         val ddr = listOf("Saxony", "Thuringia", "Saxony-Anhalt", "Brandenburg", "Mecklenburg-Western Pomerania")
         val ddr_str = "( 'Saxony', 'Thuringia', 'Saxony-Anhalt', 'Brandenburg', 'Mecklenburg-Western Pomerania')"
@@ -286,7 +284,7 @@ open class DatabaseServiceGlobal {
             )
         }.first()
 
-        return oldGermanyStatisticsDTO(
+        return OldGermanyStatisticsDTO(
             if (brdResult.toList().size == 1) Pair(0, 0) else brdResult,
             if (ddrResult.toList().size == 1) Pair(0, 0) else ddrResult,
         )
