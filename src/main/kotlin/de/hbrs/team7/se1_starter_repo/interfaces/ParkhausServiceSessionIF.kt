@@ -67,4 +67,6 @@ interface ParkhausServiceSessionIF {
     fun setzeFarben(carMap: Map<String, Int>?): marker
 
     fun setzeFarben(values: List<Double>): marker
+
+    fun setzeTitel(xAchse:String,yAchse:String):layout
 }
