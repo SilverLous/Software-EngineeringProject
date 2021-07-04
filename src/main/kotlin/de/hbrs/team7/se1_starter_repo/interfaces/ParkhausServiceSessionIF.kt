@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.interfaces
 
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.einnahmenBarDTO
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
@@ -15,7 +16,7 @@ interface ParkhausServiceSessionIF {
 
     fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Auto
 
-    fun initEbene(name: String): ParkhausEbene
+    fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene
 
     fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
 
