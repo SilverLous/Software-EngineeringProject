@@ -339,8 +339,6 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
                 databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
                 databaseGlobal.deleteByID(toUndo.Ticket!!.Ticketnummer,Ticket::class.java)
-                toUndo.Ticket?.parkhausEbenen?.dropLast(1)
-                parkhausEbene?.tickets?.dropLast(1)
                 databaseGlobal.mergeUpdatedEntity(parkhausEbene)
             }
             else{
@@ -367,17 +365,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
             } else {
                 toRedo.ImParkhaus = true
-                val pSPdto = ParkhausServletPostDto(
-                    (1..9999).random(),
-                    deletedDatum.last().time,
-                    0,
-                    0.0,
-                    toRedo.Hash!!,
-                    toRedo.Farbe!!,
-                    toRedo.Platznummer!!,
-                    toRedo.Kategorie,
-                    toRedo.Typ,
-                    toRedo.Kennzeichen!!
+                val pSPdto = ParkhausServletPostDto((1..9999).random(),deletedDatum.last().time,0,0.0,toRedo.Hash!!,
+                    toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!
                 )
                 val auto = erstelleTicket(deletedReferenceToLevelName.removeLast(), pSPdto).Auto
                 if (redoList.last().Autonummer == toRedo.Autonummer) {
