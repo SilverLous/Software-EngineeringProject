@@ -1022,7 +1022,7 @@
         axios.get('/team7Parkhaus/level1-servlet?cmd=einnahmenueberbundesland')
             .then(function (response) {
                 EinnahmenUeberBundesland = response.data
-                Plotly.newPlot('EinnahmenUeberBundesland', EinnahmenUeberBundesland,layout, {scrollZoom: true});
+                Plotly.newPlot('EinnahmenUeberBundesland', EinnahmenUeberBundesland,layout, {scrollZoom: true, color:'EinnahmenUeberBundesland'});
             })
     }
 

@@ -7,6 +7,7 @@ import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
+import java.awt.Color
 import java.io.Serializable
 import java.util.*
 
@@ -218,7 +219,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val allCarsThatLeft = databaseGlobal.getautosInParkEbene(parkhausEbeneID, false)
         val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
         val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
-        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes)))
+        val farben = setzeFarben(sumPricesOverVehicleTypes)
+        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)))
     }
 
     override fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO {
@@ -291,10 +293,33 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun erstellePreiseFürBundesländer(): statisticsChartDto? {
         val carMap = databaseGlobal.getTicketpreiseProBundesland()
+        val uebersetzteNamen = carMap?.keys?.map { it-> Parkhaus.BundeslandÜbersetzung[it]?:it }
+        val farben = setzeFarben(carMap)
         if (carMap != null) {
-            return statisticsChartDto(data = listOf(carData("bar", carMap.keys.toList(), carMap.values.map{a -> a.toDouble()/100})))
+            return statisticsChartDto(data = listOf(carData("bar",
+                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)))
         }
         return null
+    }
+
+    override fun setzeFarben(carMap: Map<String, Int>?): marker{
+        val farbenListe = ArrayList<String>()
+        val max = carMap?.values?.maxOrNull()
+
+        for(item in carMap!!.values){
+            farbenListe.add("rgba(${170-170*item/max!!},${170*item/max},0,1)")
+        }
+        return marker(farbenListe)
+    }
+
+    override fun setzeFarben(values: List<Double>): marker{
+        val farbenListe = ArrayList<String>()
+        val max = values.maxOrNull()
+
+        for(item in values){
+            farbenListe.add("rgba(${170-170*item/max!!},${170*item/max},0,1)")
+        }
+        return marker(farbenListe)
     }
 
     override fun undo() {

@@ -1,9 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.interfaces
 
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
-import de.hbrs.team7.se1_starter_repo.dto.einnahmenBarDTO
-import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
+import de.hbrs.team7.se1_starter_repo.dto.*
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
@@ -63,4 +60,8 @@ interface ParkhausServiceSessionIF {
     fun undo()
 
     fun redo()
+
+    fun setzeFarben(carMap: Map<String, Int>?): marker
+
+    fun setzeFarben(values: List<Double>): marker
 }

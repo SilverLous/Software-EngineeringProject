@@ -14,5 +14,13 @@ data class carData(
     @SerialName("x")
     val x: List<String>,
     @SerialName("y")
-    val y: List<Double>
+    val y: List<Double>,
+    @SerialName("marker")
+    val marker: marker
+)
+
+@Serializable
+data class marker(
+    @SerialName("color")
+    val color: List<String>
 )

@@ -72,7 +72,7 @@ open class Parkhaus (
             "Lower Saxony" to "Niedersachsen",
             "Rhineland-Palatinate" to "Rheinland-Pfalz",
             "Saxony" to "Sachsen",
-            "Lower Saxony" to "Sachsen-Anhalt",
+            "Saxony-Anhalt" to "Sachsen-Anhalt",
             "Thuringia" to "Thüringen",
         )
 
