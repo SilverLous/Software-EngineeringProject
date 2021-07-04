@@ -43,7 +43,6 @@ public class ParkhausServiceSessionJavaTest {
     ParkhausServiceGlobal parkhausServiceGlobal;
 
 
-    String etage = "test";
     SecureRandom zufallszahlengenerator;
 
     HashMap<String, Double> fahrzeugPreise = new HashMap<>();
@@ -365,7 +364,6 @@ public class ParkhausServiceSessionJavaTest {
     public void testNeuePreisFunktion() {
         ParkhausEbene ebene = generiereEbenen(1)[0];
         int wieOft = 8;
-        Auto aTest;
         Ticket tTest;
         Long timeNow = System.currentTimeMillis();
         ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
