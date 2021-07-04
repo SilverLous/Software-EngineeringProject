@@ -220,7 +220,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
         val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
         val farben = setzeFarben(sumPricesOverVehicleTypes)
-        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)))
+        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), layout = setzeTitel("Auto-Typen","Preis in Euro"))
     }
 
     override fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO {
@@ -297,7 +297,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val farben = setzeFarben(carMap)
         if (carMap != null) {
             return statisticsChartDto(data = listOf(carData("bar",
-                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)))
+                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)), layout = setzeTitel("Bundesländer","Preis in Euro"))
         }
         return null
     }
@@ -320,6 +320,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             farbenListe.add("rgba(${170-170*item/max!!},${170*item/max},0,1)")
         }
         return marker(farbenListe)
+    }
+
+    override fun setzeTitel(xAchse:String,yAchse:String):layout{
+        return layout(xaxis(title(xAchse)),yaxis(title(yAchse)))
     }
 
     override fun undo() {
