@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class EinnahmenBarDTO(
     @SerialName("data")
-    val `data`: List<BarData>
+    val data: List<BarData>
 )
 @Serializable
 data class BarData(

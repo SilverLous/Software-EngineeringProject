@@ -34,7 +34,7 @@ public class LogServiceGlobalJavaTest {
     }
 
     @Test
-    public void LoggerInitTest() {
+    public void loggerInitTest() {
 
         List<LogEintragDTO> events = new ArrayList<>();
         this.loggerServiceGlobal.getLogSubject().subscribe(

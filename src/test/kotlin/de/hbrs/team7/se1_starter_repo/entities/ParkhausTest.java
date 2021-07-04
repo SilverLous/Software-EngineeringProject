@@ -7,19 +7,19 @@ import org.junit.jupiter.api.Test;
 
 public class ParkhausTest {
 
-    final String testBundesland = "TestBundesland";
-    final String testStadtName = "TestStadt";
-    final Double testlat = 15.;
-    final Double testlong = 15.;
-    final Double testPop = 150.;
-    final Integer testPreis = 1;
+    final static String testBundesland = "TestBundesland";
+    final static String testStadtName = "TestStadt";
+    final static Double testlat = 15.;
+    final static Double testlong = 15.;
+    final static Double testPop = 150.;
+    final static Integer testPreis = 1;
 
     CitiesDTO testStadt = new CitiesDTO(testBundesland, testStadtName, 42,
             testlat, testlong, testPop, testPreis);
 
     @Test
     @DisplayName("Teste Statischen Fabrikator")
-    public void TestFabrikator() {
+    public void testFabrikator() {
 
         Parkhaus pa = Parkhaus.Companion.fromCitiesDTO(testStadt);
 

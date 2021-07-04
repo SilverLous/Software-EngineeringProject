@@ -118,8 +118,6 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
 
-        val saved = this.databaseGlobal.persistEntity(ticket)
-
         logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.platznummer}")
         return ticket
     }
