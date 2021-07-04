@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.services
 
-import de.hbrs.team7.se1_starter_repo.ParkhausServiceSessionIF
+import de.hbrs.team7.se1_starter_repo.interfaces.ParkhausServiceSessionIF
 import de.hbrs.team7.se1_starter_repo.dto.*
 import de.hbrs.team7.se1_starter_repo.entities.*
 import jakarta.annotation.PostConstruct
@@ -133,16 +133,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val auto = autoHinzufügen(parkhausEbeneID, params)
 
         val ticket = Ticket()
-        // ticket.Ausstellungsdatum = Date.from(Instant.now())
+
         ticket.Preisklasse = 2
         ticket.Auto = auto
         auto.Ticket = ticket
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
-        // this.DatabaseGlobal.mergeUpdatedEntity(parkhausEbeneToAdd)
+
         val saved = this.databaseGlobal.persistEntity(ticket)
         val test = this.databaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
-        // print(test.first().Ausstellungsdatum)
+
         logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.Autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.Platznummer}")
         return ticket
     }
@@ -352,17 +352,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     override fun redo() {
         if (redoList.size>0) {
-            val toRedo = redoList.last()
+            val toRedo = redoList.removeLast()
             undoList.add(toRedo)
             if (toRedo.ImParkhaus) {
                 toRedo.Ticket?.Auto = toRedo
-                ticketBezahlen(deletedReferenceToLevelName.last(), toRedo.Ticket!!, deletedDatum.last())
-                deletedDatum.removeLast()
-                redoList.removeLast()
+                ticketBezahlen(deletedReferenceToLevelName.removeLast(), toRedo.Ticket!!, deletedDatum.removeLast())
+
             } else {
                 toRedo.ImParkhaus = true
                 val pSPdto = ParkhausServletPostDto(
-                    2,
+                    (1..9999).random(),
                     deletedDatum.last().time,
                     0,
                     0.0,
@@ -373,15 +372,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     toRedo.Typ,
                     toRedo.Kennzeichen!!
                 )
-                val auto = erstelleTicket(deletedReferenceToLevelName.last(), pSPdto).Auto
-                redoList.removeLast()
+                val auto = erstelleTicket(deletedReferenceToLevelName.removeLast(), pSPdto).Auto
                 if (redoList.last().Autonummer == toRedo.Autonummer) {
                     redoList.removeLast()
                     redoList.add(auto!!)
                 }
 
             }
-            deletedReferenceToLevelName.removeLast()
         }
     }
 
