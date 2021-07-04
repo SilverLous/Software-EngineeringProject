@@ -39,12 +39,22 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     @Inject private lateinit var logGlobal: LoggerServiceGlobal
 
+
+    // scrapped idea because it is not testable with junit
+    //@Inject private lateinit var servletContext: ServletContext
+
+    @Deprecated("Nutze parkhaus.stadtname etc")
+    open lateinit var city: citiesDTO
+        protected set
+
+
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
+    // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
     override fun sessionInit() {
 
         erstelleInitStadt()
-        logGlobal.schreibeInfo("Neue Stadt: ${parkhaus.stadtname} (ParkhausEbeneID: ${parkhaus.id})")
+        print("Hello from ${parkhaus.stadtname} (ParkhausEbeneID: ${parkhaus.id}) Service new User ")
 
     }
 
@@ -76,7 +86,19 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             }
     }
 
-    override fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
+    @Deprecated("use config")
+    override fun initEbene(name: String): ParkhausEbene {
+        val pe = ParkhausEbene(name, this.parkhaus)
+        val pePersist = databaseGlobal.persistEntity(pe)
+
+        parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
+
+        this.parkhausServiceGlobal.levelSet.add(name)
+        parkhausEbenen.add(pe)
+        return databaseGlobal.persistEntity(pe)
+    }
+
+    open fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
         val parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
 
         config.parkhaus = parkhaus
