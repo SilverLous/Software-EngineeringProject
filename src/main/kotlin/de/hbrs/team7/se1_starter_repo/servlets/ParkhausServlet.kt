@@ -125,7 +125,7 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = charset
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstellePreiseFürBundesländer())
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstellePreiseFuerBundeslaender())
                 out.print(jsonData)
             }
 
@@ -182,13 +182,13 @@ abstract class ParkhausServlet : HttpServlet() {
             }
 
             "change_max" -> {
-                parkhausServiceSession.wechsleEbeneMaxParkplätze(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.wechsleEbeneMaxParkplaetze(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
                 parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
             "change_open_from" -> {
-                parkhausServiceSession.wechsleEbeneÖffnungszeit(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.wechsleEbeneOeffnungszeit(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
                 parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }

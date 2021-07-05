@@ -5,68 +5,66 @@ import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.dto.einnahmenBarDTO
 import de.hbrs.team7.se1_starter_repo.dto.statisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
-import de.hbrs.team7.se1_starter_repo.entities.Parkhaus
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
-import java.time.Instant
 import java.util.*
 
 interface ParkhausServiceSessionIF {
     fun sessionInit()
 
-    fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto): Auto
+    fun autoHinzufuegen(parkhausEbeneId: Long, params: ParkhausServletPostDto): Auto
 
     fun initEbene(name: String): ParkhausEbene
 
-    fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
+    fun erstelleTicket(parkhausEbeneName: String, params: ParkhausServletPostDto): Ticket
 
-    fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
+    fun ticketBezahlen(parkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long
 
-    fun ticketBezahlen(ParkhausEbeneId: Long, ticket: Ticket, timeCheckOut: Date): Long
+    fun ticketBezahlen(parkhausEbeneId: Long, ticket: Ticket, timeCheckOut: Date): Long
 
-    fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int
+    fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int
 
-    fun getDurchschnittUeberAutos(ParkhausEbeneName: String): Int
+    fun getDurchschnittUeberAutos(parkhausEbeneName: String): Int
 
-    fun getEbeneUeberId(ParkhausEbeneID: Long): ParkhausEbene
+    fun getEbeneUeberId(parkhausEbeneId: Long): ParkhausEbene
 
-    fun findeTicketUeberParkplatz(ParkhausEbeneName: String, placeNumber: Int): Ticket?
+    fun findeTicketUeberParkplatz(parkhausEbeneName: String, placeNumber: Int): Ticket?
 
-    fun getAlleUser(ParkhausEbeneName: String): Int
+    fun getAlleUser(parkhausEbeneName: String): Int
 
-    fun getAktuelleUser(ParkhausEbeneName: String): Int
+    fun getAktuelleUser(parkhausEbeneName: String): Int
 
     fun getParkhausEbenen():List<ParkhausEbene>
 
-    fun getIdUeberName(ParkhausEbeneName: String):Long
+    fun getIdUeberName(parkhausEbeneName: String):Long
 
-    fun getAutosInParkEbene(ParkhausEbeneName: String, ImParkhaus: Boolean): List<Auto>
+    fun getAutosInParkEbene(parkhausEbeneName: String, imParkhaus: Boolean): List<Auto>
 
-    fun getAutosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>
+    fun getAutosInParkEbene(parkhausEbeneId: Long, imParkhaus : Boolean): List<Auto>
 
-    fun erstelleStatistikenUeberFahrzeuge(ParkhausEbeneName: String): statisticsChartDto
+    fun erstelleStatistikenUeberFahrzeuge(parkhausEbeneName: String): StatisticsChartDto
 
-    fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
+    fun getTageseinnahmen(parkhausEbeneName: String): EinnahmenBarDTO
 
-    fun getTageseinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO
+    fun getTageseinnahmen(parkhausEbeneId: Long): EinnahmenBarDTO
 
-    fun getWocheneinnahmen(ParkhausEbeneName: String): einnahmenBarDTO
+    fun getWocheneinnahmen(parkhausEbeneName: String): EinnahmenBarDTO
 
-    fun getWocheneinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO
+    fun getWocheneinnahmen(parkhausEbeneId: Long): EinnahmenBarDTO
 
-    fun getPrintStringAutos(ParkhausEbeneName: String): String
+    fun getPrintStringAutos(parkhausEbeneName: String): String
 
-    fun getPrintStringAutos(ParkhausEbeneId: Long): String
+    fun getPrintStringAutos(parkhausEbeneId: Long): String
 
-    fun erstellePreiseFürBundesländer(): statisticsChartDto?
+    fun erstellePreiseFuerBundeslaender(): StatisticsChartDto?
 
     fun undo()
 
     fun redo()
 
-    fun setzeFarben(carMap: Map<String, Int>?): marker
+    fun setzeFarben(carMap: Map<String, Int>?): Marker
 
-    fun setzeFarben(values: List<Double>): marker
+    fun setzeFarben(values: List<Double>): Marker
 
-    fun setzeTitel(xAchse:String,yAchse:String):layout
+    fun setzeTitel(xAchse:String,yAchse:String):Layout
 }

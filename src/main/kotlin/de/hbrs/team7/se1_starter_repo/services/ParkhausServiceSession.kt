@@ -7,7 +7,6 @@ import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.SessionScoped
 import jakarta.inject.Inject
 import jakarta.inject.Named
-import java.awt.Color
 import java.io.Serializable
 import java.util.*
 
@@ -39,22 +38,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     @Inject private lateinit var logGlobal: LoggerServiceGlobal
 
-
-    // scrapped idea because it is not testable with junit
-    //@Inject private lateinit var servletContext: ServletContext
-
-    @Deprecated("Nutze parkhaus.stadtname etc")
-    open lateinit var city: citiesDTO
-        protected set
-
-
     // this is the constructor for own functionality (called per new browser connection)
     @PostConstruct
-    // open fun sessionInit(@Observes @Initialized(SessionScoped::class) pServletContext: ServletContext) {
     override fun sessionInit() {
 
         erstelleInitStadt()
-        print("Hello from ${parkhaus.stadtname} (ParkhausEbeneID: ${parkhaus.id}) Service new User ")
+        logGlobal.schreibeInfo("Neue Stadt: ${parkhaus.stadtname} (parkhausEbeneID: ${parkhaus.id})")
 
     }
 
@@ -86,19 +75,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             }
     }
 
-    @Deprecated("use config")
-    override fun initEbene(name: String): ParkhausEbene {
-        val pe = ParkhausEbene(name, this.parkhaus)
-        val pePersist = databaseGlobal.persistEntity(pe)
-
-        parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
-
-        this.parkhausServiceGlobal.levelSet.add(name)
-        parkhausEbenen.add(pe)
-        return databaseGlobal.persistEntity(pe)
-    }
-
-    open fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
+    override fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
         val parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java) !!
 
         config.parkhaus = parkhaus
@@ -117,38 +94,36 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return peGespeichert
     }
 
-    override fun erstelleTicket(ParkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
+    override fun erstelleTicket(parkhausEbeneName: String, params: ParkhausServletPostDto): Ticket {
         val originalPlatz = params.space
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
-        val belegtePlätze = getAutosInParkEbene(parkhausEbeneID, true)
-            .map { auto -> auto.Platznummer !! }.toSet()
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
+        val belegtePlaetze = getAutosInParkEbene(parkhausEbeneID, true)
+            .map { auto -> auto.platznummer !! }.toSet()
 
-        val gesamtPlätze = (1..this.parkhausEbenen.find { pe -> pe.id == parkhausEbeneID }!!.maxPlätze).toSet()
+        val gesamtPlaetze = (1..this.parkhausEbenen.find { pe -> pe.id == parkhausEbeneID }!!.maxPlätze).toSet()
 
-        val verfügbarePlätze = gesamtPlätze.subtract(belegtePlätze)
+        val verfuegbarePlaetze = gesamtPlaetze.subtract(belegtePlaetze)
 
-        if(params.space !in verfügbarePlätze) {
-            params.space = verfügbarePlätze.random()
+        if(params.space !in verfuegbarePlaetze) {
+            params.space = verfuegbarePlaetze.random()
         }
 
-        val auto = autoHinzufügen(parkhausEbeneID, params)
+        val auto = autoHinzufuegen(parkhausEbeneID, params)
 
         val ticket = Ticket()
 
         ticket.Preisklasse = 2
         ticket.Auto = auto
-        auto.Ticket = ticket
+        auto.ticket = ticket
         val parkhausEbeneToAdd = getParkhausEbenen().first { e -> e.id == parkhausEbeneID }
         parkhausEbeneToAdd.tickets.add(ticket)
+        this.databaseGlobal.persistEntity(ticket)
 
-        val saved = this.databaseGlobal.persistEntity(ticket)
-        val test = this.databaseGlobal.nativeSQLQuerySample(saved.Ticketnummer)
-
-        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.Autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.Platznummer}")
+        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.platznummer}")
         return ticket
     }
 
-    override fun autoHinzufügen(ParkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
+    override fun autoHinzufuegen(parkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
 
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
         this.databaseGlobal.persistEntity(auto)
@@ -156,20 +131,20 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return auto
     }
 
-    override fun ticketBezahlen(ParkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun ticketBezahlen(parkhausEbeneName: String, ticket: Ticket, timeCheckOut: Date): Long {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return ticketBezahlen(parkhausEbeneID, ticket, timeCheckOut)
     }
 
-    override fun ticketBezahlen(ParkhausEbeneId: Long, ticket: Ticket, timeCheckOut: Date): Long {
+    override fun ticketBezahlen(parkhausEbeneID: Long, ticket: Ticket, timeCheckOut: Date): Long {
 
         ticket.Ausfahrdatum = timeCheckOut
 
 
-        ticket.price = errechneTicketPreis(ParkhausEbeneId, ticket, ticket.Auto !!)
+        ticket.price = errechneTicketPreis(parkhausEbeneID, ticket, ticket.Auto !!)
 
         this.databaseGlobal.mergeUpdatedEntity(ticket)
-        ticket.Auto?.ImParkhaus = false
+        ticket.Auto?.imParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
 
         parkhausServiceGlobal.statisticUpdateSubj
@@ -186,91 +161,91 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val duration = (ticket.Auto?.getParkdauer())
 
         val fahrzeugMultiplikator: Double = (ebene?.fahrzeugTypen?.find {
-                entry -> entry.typ!!.lowercase() == ticket.Auto!!.Typ.lowercase() }?.multiplikator) ?: 1.0
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }?.multiplikator) ?: 1.0
         return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
     }
 
-    override fun getSummeTicketpreiseUeberAutos(ParkhausEbeneName: String): Int {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getSummeDerTicketpreise(parkhausEbeneID) !!
     }
 
-    override fun getEbeneUeberId(ParkhausEbeneID: Long):ParkhausEbene{
-        return parkhausEbenen.first{e-> e.id == ParkhausEbeneID }
+    override fun getEbeneUeberId(parkhausEbeneID: Long):ParkhausEbene{
+        return parkhausEbenen.first{e-> e.id == parkhausEbeneID }
     }
-    override fun getAlleUser(ParkhausEbeneName: String):Int{
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getAlleUser(parkhausEbeneName: String):Int{
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getAnzahlAllerUser(parkhausEbeneID) !!
     }
-    override fun getAktuelleUser(ParkhausEbeneName: String): Int{
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getAktuelleUser(parkhausEbeneName: String): Int{
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getautosInParkEbene(parkhausEbeneID).size
     }
 
-    override fun getDurchschnittUeberAutos(ParkhausEbeneName: String): Int {
-        val divisor = (getAlleUser(ParkhausEbeneName) - getAktuelleUser(ParkhausEbeneName))
+    override fun getDurchschnittUeberAutos(parkhausEbeneName: String): Int {
+        val divisor = (getAlleUser(parkhausEbeneName) - getAktuelleUser(parkhausEbeneName))
         return if (divisor == 0) {
             0;
         } else
-            (getSummeTicketpreiseUeberAutos(ParkhausEbeneName) / divisor)
+            (getSummeTicketpreiseUeberAutos(parkhausEbeneName) / divisor)
     }
 
-    override fun findeTicketUeberParkplatz(ParkhausEbeneName: String, placeNumber: Int): Ticket? {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun findeTicketUeberParkplatz(parkhausEbeneName: String, placeNumber: Int): Ticket? {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.findeTicketUeberParkplatz(parkhausEbeneID, placeNumber)
     }
-    override fun getIdUeberName(ParkhausEbeneName: String):Long{
-        return parkhausEbenen.first{e-> e.name == ParkhausEbeneName }.id
+    override fun getIdUeberName(parkhausEbeneName: String):Long{
+        return parkhausEbenen.first{e-> e.name == parkhausEbeneName }.id
     }
 
     override fun getParkhausEbenen():List<ParkhausEbene>{
         return parkhausEbenen
     }
 
-    override fun getAutosInParkEbene(ParkhausEbeneName: String, ImParkhaus : Boolean): List<Auto>{
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
-        return getAutosInParkEbene(parkhausEbeneID, ImParkhaus)
+    override fun getAutosInParkEbene(parkhausEbeneName: String, imParkhaus : Boolean): List<Auto>{
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
+        return getAutosInParkEbene(parkhausEbeneID, imParkhaus)
     }
 
-    override fun getAutosInParkEbene(ParkhausEbeneID: Long, ImParkhaus : Boolean): List<Auto>{
-        return databaseGlobal.getautosInParkEbene(ParkhausEbeneID, ImParkhaus)
+    override fun getAutosInParkEbene(parkhausEbeneID: Long, imParkhaus : Boolean): List<Auto>{
+        return databaseGlobal.getautosInParkEbene(parkhausEbeneID, imParkhaus)
     }
 
-    override fun erstelleStatistikenUeberFahrzeuge(ParkhausEbeneName: String): statisticsChartDto {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun erstelleStatistikenUeberFahrzeuge(parkhausEbeneName: String): StatisticsChartDto {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         val allCarsThatLeft = databaseGlobal.getautosInParkEbene(parkhausEbeneID, false)
-        val allVehicleTypes = allCarsThatLeft.map { a->a.Typ }.toSet().toList()
-        val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.Typ==a }.fold(0.0) { acc, i -> acc + (i.Ticket!!.price)/100 } }
+        val allVehicleTypes = allCarsThatLeft.map { a->a.typ }.toSet().toList()
+        val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.typ==a }.fold(0.0) { acc, i -> acc + (i.ticket!!.price)/100 } }
         val farben = setzeFarben(sumPricesOverVehicleTypes)
-        return statisticsChartDto(data = listOf(carData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), layout = setzeTitel("Auto-Typen","Preis in Euro"))
+        return StatisticsChartDto(data = listOf(CarData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), Layout = setzeTitel("Auto-Typen","Preis in Euro"))
     }
 
-    override fun getTageseinnahmen(ParkhausEbeneName: String): einnahmenBarDTO {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getTageseinnahmen(parkhausEbeneName: String): EinnahmenBarDTO {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return getTageseinnahmen(parkhausEbeneID)
     }
 
-    override fun getTageseinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO {
-        val sumOverDay = databaseGlobal.errechneTagesEinnahmen(ParkhausEbeneId)
-            return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Tages Einnahmen"),
+    override fun getTageseinnahmen(parkhausEbeneID: Long): EinnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneTagesEinnahmen(parkhausEbeneID)
+            return EinnahmenBarDTO(data = listOf(BarData("bar", listOf("Tages Einnahmen"),
                 listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
 
     }
 
-    override fun getWocheneinnahmen(ParkhausEbeneName: String): einnahmenBarDTO {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getWocheneinnahmen(parkhausEbeneName: String): EinnahmenBarDTO {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return getWocheneinnahmen(parkhausEbeneID)
     }
 
-    override fun getWocheneinnahmen(ParkhausEbeneId: Long): einnahmenBarDTO {
-        val sumOverDay = databaseGlobal.errechneWochenEinnahmen(ParkhausEbeneId)
-        return einnahmenBarDTO(data = listOf(BarData("bar", listOf("Wochen Einnahmen"),
+    override fun getWocheneinnahmen(parkhausEbeneID: Long): EinnahmenBarDTO {
+        val sumOverDay = databaseGlobal.errechneWochenEinnahmen(parkhausEbeneID)
+        return EinnahmenBarDTO(data = listOf(BarData("bar", listOf("Wochen Einnahmen"),
             listOf((sumOverDay?.toDouble())?.div(100) ?: 0.0))))
 
     }
 
-    override fun getPrintStringAutos(ParkhausEbeneName: String): String {
-        val parkhausEbeneID = getIdUeberName(ParkhausEbeneName)
+    override fun getPrintStringAutos(parkhausEbeneName: String): String {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return getPrintStringAutos(parkhausEbeneID)
     }
 
@@ -281,20 +256,20 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      * Notation: Nr/Timer/Duration/Price/Hash/Color/Space/client_category/vehicle_type/license
      *
      */
-    override fun getPrintStringAutos(ParkhausEbeneId: Long): String {
-        val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(ParkhausEbeneId)
+    override fun getPrintStringAutos(parkhausEbeneID: Long): String {
+        val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(parkhausEbeneID)
 
         var autoStringListe: List<String> = autosInParkhausEbene.map {
-                        "${it.Autonummer}/" +
-                        "${it.Ticket?.Ausstellungsdatum?.time}/" +
-                        "${if (it.ImParkhaus) 0 else it.getParkdauer()}/" +
-                        "${errechneTicketPreis(ParkhausEbeneId, it.Ticket!!, it)}/" +
-                        "Ticket${it.Ticket?.Ticketnummer}/" +
-                        "${it.Farbe}/" +
-                        "${it.Platznummer}/" +
-                        "${it.Typ}/" +
-                        "${it.Kategorie}/" +
-                        "${it.Kennzeichen}"
+                        "${it.autonummer}/" +
+                        "${it.ticket?.Ausstellungsdatum?.time}/" +
+                        "${if (it.imParkhaus) 0 else it.getParkdauer()}/" +
+                        "${errechneTicketPreis(parkhausEbeneID, it.ticket!!, it)}/" +
+                        "Ticket${it.ticket?.Ticketnummer}/" +
+                        "${it.farbe}/" +
+                        "${it.platznummer}/" +
+                        "${it.typ}/" +
+                        "${it.kategorie}/" +
+                        "${it.kennzeichen}"
         }
 
 
@@ -313,63 +288,63 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         //"""<button type="button" class="btn btn-outline-primary" data-cityid="${}">Primary</button>"""
     }
 
-    override fun erstellePreiseFürBundesländer(): statisticsChartDto? {
+    override fun erstellePreiseFuerBundeslaender(): StatisticsChartDto? {
         val carMap = databaseGlobal.getTicketpreiseProBundesland()
         val uebersetzteNamen = carMap?.keys?.map { it-> Parkhaus.BundeslandÜbersetzung[it]?:it }
         val farben = setzeFarben(carMap)
         if (carMap != null) {
-            return statisticsChartDto(data = listOf(carData("bar",
-                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)), layout = setzeTitel("Bundesländer","Preis in Euro"))
+            return StatisticsChartDto(data = listOf(CarData("bar",
+                uebersetzteNamen as List<String>, carMap.values.map{ a -> a.toDouble()/100},farben)), Layout = setzeTitel("Bundesländer","Preis in Euro"))
         }
         return null
     }
 
-    override fun setzeFarben(carMap: Map<String, Int>?): marker{
+    override fun setzeFarben(carMap: Map<String, Int>?): Marker{
         val farbenListe = ArrayList<String>()
         val max = carMap?.values?.maxOrNull()
 
         for(item in carMap!!.values){
             farbenListe.add("rgba(${170-170*item/max!!},${170*item/max},0,1)")
         }
-        return marker(farbenListe)
+        return Marker(farbenListe)
     }
 
-    override fun setzeFarben(values: List<Double>): marker{
+    override fun setzeFarben(values: List<Double>): Marker{
         val farbenListe = ArrayList<String>()
         val max = values.maxOrNull()
 
         for(item in values){
             farbenListe.add("rgba(${170-170*item/max!!},${170*item/max},0,1)")
         }
-        return marker(farbenListe)
+        return Marker(farbenListe)
     }
 
-    override fun setzeTitel(xAchse:String,yAchse:String):layout{
-        return layout(xaxis(title(xAchse)),yaxis(title(yAchse)))
+    override fun setzeTitel(xAchse:String,yAchse:String):Layout{
+        return Layout(Xaxis(Title(xAchse)),Yaxis(Title(yAchse)))
     }
 
     override fun undo() {
         if (undoList.size>0){
             val toUndo = undoList.last()
             redoList.add(toUndo)
-            if (toUndo.ImParkhaus){
-                toUndo.ImParkhaus = false
-                val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)
-                deletedDatum.add(toUndo.Ticket!!.Ausstellungsdatum)
-                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)?.name!!)
-                toUndo.Ticket?.Auto = null
-                databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
-                databaseGlobal.deleteByID(toUndo.Autonummer,Auto::class.java)
-                databaseGlobal.deleteByID(toUndo.Ticket!!.Ticketnummer,Ticket::class.java)
+            if (toUndo.imParkhaus){
+                toUndo.imParkhaus = false
+                val parkhausEbene = databaseGlobal.findeParkhausEbeneByTicket(toUndo.ticket!!.Ticketnummer)
+                deletedDatum.add(toUndo.ticket!!.Ausstellungsdatum)
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.ticket!!.Ticketnummer)?.name!!)
+                toUndo.ticket?.Auto = null
+                databaseGlobal.mergeUpdatedEntity(toUndo.ticket)
+                databaseGlobal.deleteByID(toUndo.autonummer,Auto::class.java)
+                databaseGlobal.deleteByID(toUndo.ticket!!.Ticketnummer,Ticket::class.java)
                 databaseGlobal.mergeUpdatedEntity(parkhausEbene)
             }
             else{
-                toUndo.ImParkhaus = true
-                toUndo.Ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
-                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.Ticket!!.Ticketnummer)?.name!!)
-                toUndo.Ticket?.Ausfahrdatum = null
-                toUndo.Ticket?.price = 0
-                databaseGlobal.mergeUpdatedEntity(toUndo.Ticket)
+                toUndo.imParkhaus = true
+                toUndo.ticket?.Ausfahrdatum?.let { deletedDatum.add(it) }
+                deletedReferenceToLevelName.add(databaseGlobal.findeParkhausEbeneByTicket(toUndo.ticket!!.Ticketnummer)?.name!!)
+                toUndo.ticket?.Ausfahrdatum = null
+                toUndo.ticket?.price = 0
+                databaseGlobal.mergeUpdatedEntity(toUndo.ticket)
                 databaseGlobal.mergeUpdatedEntity(toUndo)
             }
             undoList.removeLast()
@@ -381,17 +356,17 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         if (redoList.size>0) {
             val toRedo = redoList.removeLast()
             undoList.add(toRedo)
-            if (toRedo.ImParkhaus) {
-                toRedo.Ticket?.Auto = toRedo
-                ticketBezahlen(deletedReferenceToLevelName.removeLast(), toRedo.Ticket!!, deletedDatum.removeLast())
+            if (toRedo.imParkhaus) {
+                toRedo.ticket?.Auto = toRedo
+                ticketBezahlen(deletedReferenceToLevelName.removeLast(), toRedo.ticket!!, deletedDatum.removeLast())
 
             } else {
-                toRedo.ImParkhaus = true
-                val pSPdto = ParkhausServletPostDto((1..9999).random(),deletedDatum.last().time,0,0.0,toRedo.Hash!!,
-                    toRedo.Farbe!!,toRedo.Platznummer!!,toRedo.Kategorie,toRedo.Typ,toRedo.Kennzeichen!!
+                toRedo.imParkhaus = true
+                val pSPdto = ParkhausServletPostDto((1..9999).random(),deletedDatum.last().time,0,0.0,toRedo.hash!!,
+                    toRedo.farbe!!,toRedo.platznummer!!,toRedo.kategorie,toRedo.typ,toRedo.kennzeichen!!
                 )
                 val auto = erstelleTicket(deletedReferenceToLevelName.removeLast(), pSPdto).Auto
-                if (redoList.last().Autonummer == toRedo.Autonummer) {
+                if (redoList.last().autonummer == toRedo.autonummer) {
                     redoList.removeLast()
                     redoList.add(auto!!)
                 }
@@ -404,7 +379,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         redoList.clear()
     }
 
-    open fun wechsleEbeneMaxParkplätze(name: String, aktuell: Int, neu: Int) {
+    open fun wechsleEbeneMaxParkplaetze(name: String, aktuell: Int, neu: Int) {
         val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 
 
@@ -415,7 +390,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
-    open fun wechsleEbeneÖffnungszeit(name: String, aktuell: Int, neu: Int) {
+    open fun wechsleEbeneOeffnungszeit(name: String, aktuell: Int, neu: Int) {
         val parkhausEbeneArrayPos = this.parkhausEbenen.indexOfFirst { pe -> pe.name == name }
 
 

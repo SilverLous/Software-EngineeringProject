@@ -3,14 +3,14 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class statisticsChartDto(
+data class StatisticsChartDto(
     @SerialName("data")
-    val `data`: List<carData>,
+    val `data`: List<CarData>,
     @SerialName("layout")
-    val `layout`: layout
+    val Layout: Layout
 )
 @Serializable
-data class carData(
+data class CarData(
     @SerialName("type")
     val type: String,
     @SerialName("x")
@@ -18,37 +18,37 @@ data class carData(
     @SerialName("y")
     val y: List<Double>,
     @SerialName("marker")
-    val marker: marker,
+    val Marker: Marker,
 )
 
 @Serializable
-data class marker(
+data class Marker(
     @SerialName("color")
     val color: List<String>
 )
 
 @Serializable
-data class layout(
+data class Layout(
     @SerialName("xaxis")
-    val xaxis: xaxis,
+    val Xaxis: Xaxis,
     @SerialName("yaxis")
-    val yaxis: yaxis
+    val Yaxis: Yaxis
 )
 
 @Serializable
-data class xaxis(
+data class Xaxis(
     @SerialName("title")
-    val title: title
+    val Title: Title
 )
 
 @Serializable
-data class yaxis(
+data class Yaxis(
     @SerialName("title")
-    val title: title
+    val Title: Title
 )
 
 @Serializable
-data class title(
+data class Title(
     @SerialName("text")
     val text: String
 )

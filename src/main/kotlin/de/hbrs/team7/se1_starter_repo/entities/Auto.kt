@@ -1,7 +1,5 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-import de.hbrs.team7.se1_starter_repo.CarIF
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
@@ -9,39 +7,39 @@ import java.util.*
 @Entity
 open class Auto(
     @Column(nullable = false)
-    open var Hash: String? = null,
+    open var hash: String? = null,
 
     @Column(nullable = false)
-    open var Farbe: String? = null,
+    open var farbe: String? = null,
 
     @Column(nullable = false)
-    var Platznummer: Int? = null,
+    var platznummer: Int? = null,
 
     @Column(nullable = false)
-    open var Kennzeichen: String? = null,
+    open var kennzeichen: String? = null,
 
     @Column(nullable = false)
-    var Typ: String = "",
+    var typ: String = "",
 
     @Column(nullable = false)
-    var Kategorie: String = ""
+    var kategorie: String = ""
 
 
 ) {
 
     @Id
     @GeneratedValue
-    open val Autonummer: Long = 0
+    open val autonummer: Long = 0
 
 
     @Column(nullable = false)
-    var ImParkhaus: Boolean = true
+    var imParkhaus: Boolean = true
 
     @OneToOne(mappedBy = "Auto")
-    var Ticket: Ticket? = null
+    var ticket: Ticket? = null
 
     fun getParkdauer():Long{
-        return this.Ticket!!.Ausfahrdatum?.time?.minus(this.Ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.Ticket!!.Ausstellungsdatum.time
+        return this.ticket!!.Ausfahrdatum?.time?.minus(this.ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.ticket!!.Ausstellungsdatum.time
     }
 
 }

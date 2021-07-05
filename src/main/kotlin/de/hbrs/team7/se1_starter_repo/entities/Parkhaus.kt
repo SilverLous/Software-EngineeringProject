@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
+import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import jakarta.persistence.*
 
 @Entity
@@ -76,7 +76,7 @@ open class Parkhaus (
             "Thuringia" to "Thüringen",
         )
 
-        fun fromCitiesDTO(city: citiesDTO): Parkhaus {
+        fun fromCitiesDTO(city: CitiesDTO): Parkhaus {
 
             return Parkhaus(
                 city.name,

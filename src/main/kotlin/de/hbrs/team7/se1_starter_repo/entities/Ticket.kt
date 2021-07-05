@@ -2,7 +2,6 @@ package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.persistence.*
-import kotlinx.serialization.SerialName
 import java.time.Instant
 import java.util.*
 import kotlin.collections.ArrayList
@@ -13,7 +12,6 @@ import kotlin.collections.ArrayList
 
 // https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
 @Entity
-// @Table(name = "Tickets") //TODO Decide if class should named TicketEntity or just Ticket
 open class Ticket {
 
     @Id @GeneratedValue
@@ -41,16 +39,16 @@ open class Ticket {
 
     fun zuParkhausServletPostDto(): ParkhausServletPostDto {
         return ParkhausServletPostDto(
-            nr = this.Auto!!.Autonummer.toInt(),
+            nr = this.Auto!!.autonummer.toInt(),
             timer = this.Ausstellungsdatum.time,
             duration = this.Ausstellungsdatum.time,
             price = this.price.toDouble() / 100,
-            hash = this.Auto!!.Hash!!,
-            color = this.Auto!!.Farbe !!,
-            space = this.Auto!!.Platznummer !!,
-            clientCategory = this.Auto!!.Kategorie,
-            vehicleType = this.Auto!!.Typ,
-            license = this.Auto!!.Kennzeichen !!
+            hash = this.Auto!!.hash!!,
+            color = this.Auto!!.farbe !!,
+            space = this.Auto!!.platznummer !!,
+            clientCategory = this.Auto!!.kategorie,
+            vehicleType = this.Auto!!.typ,
+            license = this.Auto!!.kennzeichen !!
         )
     }
 

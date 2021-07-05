@@ -1,7 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.dto.citiesDTO
 import jakarta.persistence.*
 
 @Entity
