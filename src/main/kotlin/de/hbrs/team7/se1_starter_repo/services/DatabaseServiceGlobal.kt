@@ -47,20 +47,33 @@ open class DatabaseServiceGlobal {
     // private val et = em.transaction
 
 
-    open fun <T> persistEntity(e: T): T {
+    open fun <T> persistEntity(e: T): T? {
         val tx = em.transaction
-        tx.begin()
-        em.persist(e)
-        tx.commit()
-        return e
+        for (i in 1..3){
+            if(!tx.isActive) {
+                tx.begin()
+                em.persist(e)
+                tx.commit()
+                return e
+            }
+            Thread.sleep((10..99).random()*100L)
+        }
+        return null
     }
 
-    open fun <T> mergeUpdatedEntity(e: T): T {
+
+    open fun <T> mergeUpdatedEntity(e: T): T? {
         val tx = em.transaction
-        tx.begin()
-        val newE = em.merge(e)
-        tx.commit()
-        return newE
+        for (i in 1..3){
+            if(!tx.isActive) {
+                tx.begin()
+                val newE = em.merge(e)
+                tx.commit()
+                return newE
+            }
+            Thread.sleep((10..99).random()*100L)
+        }
+        return null
     }
 
     open fun <T> deleteByID(id: Long, classType: Class<T>) {

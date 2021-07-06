@@ -56,7 +56,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             ladeParkhausStadt(pa.id)
         } else {
             val ph = Parkhaus.fromCitiesDTO(city)
-            parkhaus = databaseGlobal.persistEntity(ph)
+            parkhaus = databaseGlobal.persistEntity(ph)!!
 
             if(parkhausServiceGlobal.ebenenSet.isNotEmpty()) {
                 parkhausEbenen.addAll(parkhausServiceGlobal.ebenenSet.map { e -> initEbene(e) })
@@ -85,8 +85,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         pe.fahrzeugTypen = fahrzeugTypen
 
         parkhaus.parkhausEbeneHinzufügen(pe)
-
-        this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)
+        this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)!!
 
         val peGespeichert = this.parkhaus.ebenen.find { pE -> pE.name == config.ebenenNamen } !!
         this.parkhausServiceGlobal.ebenenSet.add(config)
@@ -386,7 +385,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].maxPlätze = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
 
     }
 
@@ -397,7 +396,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].öffnungszeit = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
     }
 
     open fun wechsleEbeneLadenschluss(name: String, aktuell: Int, neu: Int) {
@@ -407,7 +406,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].ladenschluss = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
 
     }
 
