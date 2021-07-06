@@ -125,7 +125,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun autoHinzufuegen(parkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
 
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
-        this.databaseGlobal.persistEntity(auto)
+        // this.databaseGlobal.persistEntity(auto)
         undoList.add(auto)
         return auto
     }
@@ -142,9 +142,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         ticket.price = errechneTicketPreis(parkhausEbeneID, ticket, ticket.Auto !!)
 
+        // this.databaseGlobal.mergeUpdatedEntity(ticket)
+        ticket.Auto!!.imParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket)
-        ticket.Auto?.imParkhaus = false
-        this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
 
         parkhausServiceGlobal.statisticUpdateSubj
             .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN))
