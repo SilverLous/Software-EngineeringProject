@@ -152,16 +152,20 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             undoList.add(ticket.Auto!!)
         }
 
-        return ticket.price.toLong()/100
+        return ticket.price.toLong()
     }
 
     open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto  ): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         val duration = (ticket.Auto?.getParkdauer())
 
-        val fahrzeugMultiplikator: Double = (ebene?.fahrzeugTypen?.find {
-                entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }?.multiplikator) ?: 1.0
-        return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
+        val fahrzeugMultiplikator: Double = (
+                ebene?.fahrzeugTypen?.find {
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
+                ?.multiplikator) ?: 1.0
+        print(fahrzeugMultiplikator)
+        return (
+                ((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
     }
 
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
@@ -362,7 +366,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             } else {
                 toRedo.imParkhaus = true
                 val pSPdto = ParkhausServletPostDto((1..9999).random(),deletedDatum.last().time,0,0.0,toRedo.hash!!,
-                    toRedo.farbe!!,toRedo.platznummer!!,toRedo.kategorie,toRedo.typ,toRedo.kennzeichen!!
+                    toRedo.farbe!!,toRedo.platznummer!!,toRedo.kategorie,toRedo.typ,toRedo.kennzeichen!!, deletedDatum.last().time
                 )
                 val auto = erstelleTicket(deletedReferenceToLevelName.removeLast(), pSPdto).Auto
                 if (redoList.last().autonummer == toRedo.autonummer) {

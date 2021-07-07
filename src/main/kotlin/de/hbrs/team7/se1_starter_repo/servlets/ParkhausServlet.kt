@@ -178,7 +178,8 @@ abstract class ParkhausServlet : HttpServlet() {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(config.ebenenNamen,data.space) !!
                 parkhausServiceSession.loescheRedoList()
-                parkhausServiceSession.ticketBezahlen(config.ebenenNamen,zustaendigesTicket, Date.from(Instant.now()))
+                val ticketPreis = parkhausServiceSession.ticketBezahlen(config.ebenenNamen,zustaendigesTicket, Date.from(Instant.now()))
+                out.write(ticketPreis.toString())
             }
 
             "change_max" -> {

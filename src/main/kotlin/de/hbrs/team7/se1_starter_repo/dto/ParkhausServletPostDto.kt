@@ -6,16 +6,14 @@ import kotlinx.serialization.*
  * Request zum Parkenden Auto
  * @property nr Nummer des Fahrzeugs
  *
- * @property von Einparkzeit
- * @property bis Ausparkzeit
- * @property dauer Parkdauer
+ * @property begin Einparkzeit
+ * @property duration Parkdauer
  * @property clientCategory Kundentyp (Client Category)
  * @property vehicleType Fahrzeugtyp (Vehicle Type)
- * @property ticket Ticket-Hashwert
  * @property license Fahrzeug-Kennzeichen
  * @property color Farbe des Autos
  * @property space Stellplatz-Nummer
- * @property preis Parkgebühr
+ * @property price Parkgebühr
  *
  *  */
 @Serializable
@@ -29,5 +27,7 @@ public data class ParkhausServletPostDto(
     var space : Int,
     @SerialName("client_category") val clientCategory : String,
     @SerialName("vehicle_type") val vehicleType : String,
-    val license : String
+    val license : String,
+    val begin : Long,
+
 )

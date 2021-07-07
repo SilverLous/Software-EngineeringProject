@@ -41,14 +41,15 @@ open class Ticket {
         return ParkhausServletPostDto(
             nr = this.Auto!!.autonummer.toInt(),
             timer = this.Ausstellungsdatum.time,
-            duration = this.Ausstellungsdatum.time,
+            duration = 0,
             price = this.price.toDouble() / 100,
             hash = this.Auto!!.hash!!,
             color = this.Auto!!.farbe !!,
             space = this.Auto!!.platznummer !!,
             clientCategory = this.Auto!!.kategorie,
             vehicleType = this.Auto!!.typ,
-            license = this.Auto!!.kennzeichen !!
+            license = this.Auto!!.kennzeichen !!,
+            begin = this.Ausstellungsdatum.time,
         )
     }
 
