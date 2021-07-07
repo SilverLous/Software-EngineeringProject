@@ -57,7 +57,7 @@
     private ParkhausServiceSession parkhausServiceSession;
 %>
 <div class="box center grey-background">
-    <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()} </h1>
+    <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()}, Preisklasse: ${parkhausServiceSession.parkhaus.getPreisklasse()}</h1>
 </div>
 <div class="box center lightgreen">
     <h2> <span style="color: navy; ">Unsere weiteren Standorte: </span></h2>
