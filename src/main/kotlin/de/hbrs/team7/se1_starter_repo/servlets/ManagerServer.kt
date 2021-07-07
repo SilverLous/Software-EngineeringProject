@@ -39,7 +39,7 @@ public open class ManagerServer : BasicWebsocketIF {
         }, 0, 10000) */
 
         parkhausServiceGlobal.statisticUpdateSubj
-            .buffer(5, TimeUnit.SECONDS)
+            .buffer(1, TimeUnit.SECONDS)
             .map { it:  List<List<ManagerStatistikUpdateDTO>> -> it.flatten().toSet().toList() }
             .map { it:  List<ManagerStatistikUpdateDTO> -> it.map { ev -> ev.event } }
             .filter { it -> it.isNotEmpty() }.

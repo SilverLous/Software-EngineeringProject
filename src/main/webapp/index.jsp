@@ -14,7 +14,7 @@
     <meta property="og:description" content="Bachelor Course Software Engineering 1 (SE1), Hochschule Bonn-Rhein-Sieg.">
     <link rel="shortcut icon" href="https://kaul.inf.h-brs.de/favicon.ico" />
     <title>Tomcat Parkhaus</title>
-    <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.5.1.js"></script>
+    <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.5.8.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -57,7 +57,7 @@
     private ParkhausServiceSession parkhausServiceSession;
 %>
 <div class="box center grey-background">
-    <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()} </h1>
+    <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()}, Preisklasse: ${parkhausServiceSession.parkhaus.getPreisklasse()}</h1>
 </div>
 <div class="box center lightgreen">
     <h2> <span style="color: navy; ">Unsere weiteren Standorte: </span></h2>
@@ -69,23 +69,23 @@
 </div>
 <div class="box lightyellow">
     <h1>Parkhaus Etage 1</h1>
-    <ccm-parkhaus-10-5-1 server_url="./level1-servlet"
+    <ccm-parkhaus-10-5-8 server_url="./level1-servlet"
                          hide_table="false"
                          simulation.delay="6"
                          name="Etage1"
                          license_max="15"
                          client_categories='["any","Family"]'
-                         vehicle_types='["PKW","SUV"]'
+                         vehicle_types='["PKW","SUV", "PICKUP", "ZWEIRAD", "TRIKE", "QUAD"]'
                          price_factor='{"SUV":2,"Family":0.5}'
                          json_format="true"
                          max="11"
                          extra_buttons='["Average","Sum","Total Users","Cars",{"extra_class":"undo start","extra_inner":"Undo","extra_popup_title":"Undo and Restart"},{"extra_class":"redo start","extra_inner":"Redo","extra_popup_title":"Redo and Restart"}]'
                          extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
-    </ccm-parkhaus-10-5-1>
+    </ccm-parkhaus-10-5-8>
 </div>
 <div class="box lightgreen">
     <h1>Parkhaus Etage 2</h1>
-    <ccm-parkhaus-10-5-1 server_url="./level2-servlet"
+    <ccm-parkhaus-10-5-8 server_url="./level2-servlet"
                          name="Etage2"
                          license_max="14"
                          client_categories='["any","Business"]'
@@ -96,7 +96,7 @@
                          debug="true"
                          max="12"
                          extra_buttons='["Average","Sum"]'>
-    </ccm-parkhaus-10-5-1>
+    </ccm-parkhaus-10-5-8>
 
 </div>
 
@@ -111,6 +111,14 @@
 
 </div>
 
+
+
+<div class="click-map" onClick="style.pointerEvents='none'"></div>
+<iframe id="googleMaps"
+        src="https://maps.google.com/maps?q=${parkhausServiceSession.parkhaus.lat},${parkhausServiceSession.parkhaus.lng}+(Ihr%20Parkhaus%20in%20${parkhausServiceSession.parkhaus.stadtname})&z=15&output=embed"
+
+        width="100%" height="500" frameborder="0" style="border:0" scrolling="no"
+        allowfullscreen></iframe>
 </body>
 
 <script>
@@ -119,7 +127,7 @@
         axios.get('/team7Parkhaus/level1-servlet?cmd=wechsleParkhaus&stadt=' + stadID)
             .then(function (response) {
                 // alert(response.body)
-                window.location.reload();
+                location.reload(true);
             })
     }
 

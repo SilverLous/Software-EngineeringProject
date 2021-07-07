@@ -1032,12 +1032,12 @@
     plotEinnahmenUeberBundesland()
 
     statistikUpdatews.onmessage = function (e) {
+        console.log("From Server:"+ e.data);
         plotTageseinnahmen()
         plotWocheneinnahmen()
         plotEinnahmenUeberAutoTyp()
         plotEinnahmenUeberBundesland()
 
-        console.log("From Server:"+ e.data);
     };
 
     managerLogws.onmessage = function (e) {

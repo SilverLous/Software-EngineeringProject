@@ -56,7 +56,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             ladeParkhausStadt(pa.id)
         } else {
             val ph = Parkhaus.fromCitiesDTO(city)
-            parkhaus = databaseGlobal.persistEntity(ph)
+            parkhaus = databaseGlobal.persistEntity(ph)!!
 
             if(parkhausServiceGlobal.ebenenSet.isNotEmpty()) {
                 parkhausEbenen.addAll(parkhausServiceGlobal.ebenenSet.map { e -> initEbene(e) })
@@ -85,8 +85,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         pe.fahrzeugTypen = fahrzeugTypen
 
         parkhaus.parkhausEbeneHinzufügen(pe)
-
-        this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)
+        this.parkhaus = databaseGlobal.mergeUpdatedEntity(parkhaus)!!
 
         val peGespeichert = this.parkhaus.ebenen.find { pE -> pE.name == config.ebenenNamen } !!
         this.parkhausServiceGlobal.ebenenSet.add(config)
@@ -126,7 +125,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     override fun autoHinzufuegen(parkhausEbeneID: Long, params: ParkhausServletPostDto):Auto {
 
         val auto = Auto(params.hash,params.color,params.space,params.license, params.vehicleType, params.clientCategory)
-        this.databaseGlobal.persistEntity(auto)
+        // this.databaseGlobal.persistEntity(auto)
         undoList.add(auto)
         return auto
     }
@@ -143,9 +142,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
         ticket.price = errechneTicketPreis(parkhausEbeneID, ticket, ticket.Auto !!)
 
+        // this.databaseGlobal.mergeUpdatedEntity(ticket)
+        ticket.Auto!!.imParkhaus = false
         this.databaseGlobal.mergeUpdatedEntity(ticket)
-        ticket.Auto?.imParkhaus = false
-        this.databaseGlobal.mergeUpdatedEntity(ticket.Auto)
 
         parkhausServiceGlobal.statisticUpdateSubj
             .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN))
@@ -153,16 +152,23 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             undoList.add(ticket.Auto!!)
         }
 
-        return ticket.price.toLong()/100
+        return ticket.price.toLong()
     }
 
     open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto  ): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         val duration = (ticket.Auto?.getParkdauer())
 
-        val fahrzeugMultiplikator: Double = (ebene?.fahrzeugTypen?.find {
-                entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }?.multiplikator) ?: 1.0
-        return (((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
+        val fahrzeugMultiplikator: Double = (
+                ebene?.fahrzeugTypen?.find {
+                entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
+                ?.multiplikator) ?: 1.0
+
+        val anzahlHalberStunden = ((duration ?: 0) / 1800000 + 1)
+        val multiplikator = (this.parkhaus.preisklasse!!+1) * fahrzeugMultiplikator
+        return ((anzahlHalberStunden * 100) + (50 * multiplikator )).toInt()
+                //Zeit in Millisekunden umrechnen in angebrochene halbe Stunden in Euro
+                // dazu fest fix Preis von 50 cent mal preisklasse mal fahrzeugMultiplikator
     }
 
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
@@ -363,7 +369,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             } else {
                 toRedo.imParkhaus = true
                 val pSPdto = ParkhausServletPostDto((1..9999).random(),deletedDatum.last().time,0,0.0,toRedo.hash!!,
-                    toRedo.farbe!!,toRedo.platznummer!!,toRedo.kategorie,toRedo.typ,toRedo.kennzeichen!!
+                    toRedo.farbe!!,toRedo.platznummer!!,toRedo.kategorie,toRedo.typ,toRedo.kennzeichen!!, deletedDatum.last().time
                 )
                 val auto = erstelleTicket(deletedReferenceToLevelName.removeLast(), pSPdto).Auto
                 if (redoList.last().autonummer == toRedo.autonummer) {
@@ -386,7 +392,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].maxPlätze = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
 
     }
 
@@ -397,7 +403,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].öffnungszeit = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
     }
 
     open fun wechsleEbeneLadenschluss(name: String, aktuell: Int, neu: Int) {
@@ -407,7 +413,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         this.parkhausEbenen[parkhausEbeneArrayPos].ladenschluss = neu
 
         this.parkhausEbenen[parkhausEbeneArrayPos] =
-            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])
+            databaseGlobal.mergeUpdatedEntity(this.parkhausEbenen[parkhausEbeneArrayPos])!!
 
     }
 
