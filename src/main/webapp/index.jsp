@@ -70,7 +70,6 @@
     <h2><a href="kasse.jsp">Kasse</a></h2>
     <h2><a href="manager.jsp">Manager</a></h2>
 </div>
-<div class = "container">
     <div class="box lightyellow">
         <div class="row">
             <div class="col">

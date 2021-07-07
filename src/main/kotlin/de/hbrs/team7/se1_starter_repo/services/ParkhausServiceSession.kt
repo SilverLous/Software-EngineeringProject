@@ -194,7 +194,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      *
      * @author Alexander Bohl
      */
-    open fun getFahrzeugmultiplikatorenHTML(): PreistabelleDTO {
+    open fun getFahrzeugmultiplikatorenDTO(): PreistabelleDTO {
         var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus?.id)
         var fahrzeuge: MutableList<String> = mutableListOf()
         var preise: MutableList<Double> = mutableListOf()
@@ -218,6 +218,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             fahrzeuge,
             preise
         )
+    }
+
+    open fun getFahrzeugmultiplikatorenString(): String {
+        var dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO()
+        return dto.fahrzeugKlassen.joinToString(", ") + ";" + dto.preise.joinToString(",")
     }
 
 
