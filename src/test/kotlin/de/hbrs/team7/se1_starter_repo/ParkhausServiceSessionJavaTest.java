@@ -374,11 +374,6 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(6,ebene2.getöffnungszeit());
     }
 
-
-    /**
-     *
-     * @author: Alexander Bohl
-     */
     @Test
     @DisplayName("Test von vernuenftigen Preis Funktion")
     public void testNeuePreisFunktion() {
@@ -421,7 +416,9 @@ public class ParkhausServiceSessionJavaTest {
     /**
      *
      * Erzeugt im aktuellen Parkhaus eine variable Anzahl an Ebenen mit Default-Parametern. Die Ebenen werden
-     * mit "Generierte Ebene Nr. x" bezeichnet,
+     * mit "Generierte Ebene Nr. x" bezeichnet
+     * ruft private ParkhausEbeneConfigDTO[] generiereConfigDTOs(int anzahl) auf
+     *
      * @params anzahl: Die Anzahl der generierten Ebenen
      *
      * @author: Alexander Bohl
@@ -435,6 +432,15 @@ public class ParkhausServiceSessionJavaTest {
         return ebenen;
     }
 
+    /**
+     *
+     * Erzeugt im aktuellen Parkhaus eine variable Anzahl an Ebenen mit Default-Parametern. Die Ebenen werden
+     * mit "Generierte Ebene Nr. x" bezeichnet
+     *
+     * @param anzahl: Die Anzahl der zu generierenden Ebenen
+     *
+     * @return configs: ein Array an Configs
+     */
     private ParkhausEbeneConfigDTO[] generiereConfigDTOs(int anzahl) {
         ParkhausEbeneConfigDTO[] configs = new ParkhausEbeneConfigDTO[anzahl];
         for (int i = 0; i < anzahl; i++) {

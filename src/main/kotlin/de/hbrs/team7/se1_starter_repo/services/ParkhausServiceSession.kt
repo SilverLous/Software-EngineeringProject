@@ -9,6 +9,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import java.util.*
+import kotlin.collections.HashMap
 
 
 /*
@@ -220,9 +221,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         )
     }
 
-    open fun getFahrzeugmultiplikatorenString(): String {
-        var dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO()
-        return dto.fahrzeugKlassen.joinToString(", ") + ";" + dto.preise.joinToString(",")
+    open fun getFahrzeugmultiplikatorenHashMap(): HashMap<String,Double> {
+        val dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO()
+        val map: HashMap<String,Double> = HashMap()
+        var i: Int = 0;
+        for (klasse in dto.fahrzeugKlassen) {
+            map.put(klasse,dto.preise[i++])
+        }
+        return map
     }
 
 

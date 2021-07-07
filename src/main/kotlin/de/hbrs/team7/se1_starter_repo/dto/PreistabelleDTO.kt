@@ -1,8 +1,8 @@
 package de.hbrs.team7.se1_starter_repo.dto
 
-import de.hbrs.team7.se1_starter_repo.entities.FahrzeugTyp
-import java.util.*
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class PreistabelleDTO (
     var fahrzeugKlassen: MutableList<String>,
     var preise: MutableList<Double>,

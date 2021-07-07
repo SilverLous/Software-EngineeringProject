@@ -157,7 +157,24 @@
             .then(function (response) {
 
                 var preisdiv = document.getElementById('preiseebeneeins')
-                preisdiv.innerHTML = response.data;
+                //preisdiv.innerHTML = response.data;
+                preisdiv.
+                names = ["Klasse","Preis"]
+                for (var i = 0; i < list.length; i++) {
+                    var row = $('<tr/>');
+                    for (var colIndex = 0; colIndex < cols.length; colIndex++)
+                    {
+                        var val = list[i][cols[colIndex]];
+
+                        // If there is any key, which is matching
+                        // with the column name
+                        if (val == null) val = "";
+                        row.append($('<td/>').html(val));
+                    }
+
+                    // Adding each row to the table
+                    $(selector).append(row);
+                }
             })
     }
 

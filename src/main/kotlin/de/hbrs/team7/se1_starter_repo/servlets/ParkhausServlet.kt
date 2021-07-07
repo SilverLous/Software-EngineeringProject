@@ -148,7 +148,9 @@ abstract class ParkhausServlet : HttpServlet() {
                 parkhausServiceSession.redo()
             }
             "preistabelle" -> {
-                out.write(parkhausServiceSession.getFahrzeugmultiplikatorenString())
+                response.contentType = charset
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getFahrzeugmultiplikatorenHashMap())
+                out.write(jsonData.toString())
             }
 
             else -> out.println("Invalid Command: " + request.queryString)
