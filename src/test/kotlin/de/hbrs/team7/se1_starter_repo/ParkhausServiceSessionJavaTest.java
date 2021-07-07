@@ -372,7 +372,7 @@ public class ParkhausServiceSessionJavaTest {
 
         for (int i=0;i<wieOft;i++){
             parkhausServiceSession.ticketBezahlen(ebene.getName(),tTest,Date.from(Instant.ofEpochMilli(timeNow+1800000*(1+i))));
-            Assertions.assertEquals(100*(i+1) + 50 * ebene.getParkhaus().getPreisklasse(),tTest.getPrice());
+            Assertions.assertEquals(100*(i+1) + 50 * (ebene.getParkhaus().getPreisklasse()+1),tTest.getPrice());
             parkhausServiceSession.undo();
         }
     }

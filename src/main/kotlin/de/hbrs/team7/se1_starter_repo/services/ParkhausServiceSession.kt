@@ -163,9 +163,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 ebene?.fahrzeugTypen?.find {
                 entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
                 ?.multiplikator) ?: 1.0
-        print(fahrzeugMultiplikator)
-        return (
-                ((duration ?: 0) / 1800000 + 1) * 100 + 50 * this.parkhaus.preisklasse!! * fahrzeugMultiplikator).toInt() //1800000 ist eine halbe Unix-Stunde
+
+        val anzahlHalberStunden = ((duration ?: 0) / 1800000 + 1)
+        val multiplikator = (this.parkhaus.preisklasse!!+1) * fahrzeugMultiplikator
+        return ((anzahlHalberStunden * 100) + (50 * multiplikator )).toInt()
+                //Zeit in Millisekunden umrechnen in angebrochene halbe Stunden in Euro
+                // dazu fest fix Preis von 50 cent mal preisklasse mal fahrzeugMultiplikator
     }
 
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
