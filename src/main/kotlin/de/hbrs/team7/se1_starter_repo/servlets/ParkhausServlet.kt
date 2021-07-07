@@ -147,6 +147,9 @@ abstract class ParkhausServlet : HttpServlet() {
             "redo" -> {
                 parkhausServiceSession.redo()
             }
+            "preistabelle" -> {
+                out.write(parkhausServiceSession.getFahrzeugmultiplikatorenHTML())
+            }
 
             else -> out.println("Invalid Command: " + request.queryString)
         }

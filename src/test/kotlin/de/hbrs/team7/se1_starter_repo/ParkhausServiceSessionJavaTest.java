@@ -53,6 +53,13 @@ public class ParkhausServiceSessionJavaTest {
     String eingabeKennzeichen = "Y-123 456";
 
 
+    /**
+     *
+     * Vor allen Tests die Fahrzeugpreise festlegen. Die werden nicht mehr verändert, können aber zentral gesteuert
+     * werden
+     *
+     * @author Alexander Bohl
+     */
     @BeforeEach
     public void setup() {
         zufallszahlengenerator = new SecureRandom();
@@ -330,6 +337,10 @@ public class ParkhausServiceSessionJavaTest {
         }
     }
 
+    /**
+     *
+     * @author: Alexander Bohl
+     */
     @Test
     @DisplayName("Testen der wechsleEbeneMaxParkplätze-Funktion")
     public void testWechsleEbeneMaxParkplaetze() {
@@ -344,6 +355,10 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(120, ebene2.getMaxPlätze());
     }
 
+    /**
+     *
+     * @author: Alexander Bohl
+     */
     @Test
     @DisplayName("Testen der wechsleEbeneÖffnungszeit-Funktion")
     public void testWechsleEbeneOeffnungszeit() {
@@ -359,6 +374,11 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(6,ebene2.getöffnungszeit());
     }
 
+
+    /**
+     *
+     * @author: Alexander Bohl
+     */
     @Test
     @DisplayName("Test von vernuenftigen Preis Funktion")
     public void testNeuePreisFunktion() {
@@ -377,6 +397,11 @@ public class ParkhausServiceSessionJavaTest {
         }
     }
 
+
+    /**
+     *
+     * @author: Alexander Bohl
+     */
     @Test
     @DisplayName("Testen der wechsleEbeneLadenschluss-Funktion")
     public void testWechsleEbeneLadenschluss() {
@@ -392,6 +417,15 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(24,ebene2.getLadenschluss());
     }
 
+
+    /**
+     *
+     * Erzeugt im aktuellen Parkhaus eine variable Anzahl an Ebenen mit Default-Parametern. Die Ebenen werden
+     * mit "Generierte Ebene Nr. x" bezeichnet,
+     * @params anzahl: Die Anzahl der generierten Ebenen
+     *
+     * @author: Alexander Bohl
+     */
     private ParkhausEbene[] generiereEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
         ParkhausEbeneConfigDTO[] configs = generiereConfigDTOs(anzahl);
