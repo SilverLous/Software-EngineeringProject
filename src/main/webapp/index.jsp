@@ -43,6 +43,9 @@
         .lightblue {
             background-color: #d0ebf6;
         }
+        .white {
+            background-color: white;
+        }
         .lightyellow {
             background-color: lightgoldenrodyellow;
         }
@@ -67,27 +70,42 @@
     <h2><a href="kasse.jsp">Kasse</a></h2>
     <h2><a href="manager.jsp">Manager</a></h2>
 </div>
-<div class="box lightyellow">
-    <h1>Parkhaus Etage 1</h1>
-    <ccm-parkhaus-10-5-8 server_url="./level1-servlet"
-                         hide_table="false"
-                         simulation.delay="6"
-                         name="Etage1"
-                         license_max="15"
-                         client_categories='["any","Family"]'
-                         vehicle_types='["PKW","SUV", "PICKUP", "ZWEIRAD", "TRIKE", "QUAD"]'
-                         price_factor='{"SUV":2,"Family":0.5}'
-                         json_format="true"
-                         max="11"
-                         extra_buttons='["Average","Sum","Total Users","Cars",{"extra_class":"undo start","extra_inner":"Undo","extra_popup_title":"Undo and Restart"},{"extra_class":"redo start","extra_inner":"Redo","extra_popup_title":"Redo and Restart"}]'
-                         extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
-    </ccm-parkhaus-10-5-8>
+<div class = "container">
+    <div class="box lightyellow">
+        <div class="row">
+            <div class="col">
+                <h1>Parkhaus Etage 1</h1>
+                <ccm-parkhaus-10-5-8 server_url="./level1-servlet"
+                                     hide_table="false"
+                                     simulation.delay="6"
+                                     simulation_speed = "1"
+                                     name="Etage1"
+                                     license_max="15"
+                                     client_categories='["any","Family"]'
+                                     vehicle_types='["PKW","SUV", "PICKUP", "ZWEIRAD", "TRIKE", "QUAD"]'
+                                     price_factor='{"SUV":2,"Family":0.5}'
+                                     json_format="true"
+                                     max="11"
+                                     extra_buttons='["Average","Sum","Total Users","Cars",{"extra_class":"undo start","extra_inner":"Undo","extra_popup_title":"Undo and Restart"},{"extra_class":"redo start","extra_inner":"Redo","extra_popup_title":"Redo and Restart"}]'
+                                     extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
+                </ccm-parkhaus-10-5-8>
+            </div>
+            <div class="col-md-auto">
+                <div class="white">
+                    <table class="table table-bordered">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div class="box lightgreen">
     <h1>Parkhaus Etage 2</h1>
     <ccm-parkhaus-10-5-8 server_url="./level2-servlet"
                          name="Etage2"
                          license_max="14"
+                         simulation.delay="6"
+                         simulation_speed = "1"
                          client_categories='["any","Business"]'
                          vehicle_types='["PKW","SUV","UNSICHTBARES_BOOTMOBIL"]'
                          price_factor='{"SUV":2,"Business":1}'
