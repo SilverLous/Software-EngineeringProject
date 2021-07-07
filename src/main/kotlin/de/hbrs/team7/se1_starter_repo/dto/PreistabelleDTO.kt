@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class PreistabelleDTO (
     var fahrzeugKlassen: MutableList<String>,
     var preise: MutableList<Double>,
-    val festpreis: Float = 0.5f,
-    val festpreisString: String = "50 cent * Preisklasse * Fahrzeugklasse"
+    val festpreis: Float,
+    val festpreisString: String
 )

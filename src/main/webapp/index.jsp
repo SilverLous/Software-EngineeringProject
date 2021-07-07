@@ -158,26 +158,22 @@
 
                 var preisdiv = document.getElementById('preiseebeneeins')
                 var dataDTO = response.data;
-                console.log(dataDTO)
-                //preisdiv.innerHTML = response.data;
-                preisdiv.
-                names = ["Klasse","Preis"]
-                for (var i = 0; i < list.length; i++) {
-                    var row = $('<tr/>');
-                    for (var colIndex = 0; colIndex < cols.length; colIndex++)
-                    {
-                        var val = list[i][cols[colIndex]];
+                console.log(dataDTO);
+                var tabelle = "<thread> <tr> ";
 
-                        // If there is any key, which is matching
-                        // with the column name
-                        if (val == null) val = "";
-                        row.append($('<td/>').html(val));
-                    }
+                tabelle += "<th scope=\"col\">Fahrzeugtyp</th>";
+                tabelle += "<th scope=\"col\">Preis</th>";
 
-                    // Adding each row to the table
-                    $(selector).append(row);
+                tabelle += "</tr> </thread> <tbody>";
+                for (let typ in dataDTO.fahrzeugKlassen) {
+                    tabelle += "<tr> <td>" + typ.typ + "</th>";
+                    tabelle += "<td>" + typ.multiplikator + "</td> </tr>";
+
                 }
-            })
+                tabelle += "</tbody>";
+                preisdiv.innerHTML = response.data;
+
+            )
     }
 
     const vm  = new Vue({

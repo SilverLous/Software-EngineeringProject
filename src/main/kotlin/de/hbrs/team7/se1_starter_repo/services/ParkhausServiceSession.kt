@@ -209,7 +209,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 }
                 return PreistabelleDTO(
                     fahrzeuge,
-                    preise
+                    preise,
+                    0.5f,
+                    "0.50€ mal Fahrzeugmultiplikator mal (Preiskategorie + 1)"
                 )
             }
             pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
@@ -217,7 +219,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         }
         return PreistabelleDTO(
             fahrzeuge,
-            preise
+            preise,
+            0.5f,
+            "0.50€ mal Fahrzeugmultiplikator mal (Preiskategorie + 1)"
         )
     }
 
