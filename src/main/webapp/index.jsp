@@ -156,8 +156,8 @@
                     var preisdiv = document.getElementById('preiseebeneeins')
                     var dataDTO = response.data;
                     console.log(dataDTO);
-                    var tabelle = "<table class=\"table table-bordered table-striped\" " +
-                        "caption=\"Eine Liste der Preise für dieses Parkhaus\"> " + "</table><thead> <tr> ";
+                    var tabelle = "<table class=\"table table-bordered\" caption=\"Eine Liste der Preise für dieses Parkhaus\">";
+                    tabelle += "</table><thead> <tr> ";
 
                 tabelle += "<th scope=\"col\">Fahrzeugtyp</th>";
                 tabelle += "<th scope=\"col\">Preis in €</th>";
