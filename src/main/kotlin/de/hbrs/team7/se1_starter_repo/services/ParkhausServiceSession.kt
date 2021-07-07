@@ -186,6 +186,53 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 // dazu fest fix Preis von 50 cent mal preisklasse mal fahrzeugMultiplikator
     }
 
+    /**
+     *
+     * sammelt alle Fahrzeugklassen und die dazugehörigen Preise und gibt sie als Tabelle für HTML zurück
+     * versucht drei mal, die Fahrzeugtypen und Preise zu holen, danach wird eine default-Ausgabe zurückgegeben
+     *
+     *
+     * @author Alexander Bohl
+     */
+    open fun getFahrzeugmultiplikatorenHTML(): String {
+        var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus?.id)
+        for (i in 1..3) {
+            if (0 != pe?.ebenen?.size ?: 0) {
+                var parkhausEbeneID = parkhaus.ebenen[0].id
+                var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
+                var tabelle = "<thread> <tr> "
+
+                tabelle += "<th scope=\"col\">Fahrzeugtyp</th>"
+                tabelle += "<th scope=\"col\">Preis</th>"
+
+                tabelle += "</tr> </thread> <tbody>"
+                var n = 1
+                for (typ in ebene?.fahrzeugTypen!!) {
+                    tabelle += "<tr> <th scope=\"row\">${n++}</th>"
+                    tabelle += "<td>${typ.typ}</th>"
+                    tabelle += "<td>${typ.multiplikator}</td> </tr>"
+
+                }
+
+                tabelle += "</tbody>"
+                return tabelle
+            }
+            pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
+            Thread.sleep(2000L)
+        }
+        var tabelle = "<thread> <tr> "
+
+        tabelle += "<th scope=\"col\">Fahrzeugtyp</th>"
+        tabelle += "<th scope=\"col\">Preis</th>"
+
+        tabelle += "</tr> </thread> <tbody>"
+
+        tabelle += "<tr> <td>Typ 0</th>"
+        tabelle += "<td>KOSTENLOS!!</td> </tr>"
+        return tabelle
+    }
+
+
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getSummeDerTicketpreise(parkhausEbeneID)
@@ -295,6 +342,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return autoStringListe.joinToString (  "," )
     }
 
+    /**
+     *
+     *
+     * Erstellt eine Ansammlung von Bootstrap-Buttons, die alle Parkhausstandorte in der Datenbank anzeigt außer dem
+     * aktuellen und welchselt beim Klick den Standort.
+     * Wenn keine anderen Standorte in der Datenbank sind, wird eine Default-Nachricht zurückgegeben
+     *
+     * @author Alexander Bohl
+     */
     open fun zeigeHTMLParkhausListe(): String {
         val parkhaeuser = databaseGlobal.queryAllEntities(Parkhaus::class.java)?.filter { pa -> pa.ebenen.size != 0 && pa.stadtname != parkhaus.stadtname}
         val parkhausButtons = parkhaeuser?.map { p -> """<button type="button" onclick="wechsleStadt(this, '${p.id}')" class="btn btn-outline-primary" data-cityid="${p.id}">${p.stadtname}</button>"""
