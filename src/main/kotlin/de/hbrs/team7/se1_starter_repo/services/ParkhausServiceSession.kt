@@ -194,42 +194,30 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      *
      * @author Alexander Bohl
      */
-    open fun getFahrzeugmultiplikatorenHTML(): String {
+    open fun getFahrzeugmultiplikatorenHTML(): PreistabelleDTO {
         var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus?.id)
-        for (i in 1..3) {
+        var fahrzeuge: MutableList<String> = mutableListOf()
+        var preise: MutableList<Double> = mutableListOf()
+        for (i in 1..5) {
             if (0 != pe?.ebenen?.size ?: 0) {
                 var parkhausEbeneID = parkhaus.ebenen[0].id
                 var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
-                var tabelle = "<thread> <tr> "
-
-                tabelle += "<th scope=\"col\">Fahrzeugtyp</th>"
-                tabelle += "<th scope=\"col\">Preis</th>"
-
-                tabelle += "</tr> </thread> <tbody>"
-                var n = 1
                 for (typ in ebene?.fahrzeugTypen!!) {
-                    tabelle += "<tr> <th scope=\"row\">${n++}</th>"
-                    tabelle += "<td>${typ.typ}</th>"
-                    tabelle += "<td>${typ.multiplikator}</td> </tr>"
-
+                    fahrzeuge.add(typ.typ!!)
+                    preise.add(typ.multiplikator * ((parkhaus.preisklasse?:0)+1))
                 }
-
-                tabelle += "</tbody>"
-                return tabelle
+                return PreistabelleDTO(
+                    fahrzeuge,
+                    preise
+                )
             }
             pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
-            Thread.sleep(2000L)
+            Thread.sleep(1000L)
         }
-        var tabelle = "<thread> <tr> "
-
-        tabelle += "<th scope=\"col\">Fahrzeugtyp</th>"
-        tabelle += "<th scope=\"col\">Preis</th>"
-
-        tabelle += "</tr> </thread> <tbody>"
-
-        tabelle += "<tr> <td>Typ 0</th>"
-        tabelle += "<td>KOSTENLOS!!</td> </tr>"
-        return tabelle
+        return PreistabelleDTO(
+            fahrzeuge,
+            preise
+        )
     }
 
 
