@@ -90,8 +90,8 @@
                 </ccm-parkhaus-10-5-8>
             </div>
             <div class="col-md-auto">
-                <div class="white">
-                    <table class="table table-bordered" id="preiseebeneeins">
+                <div class="white" id = "preiseebeneeins">
+                    <table class="table table-bordered table-striped">
                     </table>
                 </div>
             </div>
@@ -131,7 +131,7 @@
 
 
 <div class="click-map" onClick="style.pointerEvents='none'"></div>
-<iframe id="googleMaps"
+<iframe id="googleMaps" title="Google Maps"
         src="https://maps.google.com/maps?q=${parkhausServiceSession.parkhaus.lat},${parkhausServiceSession.parkhaus.lng}+(Ihr%20Parkhaus%20in%20${parkhausServiceSession.parkhaus.stadtname})&z=15&output=embed"
 
         width="100%" height="500" frameborder="0" style="border:0" scrolling="no"
@@ -156,16 +156,16 @@
                     var preisdiv = document.getElementById('preiseebeneeins')
                     var dataDTO = response.data;
                     console.log(dataDTO);
-                    var tabelle = "<thead> <tr> ";
+                    var tabelle = "<table class=\"table table-bordered table-striped\" " +
+                        "caption=\"Eine Liste der Preise für dieses Parkhaus\"> " + "</table><thead> <tr> ";
 
-                    tabelle += "<th scope='col'>Fahrzeugtyp</th>";
-                    tabelle += "<th scope='col'>Preis</th>";
+                tabelle += "<th scope=\"col\">Fahrzeugtyp</th>";
+                tabelle += "<th scope=\"col\">Preis in €</th>";
 
-                    tabelle += "</tr> </thead> <tbody>";
+                    tabelle += "</tr> </thead> <tbody .table-striped>";
                     for (let i = 0; i < dataDTO.fahrzeugKlassen.length; i++) {
-                        tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</th>";
+                        tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</td>";
                         tabelle += "<td>" + dataDTO.preise[i] + "</td> </tr>";
-
                     }
                     tabelle += "</tbody>";
                     preisdiv.innerHTML = tabelle;

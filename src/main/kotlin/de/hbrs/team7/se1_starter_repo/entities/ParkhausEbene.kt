@@ -53,6 +53,11 @@ open class ParkhausEbene (
 
     private var freiePlaetze: Int = 0
 
+    /**
+     * Wurde zur Typkonversion zwischen Java und Kotlin verwendet, wird für zukünftige eventuelle Probleme behalten
+     *
+     * @author Alexander Bohl
+     */
     fun getIdAlsString(): String {
         return id.toString()
     }

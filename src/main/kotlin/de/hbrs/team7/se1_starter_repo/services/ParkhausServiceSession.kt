@@ -190,7 +190,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     /**
      *
      * sammelt alle Fahrzeugklassen und die dazugehörigen Preise und gibt sie als Tabelle für HTML zurück
-     * versucht drei mal, die Fahrzeugtypen und Preise zu holen, danach wird eine default-Ausgabe zurückgegeben
+     * versucht fünf mal, die Fahrzeugtypen und Preise zu holen, danach wird eine default-Ausgabe zurückgegeben
      *
      *
      * @author Alexander Bohl
@@ -225,6 +225,15 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         )
     }
 
+    /**
+     * Ruft getFahrzeugmultiplikatorenDTO() auf und formatiert die Ausgabe in eine HashMap. Wurde zum Debuggen verwendet,
+     * nicht weiter benötigt
+     *
+     * returns: eine HashMap<String, Double> als <Fahrzeugtyp.name, Preismultiplikator>
+     *
+     *@author Alexander Bohl
+     *
+     */
     open fun getFahrzeugmultiplikatorenHashMap(): HashMap<String,Double> {
         val dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO()
         val map: HashMap<String,Double> = HashMap()
