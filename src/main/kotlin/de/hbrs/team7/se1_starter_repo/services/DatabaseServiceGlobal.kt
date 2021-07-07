@@ -25,26 +25,31 @@ kotlin is final by default
 // https://gist.github.com/jahe/18a4efe614fc73cf184d8ceef8cdc996
 // https://github.com/weld/core/blob/master/tests/src/test/java/org/jboss/weld/tests/unit/resource/TestTransactionServices.java
 
+/**
+ *
+ * Der Service um mit der Datenbank zu interagieren
+ *
+ * @author Thomas Gerlach
+ */
 @ApplicationScoped
-//@Singleton
-//@Singleton
-// @Transactional
 open class DatabaseServiceGlobal {
 
-    // @Produces
-    // @PersistenceContext(unitName = "hsqldb-eclipselink")
-    // open var entityManager: EntityManager? = null
 
-    // @PersistenceContext(type = EXTENDED, ) private lateinit var entityManager: EntityManager
+    /* Korrekte Nutzung über eine dieser Methoden und @Transactive über der Methode,
+        aber es hatte mit weld nicht funktioniert
 
+        @PersistenceContext(unitName = "hsqldb-eclipselink")
+        open var entityManager: EntityManager? = null
 
-    // @PersistenceUnit
-    // open var entityManagerFactory: EntityManagerFactory? = null
+        @PersistenceContext(type = EXTENDED, ) private lateinit var entityManager: EntityManager
+
+        @PersistenceUnit
+        open var entityManagerFactory: EntityManagerFactory? = null
+     */
+
 
     private val emf = Persistence.createEntityManagerFactory("hsqldb-eclipselink")
     private val em = emf.createEntityManager()
-
-    // private val et = em.transaction
 
 
     open fun <T> persistEntity(e: T): T? {

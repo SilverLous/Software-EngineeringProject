@@ -93,6 +93,9 @@
             <div class="col-md-auto">
                 <div class="white">
                     <table class="table table-bordered">
+                        <div id="preiseebeneeins">
+
+                        </div>
                     </table>
                 </div>
             </div>
@@ -149,6 +152,16 @@
             })
     }
 
+    function ladePreistabelle() {
+
+        axios.get('/team7Parkhaus/level1-servlet?cmd=preistabelle')
+            .then(function (response) {
+
+                var preisdiv = document.getElementById('preiseebeneeins')
+                preisdiv.innerHTML = response.data;
+            })
+    }
+
     const vm  = new Vue({
         el: '#main',
         data: {loaded: false, plotData: null},
@@ -163,6 +176,10 @@
         }
     });
 
+    document.addEventListener("DOMContentLoaded", function(event)
+    {
+        ladePreistabelle()
+    })
 
 
 </script>
