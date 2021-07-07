@@ -3,7 +3,7 @@ import kotlinx.serialization.*
 
 
 /**
- * Request zum Parkenden Auto
+ * Request zum Parkenden Auto aus der ccm Komponente
  * @property nr Nummer des Fahrzeugs
  *
  * @property begin Einparkzeit
@@ -15,6 +15,7 @@ import kotlinx.serialization.*
  * @property space Stellplatz-Nummer
  * @property price Parkgebühr
  *
+ * @author Thomas Gerlach
  *  */
 @Serializable
 public data class ParkhausServletPostDto(
