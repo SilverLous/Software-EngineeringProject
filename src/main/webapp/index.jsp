@@ -91,10 +91,7 @@
             </div>
             <div class="col-md-auto">
                 <div class="white">
-                    <table class="table table-bordered">
-                        <div id="preiseebeneeins">
-
-                        </div>
+                    <table class="table table-bordered" id="preiseebeneeins">
                     </table>
                 </div>
             </div>
@@ -156,23 +153,23 @@
         axios.get('/team7Parkhaus/level1-servlet?cmd=preistabelle')
             .then(function (response) {
 
-                var preisdiv = document.getElementById('preiseebeneeins')
-                var dataDTO = response.data;
-                console.log(dataDTO);
-                var tabelle = "<thread> <tr> ";
+                    var preisdiv = document.getElementById('preiseebeneeins')
+                    var dataDTO = response.data;
+                    console.log(dataDTO);
+                    var tabelle = "<thead> <tr> ";
 
-                tabelle += "<th scope=\"col\">Fahrzeugtyp</th>";
-                tabelle += "<th scope=\"col\">Preis</th>";
+                    tabelle += "<th scope='col'>Fahrzeugtyp</th>";
+                    tabelle += "<th scope='col'>Preis</th>";
 
-                tabelle += "</tr> </thread> <tbody>";
-                for (let typ in dataDTO.fahrzeugKlassen) {
-                    tabelle += "<tr> <td>" + typ.typ + "</th>";
-                    tabelle += "<td>" + typ.multiplikator + "</td> </tr>";
+                    tabelle += "</tr> </thead> <tbody>";
+                    for (let i = 0; i < dataDTO.fahrzeugKlassen.length; i++) {
+                        tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</th>";
+                        tabelle += "<td>" + dataDTO.preise[i] + "</td> </tr>";
 
+                    }
+                    tabelle += "</tbody>";
+                    preisdiv.innerHTML = tabelle;
                 }
-                tabelle += "</tbody>";
-                preisdiv.innerHTML = response.data;
-
             )
     }
 
