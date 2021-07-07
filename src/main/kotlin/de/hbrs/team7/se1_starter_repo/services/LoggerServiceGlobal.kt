@@ -15,9 +15,16 @@ open means not final
 kotlin is final by default
  */
 
-// @Named
+/**
+ *
+ * Ein Service für das zentrale loggen von Informationen.
+ * Diese werden einmal als System log ausgegeben und einmal an die Website als Websocket
+ *
+ * @property logSubject ein ReplaySubject um zu speichern welche Log Einträge eingekommen sind
+ *
+ * @author Thomas Gerlach
+ */
 @ApplicationScoped
-//@Singleton
 open class LoggerServiceGlobal { // : ParkhausServiceIF {
 
     open val logSubject: ReplaySubject<LogEintragDTO> = ReplaySubject.create()

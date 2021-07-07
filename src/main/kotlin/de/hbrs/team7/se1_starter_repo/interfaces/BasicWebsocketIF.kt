@@ -5,6 +5,15 @@ import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
 import java.io.IOException
 
+/**
+ *
+ * Ein Template für einen Websocket der für alle gleich ist
+ * und nicht wiederholt falls jemand zu spät kommt
+ *
+ * @property sessions Eine Liste der aktiven "Zuhörer"
+ *
+ * @author Thomas Gerlach
+ */
 interface BasicWebsocketIF {
     val sessions: MutableSet<Session>
 

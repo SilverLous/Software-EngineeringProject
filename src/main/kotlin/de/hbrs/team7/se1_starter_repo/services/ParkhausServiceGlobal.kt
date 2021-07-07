@@ -19,16 +19,21 @@ open means not final
 kotlin is final by default
  */
 
+
+/**
+ *
+ * Ein Service um Global und eindeutig werte zu erhalten oder zu speichern, quasi cache
+ *
+ * @property statisticUpdateSubj ein PublishSubjekt um zu speichern welche UI-Komponente aktualisiert werden soll
+ *
+ * @author Thomas Gerlach
+ */
 @Named
 @ApplicationScoped
-//@Singleton
 open class ParkhausServiceGlobal { // : ParkhausServiceIF {
 
     @Inject
     private lateinit var databaseGlobal: DatabaseServiceGlobal
-
-    @Deprecated("use ebenenSet")
-    open val levelSet = mutableSetOf<String>()
 
     open val ebenenSet = mutableSetOf<ParkhausEbeneConfigDTO>()
 

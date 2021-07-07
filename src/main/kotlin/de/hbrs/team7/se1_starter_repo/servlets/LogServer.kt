@@ -9,6 +9,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 
+/**
+ *
+ *  
+ *
+ * @author Thomas Gerlach
+ */
 @ServerEndpoint("/log" )
 public open class LogServer : BasicWebsocketIF {
     override val sessions = mutableSetOf<Session>()
