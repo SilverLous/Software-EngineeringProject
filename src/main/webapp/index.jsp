@@ -157,6 +157,8 @@
             .then(function (response) {
 
                 var preisdiv = document.getElementById('preiseebeneeins')
+                var dataDTO = response.data;
+                console.log(dataDTO)
                 //preisdiv.innerHTML = response.data;
                 preisdiv.
                 names = ["Klasse","Preis"]
@@ -194,7 +196,7 @@
 
     document.addEventListener("DOMContentLoaded", function(event)
     {
-        ladePreistabelle()
+        console.log(ladePreistabelle())
     })
 
 
