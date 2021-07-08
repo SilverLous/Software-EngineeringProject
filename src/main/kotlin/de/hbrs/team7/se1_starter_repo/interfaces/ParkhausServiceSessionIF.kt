@@ -57,4 +57,5 @@ interface ParkhausServiceSessionIF {
     fun setzeFarben(values: List<Double>): Marker
 
     fun setzeTitel(xAchse:String,yAchse:String):Layout
+    fun erstelleDauerUeberFahrzeugTyp(parkhausEbeneName: String): StatisticsChartDto?
 }

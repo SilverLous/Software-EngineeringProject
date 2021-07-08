@@ -386,6 +386,16 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return null
     }
 
+    override fun erstelleDauerUeberFahrzeugTyp(parkhausEbeneName: String): StatisticsChartDto? {
+        val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
+        val allCarsThatLeft = databaseGlobal.getautosInParkEbene(parkhausEbeneID, false)
+        val allVehicleTypes = allCarsThatLeft.map { a->a.typ }.toSet().toList()
+        val sumPricesOverVehicleTypes = allVehicleTypes.map { a->allCarsThatLeft.filter { a2-> a2.typ==a }.fold(0.0) { acc, i -> acc + (i.getParkdauer())/1000 } }
+        val farben = setzeFarben(sumPricesOverVehicleTypes)
+        return StatisticsChartDto(data = listOf(CarData("bar", allVehicleTypes, sumPricesOverVehicleTypes,farben)), Layout = setzeTitel("Auto-Typen","Dauer in Sekunden"))
+
+    }
+
     override fun setzeFarben(carMap: Map<String, Int>?): Marker{
         val farbenListe = ArrayList<String>()
         val max = carMap?.values?.maxOrNull()
