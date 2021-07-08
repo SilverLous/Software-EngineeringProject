@@ -350,7 +350,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                         "${it.autonummer}/" +
                         "${it.ticket?.Ausstellungsdatum?.time}/" +
                         "${if (it.imParkhaus) 0 else it.getParkdauer()}/" +
-                        "${errechneTicketPreis(parkhausEbeneID, it.ticket!!, it)}/" +
+                        "${if (it.imParkhaus) 0 else errechneTicketPreis(parkhausEbeneID, it.ticket!!, it)}/" + // workaround Preis muss 0 sein sonst ist es schon ausgefahren
                         "Ticket${it.ticket?.Ticketnummer}/" +
                         "${it.farbe}/" +
                         "${it.platznummer}/" +
