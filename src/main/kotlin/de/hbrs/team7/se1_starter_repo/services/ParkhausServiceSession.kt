@@ -195,13 +195,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      *
      * @author Alexander Bohl
      */
-    open fun getFahrzeugmultiplikatorenDTO(): PreistabelleDTO {
+    open fun getFahrzeugmultiplikatorenDTO(ebenenZahl: Int): PreistabelleDTO {
         var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus?.id)
         var fahrzeuge: MutableList<String> = mutableListOf()
         var preise: MutableList<Double> = mutableListOf()
         for (i in 1..5) {
             if (0 != pe?.ebenen?.size ?: 0) {
-                var parkhausEbeneID = parkhaus.ebenen[0].id
+                var parkhausEbeneID = parkhaus.ebenen[ebenenZahl].id
                 var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
                 for (typ in ebene?.fahrzeugTypen!!) {
                     fahrzeuge.add(typ.typ!!)
@@ -211,7 +211,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     fahrzeuge,
                     preise,
                     0.5f,
-                    "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)"
+                    "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",
+                    (parkhaus.preisklasse?:0) + 1
                 )
             }
             pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
@@ -221,7 +222,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             fahrzeuge,
             preise,
             0.5f,
-            "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)"
+            "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",
+            0
         )
     }
 
@@ -234,8 +236,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      *@author Alexander Bohl
      *
      */
-    open fun getFahrzeugmultiplikatorenHashMap(): HashMap<String,Double> {
-        val dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO()
+    open fun getFahrzeugmultiplikatorenHashMap(ebenenZahl: Int): HashMap<String,Double> {
+        val dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO(ebenenZahl)
         val map: HashMap<String,Double> = HashMap()
         var i: Int = 0;
         for (klasse in dto.fahrzeugKlassen) {

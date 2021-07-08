@@ -146,9 +146,9 @@
             })
     }
 
-    function ladePreistabelle() {
+    function ladePreistabelle(ebenenZahl) {
 
-        axios.get('/team7Parkhaus/level1-servlet?cmd=preistabelle')
+        axios.get('/team7Parkhaus/level1-servlet?cmd=preistabelle&ebene=' + ebenenZahl)
             .then(function (response) {
 
                     var preisdiv = document.getElementById('preiseebeneeins')
@@ -165,7 +165,7 @@
                         tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</td>";
                         tabelle += "<td>" + Math.round(dataDTO.preise[i] * 100) / 100 + "</td> </tr>";
                     }
-                    tabelle += "<td colspan=\"2\">Basispreis: " + dataDTO.festpreisString + "</td>";
+                    tabelle += "<td colspan=\"2\">Basispreis: " + dataDTO.festpreis * dataDTO.ortsmultiplikator+ " mal Fahrzeugtyp</td>";
                     tabelle += "</tbody>";
                     preisdiv.innerHTML = tabelle;
                 }
@@ -188,7 +188,7 @@
 
     document.addEventListener("DOMContentLoaded", function(event)
     {
-        console.log(ladePreistabelle())
+        console.log(ladePreistabelle(0))
     })
 
 

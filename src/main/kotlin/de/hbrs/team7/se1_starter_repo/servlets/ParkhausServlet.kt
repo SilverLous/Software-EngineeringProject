@@ -158,7 +158,8 @@ abstract class ParkhausServlet : HttpServlet() {
             }
             "preistabelle" -> {
                 response.contentType = charset
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getFahrzeugmultiplikatorenDTO())
+                val ebenenZahl = Integer.parseInt(request.getParameter("ebene"))
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getFahrzeugmultiplikatorenDTO(ebenenZahl))
                 out.print(jsonData)
             }
 
