@@ -167,6 +167,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         if (ticket.Auto != null){
             undoList.add(ticket.Auto!!)
         }
+        logGlobal.schreibeInfo("Auto ${ticket.Auto} hat das Parkhaus verlassen. Parkdauer: ${ticket.Auto?.getParkdauer()?:0}")
 
         return ticket.price.toLong()
     }
