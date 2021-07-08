@@ -947,6 +947,9 @@
             <div class="col-md-6">
                 <div id='EinnahmenUeberBundesland'><!-- Plotly chart will be drawn inside this DIV --></div>
             </div>
+            <div class="col-md-6">
+                <div id='DauerUeberTyp'><!-- Plotly chart will be drawn inside this DIV --></div>
+            </div>
         </div>
         <div class="row">
             <div class="col-6">
@@ -1026,10 +1029,20 @@
             })
     }
 
+
+    function plotDauerUeberAutoTyp(){
+        axios.get('/team7Parkhaus/level1-servlet?cmd=daueruebertyp')
+            .then(function (response) {
+                DauerUeberTyp = response.data
+                Plotly.newPlot('DauerUeberTyp', DauerUeberTyp,layout, {scrollZoom: true, color:'DauerUeberTyp'});
+            })
+    }
+
     plotTageseinnahmen()
     plotWocheneinnahmen()
     plotEinnahmenUeberAutoTyp()
     plotEinnahmenUeberBundesland()
+    plotDauerUeberAutoTyp()
 
     statistikUpdatews.onmessage = function (e) {
         console.log("From Server:"+ e.data);
@@ -1037,6 +1050,7 @@
         plotWocheneinnahmen()
         plotEinnahmenUeberAutoTyp()
         plotEinnahmenUeberBundesland()
+        plotDauerUeberAutoTyp()
 
     };
 

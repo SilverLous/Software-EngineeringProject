@@ -128,6 +128,15 @@ abstract class ParkhausServlet : HttpServlet() {
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstellePreiseFuerBundeslaender())
                 out.print(jsonData)
             }
+            "daueruebertyp" -> {
+                // http://json-b.net/docs/user-guide.html
+
+                // https://github.com/Kotlin/kotlinx.serialization
+                response.contentType = charset
+
+                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleDauerUeberFahrzeugTyp(config.ebenenNamen))
+                out.print(jsonData)
+            }
 
             "average" ->  out.println("${parkhausServiceSession.getDurchschnittUeberAutos(config.ebenenNamen)/100} € per car")
 
