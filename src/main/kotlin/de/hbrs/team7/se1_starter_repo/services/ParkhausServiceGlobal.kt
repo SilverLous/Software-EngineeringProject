@@ -51,8 +51,8 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
 
     open fun getAlteDeutschlandDaten() : Pair<String,String> {
         val data = databaseGlobal.getAlteDeutschlandDaten()
-        val brdString = "Autos: ${data.brd.first} Einnahmen: ${data.brd.second} €"
-        val ddrString = "Autos: ${data.ddr.first} Einnahmen: ${data.ddr.second} €"
+        val brdString = "Autos: ${data.brd.first} Einnahmen: ${data.brd.second / 100} €"
+        val ddrString = "Autos: ${data.ddr.first} Einnahmen: ${data.ddr.second / 100} €"
 
         return Pair( brdString, ddrString )
 
