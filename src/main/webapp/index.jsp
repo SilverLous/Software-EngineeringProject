@@ -132,7 +132,7 @@
 <iframe id="googleMaps" title="Google Maps"
         src="https://maps.google.com/maps?q=${parkhausServiceSession.parkhaus.lat},${parkhausServiceSession.parkhaus.lng}+(Ihr%20Parkhaus%20in%20${parkhausServiceSession.parkhaus.stadtname})&z=15&output=embed"
 
-        width="100%" height="500" frameborder="0" style="border:0" scrolling="no"
+        width="100%" height="500" style="border:0"
         allowfullscreen></iframe>
 </body>
 
