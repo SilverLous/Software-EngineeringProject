@@ -91,8 +91,6 @@
             </div>
             <div class="col-md-auto">
                 <div class="white" id = "preiseebeneeins">
-                    <table class="table table-bordered table-striped">
-                    </table>
                 </div>
             </div>
         </div>
@@ -156,13 +154,13 @@
                     var preisdiv = document.getElementById('preiseebeneeins')
                     var dataDTO = response.data;
                     console.log(dataDTO);
-                    var tabelle = "<table class=\"table table-bordered\" caption=\"Eine Liste der Preise für dieses Parkhaus\">";
-                    tabelle += "</table><thead> <tr> ";
+                    var tabelle = "<table class=\"table table-bordered table-striped\" caption=\"Eine Liste der Preise für dieses Parkhaus\">";
+                    tabelle += "<thead> <tr> ";
 
                 tabelle += "<th scope=\"col\">Fahrzeugtyp</th>";
                 tabelle += "<th scope=\"col\">Preis in €</th>";
 
-                    tabelle += "</tr> </thead> <tbody .table-striped>";
+                    tabelle += "</tr> </thead> <tbody >";
                     for (let i = 0; i < dataDTO.fahrzeugKlassen.length; i++) {
                         tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</td>";
                         tabelle += "<td>" + dataDTO.preise[i] + "</td> </tr>";
