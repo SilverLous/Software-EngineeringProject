@@ -46,13 +46,15 @@ Für alle Parkhäuser gibt es eine einheitliche Managerseite, in der man Statist
  - Axios
  - ccm.parkhaus
 
-### Deploment
+### Deployment
  - Gitlab Pipelines
+   - Maven develop Pipeline
+   - Docker Productive Pipeline  
  - Jenkins Pipelines
- - SonarQube Analysen
- - Traefik als reverse proxy
+   - SonarQube Analysen
  - Docker-Swarm als Container Umgebung
- - Tomcat 10
+     - Traefik als reverse proxy
+     - Tomcat 10
 
 
 # Lines of Code
