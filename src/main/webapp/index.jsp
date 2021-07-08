@@ -163,8 +163,9 @@
                     tabelle += "</tr> </thead> <tbody >";
                     for (let i = 0; i < dataDTO.fahrzeugKlassen.length; i++) {
                         tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</td>";
-                        tabelle += "<td>" + dataDTO.preise[i] + "</td> </tr>";
+                        tabelle += "<td>" + Math.round(dataDTO.preise[i] * 100) / 100 + "</td> </tr>";
                     }
+                    tabelle += "<td colspan=\"2\">Basispreis: " + dataDTO.festpreisString + "</td>";
                     tabelle += "</tbody>";
                     preisdiv.innerHTML = tabelle;
                 }
