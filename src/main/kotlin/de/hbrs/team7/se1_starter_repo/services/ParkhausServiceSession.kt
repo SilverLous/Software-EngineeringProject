@@ -211,7 +211,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     fahrzeuge,
                     preise,
                     0.5f,
-                    "0.50€ mal Fahrzeugmultiplikator mal (Preiskategorie + 1)"
+                    "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)"
                 )
             }
             pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
@@ -221,7 +221,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             fahrzeuge,
             preise,
             0.5f,
-            "0.50€ mal Fahrzeugmultiplikator mal (Preiskategorie + 1)"
+            "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)"
         )
     }
 

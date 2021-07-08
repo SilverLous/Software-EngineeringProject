@@ -132,7 +132,7 @@
 <iframe id="googleMaps" title="Google Maps"
         src="https://maps.google.com/maps?q=${parkhausServiceSession.parkhaus.lat},${parkhausServiceSession.parkhaus.lng}+(Ihr%20Parkhaus%20in%20${parkhausServiceSession.parkhaus.stadtname})&z=15&output=embed"
 
-        width="100%" height="500" frameborder="0" style="border:0" scrolling="no"
+        width="100%" height="500" style="border:0"
         allowfullscreen></iframe>
 </body>
 
@@ -163,8 +163,9 @@
                     tabelle += "</tr> </thead> <tbody >";
                     for (let i = 0; i < dataDTO.fahrzeugKlassen.length; i++) {
                         tabelle += "<tr> <td>" + dataDTO.fahrzeugKlassen[i] + "</td>";
-                        tabelle += "<td>" + dataDTO.preise[i] + "</td> </tr>";
+                        tabelle += "<td>" + Math.round(dataDTO.preise[i] * 100) / 100 + "</td> </tr>";
                     }
+                    tabelle += "<td colspan=\"2\">Basispreis: " + dataDTO.festpreisString + "</td>";
                     tabelle += "</tbody>";
                     preisdiv.innerHTML = tabelle;
                 }
