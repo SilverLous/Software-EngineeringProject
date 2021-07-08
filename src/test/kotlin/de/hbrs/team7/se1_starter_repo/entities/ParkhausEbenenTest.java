@@ -22,7 +22,7 @@ public class ParkhausEbenenTest {
     static final int VERZÖGERUNG = 200;
     static final int SIMULATIONSGESCHWINDIGKEIT = 1;
     static final int ZEITVERSCHUB = 0;
-    static final HashMap<String, Double> FAHRZEUGPREISE = new HashMap<String, Double>();
+    static final HashMap<String, Double> FAHRZEUGPREISE = new HashMap<>();
 
     @Test
     @DisplayName("Teste Statischen Fabrikator")
