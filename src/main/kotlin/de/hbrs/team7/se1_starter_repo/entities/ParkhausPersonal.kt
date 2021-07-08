@@ -35,6 +35,11 @@ open class ParkhausPersonal(
         this.loggedIn = false
     }
 
+    /**
+     * die weiteren Funktionen wurden durch den Einsatz der Datenbank überflüssig
+     *
+     *
+     */
     fun statistikAbrufen(parkhaus: Parkhaus): Json? {
         return null
     }
