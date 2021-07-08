@@ -435,7 +435,7 @@ public class ParkhausServiceSessionJavaTest {
     /**
      *
      * Erzeugt im aktuellen Parkhaus eine variable Anzahl an Ebenen mit Default-Parametern. Die Ebenen werden
-     * mit "Generierte Ebene Nr. x" bezeichnet
+     * mit "Generierte Ebene Nr. x" x Element aus N0 bezeichnet
      *
      * @param anzahl: Die Anzahl der zu generierenden Ebenen
      *

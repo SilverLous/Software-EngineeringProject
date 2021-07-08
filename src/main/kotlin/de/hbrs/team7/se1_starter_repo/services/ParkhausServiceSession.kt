@@ -227,7 +227,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     /**
      * Ruft getFahrzeugmultiplikatorenDTO() auf und formatiert die Ausgabe in eine HashMap. Wurde zum Debuggen verwendet,
-     * nicht weiter benötigt
+     * wird für zukünftige Tabellen als Anlehnung behalten
      *
      * returns: eine HashMap<String, Double> als <Fahrzeugtyp.name, Preismultiplikator>
      *
