@@ -545,7 +545,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         HashMap<String, Double> preise = new HashMap<>();
         preise.put("Auto", 1.0);
         for (int i = 0; i < anzahl; i++) {
-            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,5, preise, parkhaus));
+            ebenen[i] = parkhausServiceSession.initEbene(new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 12, 6,24,0,0, 5, preise, parkhaus));
         }
         return ebenen;
     }

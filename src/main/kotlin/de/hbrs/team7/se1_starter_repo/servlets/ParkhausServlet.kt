@@ -78,11 +78,17 @@ abstract class ParkhausServlet : HttpServlet() {
         println("$cmd + requested:" + request.queryString)
 
         when (cmd.lowercase()) {
-            "config" ->
+            "config" -> {
                 // Overwrite Parkhaus config parameters
                 // Max, open_from, open_to, delay, simulation_speed
-                out.println(parkhausServiceSession.getParkhausEbenen().find { pe -> pe.name == config.ebenenNamen }!!.toConfigCSV())
 
+                response.contentType = charset
+
+                val ebeneDTO: ParkhausEbeneConfigDTO = parkhausServiceSession.getParkhausEbenen().find { pe -> pe.name == config.ebenenNamen }!!.toConfigDTO()
+                val jsonData = Json.encodeToJsonElement( ebeneDTO )
+                out.print(jsonData)
+
+            }
             "sum" -> {
                 out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(config.ebenenNamen)/100} € insgesamt")
             }

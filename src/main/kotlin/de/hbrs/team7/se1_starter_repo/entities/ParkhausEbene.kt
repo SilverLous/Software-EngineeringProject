@@ -2,6 +2,8 @@ package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import jakarta.persistence.*
+import kotlinx.serialization.SerialName
+import kotlin.jvm.Transient
 
 @Entity
 open class ParkhausEbene (
@@ -48,6 +50,21 @@ open class ParkhausEbene (
     fun toConfigCSV(): String {
         return listOf(maxPlätze, öffnungszeit, ladenschluss, verzögerung, simulationsGeschwindigkeit).joinToString(",")
     }
+
+    fun toConfigDTO(): ParkhausEbeneConfigDTO {
+
+        return ParkhausEbeneConfigDTO(
+            ebenenNamen = this.name!!,
+            maxPlätze = this.maxPlätze,
+            öffnungszeit = this.öffnungszeit,
+            ladenschluss = this.ladenschluss,
+            verzögerung = this.verzögerung,
+            zeitverschub =  0,
+            simulationsGeschwindigkeit =  simulationsGeschwindigkeit,
+            FahrzeugPreise = hashMapOf(),
+        )
+    }
+
 
 
 

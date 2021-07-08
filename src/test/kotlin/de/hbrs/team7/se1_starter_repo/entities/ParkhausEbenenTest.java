@@ -15,34 +15,36 @@ import java.util.HashMap;
  */
 public class ParkhausEbenenTest {
 
-    static final String EBENEN_NAMEN = "TestBundesland";
-    static final int MAX_PLÄTZE = 12;
+    static final String EBENENNAMEN = "TestBundesland";
+    static final int MAXPLÄTZE = 12;
     static final int ÖFFNUNGSZEIT = 6;
     static final int LADENSCHLUSS = 24;
     static final int VERZÖGERUNG = 200;
-    static final int SIMULATIONS_GESCHWINDIGKEIT = 1;
-    static final HashMap<String, Double> FAHRZEUG_PREISE = new HashMap<String, Double>();
+    static final int SIMULATIONSGESCHWINDIGKEIT = 1;
+    static final int ZEITVERSCHUB = 0;
+    static final HashMap<String, Double> FAHRZEUGPREISE = new HashMap<String, Double>();
 
     @Test
     @DisplayName("Teste Statischen Fabrikator")
     public void testFabrikator() {
 
-        FAHRZEUG_PREISE.put("PKW", 1.0);
-        FAHRZEUG_PREISE.put("Pickup", 1.2);
-        FAHRZEUG_PREISE.put("SUV", 1.5);
+        FAHRZEUGPREISE.put("PKW", 1.0);
+        FAHRZEUGPREISE.put("Pickup", 1.2);
+        FAHRZEUGPREISE.put("SUV", 1.5);
 
-        ParkhausEbeneConfigDTO testConfig = new ParkhausEbeneConfigDTO(EBENEN_NAMEN, MAX_PLÄTZE, ÖFFNUNGSZEIT,
-                LADENSCHLUSS, VERZÖGERUNG, SIMULATIONS_GESCHWINDIGKEIT, FAHRZEUG_PREISE, null);
+        ParkhausEbeneConfigDTO testConfig = new ParkhausEbeneConfigDTO(
+                EBENENNAMEN, MAXPLÄTZE, ÖFFNUNGSZEIT,
+                LADENSCHLUSS, VERZÖGERUNG, ZEITVERSCHUB, SIMULATIONSGESCHWINDIGKEIT, FAHRZEUGPREISE, null);
 
 
         ParkhausEbene pe = ParkhausEbene.Companion.ausEbenenConfig(testConfig);
 
-        Assertions.assertEquals(EBENEN_NAMEN, pe.getName());
-        Assertions.assertEquals(MAX_PLÄTZE, pe.getMaxPlätze());
+        Assertions.assertEquals(EBENENNAMEN, pe.getName());
+        Assertions.assertEquals(MAXPLÄTZE, pe.getMaxPlätze());
         Assertions.assertEquals(ÖFFNUNGSZEIT, pe.getöffnungszeit());
         Assertions.assertEquals(LADENSCHLUSS, pe.getLadenschluss());
         Assertions.assertEquals(VERZÖGERUNG, pe.getVerzögerung());
-        Assertions.assertEquals(SIMULATIONS_GESCHWINDIGKEIT, pe.getSimulationsGeschwindigkeit());
+        Assertions.assertEquals(SIMULATIONSGESCHWINDIGKEIT, pe.getSimulationsGeschwindigkeit());
         Assertions.assertNull(pe.getParkhaus());
 
     }

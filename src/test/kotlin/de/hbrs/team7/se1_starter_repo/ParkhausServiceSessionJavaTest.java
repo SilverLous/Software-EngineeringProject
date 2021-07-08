@@ -444,7 +444,7 @@ public class ParkhausServiceSessionJavaTest {
     private ParkhausEbeneConfigDTO[] generiereConfigDTOs(int anzahl) {
         ParkhausEbeneConfigDTO[] configs = new ParkhausEbeneConfigDTO[anzahl];
         for (int i = 0; i < anzahl; i++) {
-            configs[i] = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,5, fahrzeugPreise, null);
+            configs[i] = new ParkhausEbeneConfigDTO("Generierte Ebene Nr. "+i, 120, 6,24,0,0, 5, fahrzeugPreise, null);
         }
         return configs;
     }
