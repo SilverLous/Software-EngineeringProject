@@ -201,23 +201,29 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         var fahrzeuge: MutableList<String> = mutableListOf()
         var preise: MutableList<Double> = mutableListOf()
         for (i in 1..5) {
-            if (0 != pe?.ebenen?.size ?: 0) {
-                var parkhausEbeneID = parkhaus.ebenen[ebenenZahl].id
-                var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
-                for (typ in ebene?.fahrzeugTypen!!) {
-                    fahrzeuge.add(typ.typ!!)
-                    preise.add(typ.multiplikator * ((parkhaus.preisklasse?:0)+1))
+            try {
+                if (0 != pe?.ebenen?.size ?: 0) {
+                    var parkhausEbeneID = parkhaus.ebenen[ebenenZahl].id
+                    var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
+                    for (typ in ebene?.fahrzeugTypen!!) {
+                        fahrzeuge.add(typ.typ!!)
+                        preise.add(typ.multiplikator * ((parkhaus.preisklasse?:0)+1))
+                    }
+                    return PreistabelleDTO(
+                        fahrzeuge,
+                        preise,
+                        0.5f,
+                        "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",
+                        (parkhaus.preisklasse?:0) + 1
+                    )
                 }
-                return PreistabelleDTO(
-                    fahrzeuge,
-                    preise,
-                    0.5f,
-                    "0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",
-                    (parkhaus.preisklasse?:0) + 1
-                )
+                pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
+            } catch (e: Exception) {
+                logGlobal.schreibeWarning("Fahrzeugtypen für Website sind noch nicht Initialisiert")
+                Thread.sleep(1000L * i)
             }
-            pe = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
-            Thread.sleep(1000L)
+
+
         }
         return PreistabelleDTO(
             fahrzeuge,
