@@ -16,6 +16,7 @@
         <junit.version>5.7.1</junit.version>
         <kotlin.version>1.5.0</kotlin.version>
         <serialization.version>1.2.1</serialization.version>
+        <version.arquillian_core>1.7.0.Alpha5</version.arquillian_core>
     </properties>
 
     <dependencies>
@@ -127,35 +128,39 @@
         <dependency>
             <groupId>org.jboss.arquillian</groupId>
             <artifactId>arquillian-bom</artifactId>
-            <version>1.7.0.Alpha5</version>
-            <scope>import</scope>
+            <version>${version.arquillian_core}</version>
             <type>pom</type>
+            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.junit5</groupId>
             <artifactId>arquillian-junit5-container</artifactId>
+            <version>${version.arquillian_core}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-weld-embedded</artifactId>
+            <version>3.0.0.Alpha2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-tomcat-common</artifactId>
+            <version>1.1.0.Final</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
             <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
+            <version>1.7.0.Alpha5</version>
+            <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-weld-embedded</artifactId>
-            <version>3.0.0.Alpha1</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-core-impl</artifactId>
-            <version>${weld.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
