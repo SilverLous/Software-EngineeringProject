@@ -40,6 +40,15 @@ open class Parkhaus (
         ebenen.add(ebene)
     }
 
+    /**
+     * Methode, um das Bundesland des aktuellen Parkhauses für die Ausgabe zu übersetzen.
+     *
+     * Grundstruktur: Alexander Bohl
+     * Auslagerung in companion object: Thomas Gerlach
+     *
+     * @author Alexander Bohl
+     * @author Thomas Gerlach
+     */
     fun getUebersetztesBundesland(): String? {
 
         return if (this.bundesland in BundeslandÜbersetzung) {

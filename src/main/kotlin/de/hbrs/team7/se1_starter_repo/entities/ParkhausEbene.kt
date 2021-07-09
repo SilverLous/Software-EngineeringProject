@@ -71,7 +71,7 @@ open class ParkhausEbene (
     private var freiePlaetze: Int = 0
 
     /**
-     * Wurde zur Typkonversion zwischen Java und Kotlin verwendet, wird für zukünftige eventuelle Probleme behalten
+     * Wurde zur Typkonversion zwischen Java und Kotlin verwendet
      *
      * @author Alexander Bohl
      */
