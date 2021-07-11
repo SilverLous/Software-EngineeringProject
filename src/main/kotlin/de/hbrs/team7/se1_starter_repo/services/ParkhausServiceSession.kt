@@ -529,8 +529,17 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
+    /**
+     *
+     * Code, der im Pay-Servlet aufgerufen wird. Erzeugt den HTML-Code für die Ausgabe der Kasse.
+     *
+     * @param ebene: Der Name der Parkhausebene (Ebene 1, Ebene 2 etc.)
+     * @param parkplatz: Der Stellplatz des Autos, das abgefragt wird.
+     *
+     * @author Alexander Bohl
+     */
     open fun generiereKassenAusgabe(ebene: String, parkplatz: Int): String {
-        var ausgabe = "<h2>Ihre Parkplatznummer: $parkplatz</h2>\n"
+        var ausgabe = "<h3>Ihre Parkplatznummer: $parkplatz</h3>\n"
         val ebeneFound = parkhausEbenen.first{e-> e.name.equals(ebene) }
         val ticket = findeTicketUeberParkplatz(ebene,parkplatz)
         if (ticket == null) {
@@ -544,7 +553,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     ebeneFound?.fahrzeugTypen?.find {
                             entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
                         ?.multiplikator) ?: 1.0
-            ausgabe += "Ihr Fahrzeugklassen multiplikator: $fahrzeugMultiplikator<br>"
+            ausgabe += "Ihr Fahrzeugklassen-Multiplikator: $fahrzeugMultiplikator<br>"
 
 
             return ausgabe
