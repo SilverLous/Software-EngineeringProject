@@ -561,5 +561,9 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return parkhausServiceGlobal.ebenenSet.joinToString { "<option value=\"${it.ebenenNamen}\">${it.ebenenNamen}</option>" }
     }
 
+    open fun getPreisklasse(): Int? {
+        return parkhaus.preisklasse
+    }
+
 }
 

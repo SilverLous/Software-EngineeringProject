@@ -2,6 +2,7 @@ package de.hbrs.team7.se1_starter_repo;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
+import de.hbrs.team7.se1_starter_repo.dto.PreistabelleDTO;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
@@ -435,6 +436,22 @@ public class ParkhausServiceSessionJavaTest {
             compareString += "Ihr Fahrzeugklassen-Multiplikator: 1<br>";
             Assertions.assertEquals(compareString,parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i));
         }
+    }
+
+
+    @Test
+    @DisplayName("Test der getFahrzeugmultiplikatorenDTO()")
+    public void testFahrzeugmultiplikatorenDTO() {
+        generiereEbenen(1);
+        PreistabelleDTO tabelle = parkhausServiceSession.getFahrzeugmultiplikatorenDTO(0);
+        String[] fahrzeugtypen = {"PKW","Pickup","SUV"};
+        float[] preise = {1.0f,1.2f,1.5f};
+        Assertions.assertEquals(fahrzeugtypen,tabelle.getFahrzeugKlassen().toArray());
+        Assertions.assertEquals(0.5f,tabelle.getFestpreis());
+        Assertions.assertEquals("0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",tabelle.getFestpreisString());
+        Assertions.assertEquals(preise,tabelle.getPreise().toArray());
+        Assertions.assertEquals(parkhausServiceSession.getPreisklasse()+1,tabelle.getOrtsmultiplikator());
+
     }
 
 
