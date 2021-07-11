@@ -9,6 +9,7 @@ import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import java.util.*
+import java.util.Locale.filter
 import kotlin.collections.HashMap
 
 
@@ -528,24 +529,19 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
-    open fun generiereKassenAusgabe(ebene: Int, parkplatz: Int): String {
+    open fun generiereKassenAusgabe(ebene: String, parkplatz: Int): String {
         var ausgabe = "<h2>Ihre Parkplatznummer: $parkplatz</h2>\n"
-        if (!(ebene ==1 || ebene==2)) {
-            return "<h2>Ihre Parkebene konnte leider nicht gefunden werden.</h2>"
-        }
-        val ebene = parkhausEbenen[ebene-1]
-        val ticket = ebene.name?.let { findeTicketUeberParkplatz(it,parkplatz) }
-        val parkdauer =
-            ticket?.zuParkhausServletPostDto()?.timer
-        if (parkdauer == null) {
+        val ebeneFound = parkhausEbenen.first{e-> e.name.equals(ebene) }
+        val ticket = findeTicketUeberParkplatz(ebene,parkplatz)
+        if (ticket == null) {
             return "<h2>Ihr Parkplatz konnte leider nicht gefunden werden</h2>"
         } else {
             ausgabe += "Ihre Parkgebühren : "
-            val kosten = errechneTicketPreis(ebene.id,ticket,ticket.Auto!!)
+            val kosten = errechneTicketPreis(ebeneFound.id,ticket,ticket.Auto!!)
             ausgabe += "${kosten/100.0}€<br>"
 
             val fahrzeugMultiplikator: Double = (
-                    ebene?.fahrzeugTypen?.find {
+                    ebeneFound?.fahrzeugTypen?.find {
                             entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
                         ?.multiplikator) ?: 1.0
             ausgabe += "Ihre Preisklasse: $fahrzeugMultiplikator<br>"
@@ -558,7 +554,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     open fun generiereKassenForm(): String {
         var ausgabe = ""
         for (i in 2..parkhausEbenen.size) {
-            ausgabe += "<option value=\"$i\">Ebene $i</option>"
+            ausgabe += "<option value=\"Ebene_$i\">Ebene $i</option>"
         }
         return ausgabe
     }

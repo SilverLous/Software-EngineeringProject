@@ -54,11 +54,10 @@
         <h1><%= "Parkhaus Kasse" %></h1>
         <div id="Kassenanzeige" class="box lightyellow" >
             <select id="ebenenNummerForm" name="ebenenNummer" class="form-select" aria-label="Default select example" form="bezahlForm">
-                <option selected value="1">Ebene 1</option>
+                <option selected value="Ebene_1">Ebene 1</option>
                 ${parkhausServiceSession.generiereKassenForm()}
             </select>
             <form action = "PayServlet" method = "GET" id="bezahlForm">
-                <input hidden name="kasse">
                 <br />
                 Parkplatznummer: <input type = "number" name = "parkplatzNummer" />
                 <input type = "submit" value = "Submit" />
