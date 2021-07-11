@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException
 import jakarta.servlet.annotation.WebServlet
 
 @WebServlet(name = "level1Servlet", value = ["/level1-servlet"])
-public class Level1Servlet : ParkhausServlet()  {
+ class Level1Servlet : ParkhausServlet()  {
 
     override var config = ParkhausEbeneConfigDTO(
         ebenenNamen = "Etage1",

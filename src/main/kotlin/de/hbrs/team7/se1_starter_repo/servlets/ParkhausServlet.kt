@@ -152,7 +152,7 @@ abstract class ParkhausServlet : HttpServlet() {
                 println("ParkhausWechsel")
                 val stadtId = request.getParameter("stadt")
                 this.parkhausServiceSession.ladeParkhausStadt(stadtId.toLong())
-                out.write("Ort gewechselt!");
+                out.write("Ort gewechselt!")
             }
 
             "undo" -> {
@@ -186,8 +186,7 @@ abstract class ParkhausServlet : HttpServlet() {
         // toTypedArray() needed because return type is List not array as in original
         val paramJson = body.split(",", limit = 2).toTypedArray()
         val paramsCSV = body.split(",").toTypedArray()
-        val event = paramJson[0]
-        when (event) {
+        when (paramJson[0]) {
             "enter" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val ticket = parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)

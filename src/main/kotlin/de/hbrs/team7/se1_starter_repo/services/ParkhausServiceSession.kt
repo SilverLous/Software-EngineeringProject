@@ -9,7 +9,6 @@ import jakarta.inject.Inject
 import jakarta.inject.Named
 import java.io.Serializable
 import java.util.*
-import java.util.Locale.filter
 import kotlin.collections.HashMap
 
 
@@ -52,7 +51,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     open fun erstelleInitStadt() {
         val city = parkhausServiceGlobal.cities.random()
 
-        val pa = databaseGlobal.getParkhausüberStandtnamen(city.name)
+        val pa = databaseGlobal.getParkhausUeberStandtnamen(city.name)
 
         if (pa != null) {
             ladeParkhausStadt(pa.id)
@@ -130,7 +129,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         parkhausEbeneToAdd.tickets.add(ticket)
         this.databaseGlobal.persistEntity(ticket)
 
-        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.autonummer}. Gewünscht: ${originalPlatz} geparkt in: ${auto.platznummer}")
+        logGlobal.schreibeInfo("Auto wurde hinzugefügt ${auto.autonummer}. Gewünscht: $originalPlatz geparkt in: ${auto.platznummer}")
         return ticket
     }
 
@@ -198,14 +197,14 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
      * @author Alexander Bohl
      */
     open fun getFahrzeugmultiplikatorenDTO(ebenenZahl: Int): PreistabelleDTO {
-        var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus?.id)
-        var fahrzeuge: MutableList<String> = mutableListOf()
-        var preise: MutableList<Double> = mutableListOf()
+        var pe: Parkhaus? = databaseGlobal.findeParkhausMitEbeneUeberId(this.parkhaus.id)
+        val fahrzeuge: MutableList<String> = mutableListOf()
+        val preise: MutableList<Double> = mutableListOf()
         for (i in 1..5) {
             try {
                 if (0 != pe?.ebenen?.size ?: 0) {
-                    var parkhausEbeneID = parkhaus.ebenen[ebenenZahl].id
-                    var ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
+                    val parkhausEbeneID = parkhaus.ebenen[ebenenZahl].id
+                    val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
                     for (typ in ebene?.fahrzeugTypen!!) {
                         fahrzeuge.add(typ.typ!!)
                         preise.add(typ.multiplikator * ((parkhaus.preisklasse?:0)+1))
@@ -236,8 +235,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     /**
-     * Ruft getFahrzeugmultiplikatorenDTO() auf und formatiert die Ausgabe in eine HashMap. Wurde zum Debuggen verwendet,
-     * wird für zukünftige Tabellen als Anlehnung behalten
+     * Ruft getFahrzeugmultiplikatorenDTO() auf und formatiert die Ausgabe in eine HashMap.
      *
      * returns: eine HashMap<String, Double> als <Fahrzeugtyp.name, Preismultiplikator>
      *
@@ -247,9 +245,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     open fun getFahrzeugmultiplikatorenHashMap(ebenenZahl: Int): HashMap<String,Double> {
         val dto: PreistabelleDTO = getFahrzeugmultiplikatorenDTO(ebenenZahl)
         val map: HashMap<String,Double> = HashMap()
-        var i: Int = 0;
-        for (klasse in dto.fahrzeugKlassen) {
-            map.put(klasse,dto.preise[i++])
+        for ((i, klasse) in dto.fahrzeugKlassen.withIndex()) {
+            map[klasse] = dto.preise[i]
         }
         return map
     }
@@ -347,7 +344,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         val autosInParkhausEbene =  databaseGlobal.autosInParkEbeneHistoric(parkhausEbeneID)
 
-        var autoStringListe: List<String> = autosInParkhausEbene.map {
+        val autoStringListe: List<String> = autosInParkhausEbene.map {
                         "${it.autonummer}/" +
                         "${it.ticket?.Ausstellungsdatum?.time}/" +
                         "${if (it.imParkhaus) 0 else it.getParkdauer()}/" +
@@ -550,7 +547,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             ausgabe += "${kosten/100.0}€<br>"
 
             val fahrzeugMultiplikator: Double = (
-                    ebeneFound?.fahrzeugTypen?.find {
+                    ebeneFound.fahrzeugTypen.find {
                             entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
                         ?.multiplikator) ?: 1.0
             ausgabe += "Ihr Fahrzeugklassen-Multiplikator: $fahrzeugMultiplikator<br>"

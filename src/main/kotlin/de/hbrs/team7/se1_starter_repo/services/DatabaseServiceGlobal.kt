@@ -109,7 +109,7 @@ open class DatabaseServiceGlobal {
         return query.resultList as MutableList<Ticket>
     }
 
-    open fun getParkhausüberStandtnamen(name: String): Parkhaus? {
+    open fun getParkhausUeberStandtnamen(name: String): Parkhaus? {
         val query = em.createNativeQuery("SELECT * FROM PARKHAUS WHERE STADTNAME = ?", Parkhaus::class.java)
         query.setParameter(1, name)
         return try {
