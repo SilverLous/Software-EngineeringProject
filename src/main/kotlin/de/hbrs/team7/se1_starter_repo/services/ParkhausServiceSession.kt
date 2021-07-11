@@ -528,6 +528,30 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
+    open fun generiereKassenAusgabe(ebene: Int, parkplatz: Int): String {
+        var ausgabe = "<h2>Ihre Parkplatznummer: $parkplatz</h2>\n"
+        val ebene = parkhausEbenen[ebene]
+        val ticket = ebene.name?.let { findeTicketUeberParkplatz(it,2) }
+        val parkdauer =
+            ticket?.zuParkhausServletPostDto()?.timer
+        if (parkdauer == null) {
+            return "<h2>Ihr Parkplatz konnte leider nicht gefunden werden</h2>"
+        } else {
+            ausgabe += "Ihre Parkgebühren : "
+            val kosten = errechneTicketPreis(ebene.id,ticket,ticket.Auto!!)
+            ausgabe += "${kosten/100.0}€<br>"
+
+            val fahrzeugMultiplikator: Double = (
+                    ebene?.fahrzeugTypen?.find {
+                            entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
+                        ?.multiplikator) ?: 1.0
+            ausgabe += "Ihre Preisklasse: $fahrzeugMultiplikator<br>"
+
+
+            return ausgabe
+        }
+    }
+
 
 }
 
