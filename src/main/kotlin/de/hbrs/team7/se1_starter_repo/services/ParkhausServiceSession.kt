@@ -544,7 +544,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     ebeneFound?.fahrzeugTypen?.find {
                             entry -> entry.typ!!.lowercase() == ticket.Auto!!.typ.lowercase() }
                         ?.multiplikator) ?: 1.0
-            ausgabe += "Ihre Preisklasse: $fahrzeugMultiplikator<br>"
+            ausgabe += "Ihr Fahrzeugklassen multiplikator: $fahrzeugMultiplikator<br>"
 
 
             return ausgabe
@@ -552,11 +552,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
     open fun generiereKassenForm(): String {
-        var ausgabe = ""
-        for (i in 2..parkhausEbenen.size) {
-            ausgabe += "<option value=\"Ebene_$i\">Ebene $i</option>"
-        }
-        return ausgabe
+        return parkhausServiceGlobal.ebenenSet.joinToString { "<option value=\"${it.ebenenNamen}\">${it.ebenenNamen}</option>" }
     }
 
 }
