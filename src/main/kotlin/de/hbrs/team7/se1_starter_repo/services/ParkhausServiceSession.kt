@@ -530,7 +530,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun generiereKassenAusgabe(ebene: Int, parkplatz: Int): String {
         var ausgabe = "<h2>Ihre Parkplatznummer: $parkplatz</h2>\n"
-        if (!(ebene ==0 || ebene==1)) {
+        if (!(ebene ==1 || ebene==2)) {
             return "<h2>Ihre Parkebene konnte leider nicht gefunden werden.</h2>"
         }
         val ebene = parkhausEbenen[ebene-1]
@@ -555,6 +555,13 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         }
     }
 
+    open fun generiereKassenForm(): String {
+        var ausgabe = ""
+        for (i in 2..parkhausEbenen.size) {
+            ausgabe += "<option value=\"$i\">Ebene $i</option>"
+        }
+        return ausgabe
+    }
 
 }
 
