@@ -19,6 +19,7 @@ import org.junit.jupiter.api.*;
 
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -422,12 +423,13 @@ public class ParkhausServiceSessionJavaTest {
     public void testKasse() {
         ParkhausEbene ebene = generiereEbenen(1)[0];
         int iterationen = 10;
+        Ticket[] ticket = new Ticket[12];
 
         for (int i=1;i<iterationen;i++){
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                     0, eingabeHash+i, eingabeFarbe, i, eingabeClientCategory, "kategorie1", eingabeKennzeichen,timeNow);
-            parkhausServiceSession.erstelleTicket(ebene.getName(),paramsErstesAuto);
+            ticket[i] = parkhausServiceSession.erstelleTicket(ebene.getName(),paramsErstesAuto);
         }
 
         Assertions.assertEquals("<h2>Ihr Parkplatz konnte leider nicht gefunden werden</h2>",parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),50));
@@ -435,10 +437,15 @@ public class ParkhausServiceSessionJavaTest {
             String compareString = "<h3>Ihre Parkplatznummer: " + i + "</h3>\nIhre Parkgebühren : 0.5€<br>";
             compareString += "Ihr Fahrzeugklassen-Multiplikator: 1<br>";
             Assertions.assertEquals(compareString,parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i));
+            parkhausServiceSession.ticketBezahlen(ebene.getName(),ticket[i],Date.from(Instant.now()));
         }
     }
 
 
+    /**
+     *
+     * @author: Alexander Bohl
+     */
     @Test
     @DisplayName("Test der getFahrzeugmultiplikatorenDTO()")
     public void testFahrzeugmultiplikatorenDTO() {
@@ -446,10 +453,16 @@ public class ParkhausServiceSessionJavaTest {
         PreistabelleDTO tabelle = parkhausServiceSession.getFahrzeugmultiplikatorenDTO(0);
         String[] fahrzeugtypen = {"PKW","Pickup","SUV"};
         float[] preise = {1.0f,1.2f,1.5f};
-        Assertions.assertEquals(fahrzeugtypen,tabelle.getFahrzeugKlassen().toArray());
+        String testFahrzeugKlasse = ((String[]) tabelle.getFahrzeugKlassen().toArray()).toString();
+        Assertions.assertTrue(testFahrzeugKlasse.contains("PKW"));
+        Assertions.assertTrue(testFahrzeugKlasse.contains("Pickup"));
+        Assertions.assertTrue(testFahrzeugKlasse.contains("SUV"));
         Assertions.assertEquals(0.5f,tabelle.getFestpreis());
         Assertions.assertEquals("0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",tabelle.getFestpreisString());
-        Assertions.assertEquals(preise,tabelle.getPreise().toArray());
+        List<Double> testPreise = tabelle.getPreise();
+        Assertions.assertTrue(testPreise.contains(1.0f));
+        Assertions.assertTrue(testPreise.contains(1.2f));
+        Assertions.assertTrue(testPreise.contains(1.5f));
         Assertions.assertEquals(parkhausServiceSession.getPreisklasse()+1,tabelle.getOrtsmultiplikator());
 
     }
