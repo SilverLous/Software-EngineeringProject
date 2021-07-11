@@ -124,7 +124,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     public void testGetSumme() {
-        ParkhausEbene[] ebenen = generiereEbenen(1);
+        ParkhausEbene ebene = generiereEbenen(1)[0];
         int wieLange = 8;
         Ticket tTest;
         int preis = 0;
@@ -133,11 +133,11 @@ public class ParkhausServiceSessionJavaTest {
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
                     0, eingabeHash+i, eingabeFarbe, 1, eingabeClientCategory, "kategorie1", eingabeKennzeichen,timeNow);
-            tTest = parkhausServiceSession.erstelleTicket(ebenen[0].getName(),paramsErstesAuto);
-            parkhausServiceSession.ticketBezahlen(ebenen[0].getName(),tTest,new Date(timeNow));
+            tTest = parkhausServiceSession.erstelleTicket(ebene.getName(),paramsErstesAuto);
+            parkhausServiceSession.ticketBezahlen(ebene.getName(),tTest,new Date(timeNow));
             preis+=tTest.getPrice();
 
-            Assertions.assertEquals(preis,parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebenen[0].getName()));
+            Assertions.assertEquals(preis,parkhausServiceSession.getSummeTicketpreiseUeberAutos(ebene.getName()));
         }
 
     }
@@ -412,6 +412,31 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(24,ebene2.getLadenschluss());
     }
 
+    /**
+     *
+     * @author: Alexander Bohl
+     */
+    @Test
+    @DisplayName("Testen der Kassenfunktion generiereKassenAusgabe(String,Int)")
+    public void testKasse() {
+        ParkhausEbene ebene = generiereEbenen(1)[0];
+        int iterationen = 10;
+
+        for (int i=1;i<iterationen;i++){
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, eingabeHash+i, eingabeFarbe, i, eingabeClientCategory, "kategorie1", eingabeKennzeichen,timeNow);
+            parkhausServiceSession.erstelleTicket(ebene.getName(),paramsErstesAuto);
+        }
+
+        Assertions.assertEquals("<h2>Ihr Parkplatz konnte leider nicht gefunden werden</h2>",parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),50));
+        for (int i=1;i<iterationen;i++) {
+            String compareString = "<h3>Ihre Parkplatznummer: " + i + "</h3>\nIhre Parkgebühren : 0.5€<br>";
+            compareString += "Ihr Fahrzeugklassen-Multiplikator: 1<br>";
+            Assertions.assertEquals(compareString,parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i));
+        }
+    }
+
 
     /**
      *
@@ -421,7 +446,7 @@ public class ParkhausServiceSessionJavaTest {
      *
      * @params anzahl: Die Anzahl der generierten Ebenen
      *
-     * @author: Alexander Bohl
+     * @author Alexander Bohl
      */
     private ParkhausEbene[] generiereEbenen(int anzahl) {
         ParkhausEbene[] ebenen = new ParkhausEbene[anzahl];
