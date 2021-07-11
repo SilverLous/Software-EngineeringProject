@@ -3,5 +3,11 @@
     http://jboss.org/schema/arquillian/arquillian_1_0.xsd">
     <defaultProtocol type="Servlet 5.0"/>
 
+    <container qualifier="jbossas-remote-7" default="true">
 
+        <configuration>
+            <property name="jbossHome">target/jboss-as-${jboss.version:7.1.1.Final}</property>
+            <property name="allowConnectingToRunningServer">true</property>
+        </configuration>
+    </container>
 </arquillian>

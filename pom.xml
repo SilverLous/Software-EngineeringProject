@@ -147,19 +147,28 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+
+        <!-- <dependency>
             <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-tomcat-common</artifactId>
-            <version>1.1.0.Final</version>
+            <artifactId>arquillian-tomcat-embedded-8</artifactId>
+            <version>1.0.1.Final</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
 
         <dependency>
             <groupId>org.jboss.arquillian.protocol</groupId>
             <artifactId>arquillian-protocol-servlet-jakarta</artifactId>
-            <version>1.7.0.Alpha5</version>
-            <scope>runtime</scope>
+            <version>${version.arquillian_core}</version>
+            <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+
 
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
@@ -168,6 +177,27 @@
         </dependency>
 
     </dependencies>
+
+    <profiles>
+    <profile>
+        <id>arq-jbossas-remote-7</id>
+        <dependencies>
+            <!--<dependency>
+                <groupId>org.jboss.as</groupId>
+                <artifactId>jboss-as-arquillian-container-remote</artifactId>
+                <version>7.2.0.Final</version>
+                <scope>test</scope>
+            </dependency> -->
+            <dependency>
+                <groupId>org.jboss.spec</groupId>
+                <artifactId>jboss-jakartaee-web-8.0</artifactId>
+                <version>1.0.0.Final</version>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </profile>
+    </profiles>
+
 
     <build>
         <finalName>team7Parkhaus</finalName>
@@ -218,6 +248,10 @@
                 <version>2.22.1</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
+
+                    <systemPropertyVariables>
+                        <arquillian.launch>jbossas-remote-7</arquillian.launch>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>
