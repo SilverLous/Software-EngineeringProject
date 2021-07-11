@@ -530,7 +530,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     open fun generiereKassenAusgabe(ebene: Int, parkplatz: Int): String {
         var ausgabe = "<h2>Ihre Parkplatznummer: $parkplatz</h2>\n"
-        val ebene = parkhausEbenen[ebene+1]
+        if (!(ebene ==0 || ebene==1)) {
+            return "<h2>Ihre Parkebene konnte leider nicht gefunden werden.</h2>"
+        }
+        val ebene = parkhausEbenen[ebene-1]
         val ticket = ebene.name?.let { findeTicketUeberParkplatz(it,parkplatz) }
         val parkdauer =
             ticket?.zuParkhausServletPostDto()?.timer
