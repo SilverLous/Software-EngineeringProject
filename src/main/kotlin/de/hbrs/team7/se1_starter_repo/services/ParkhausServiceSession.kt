@@ -251,6 +251,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return map
     }
 
+    open fun getSpezifischeFahrzeugmultiplikatoren(ebenenZahl: Int, klasse: String): Double {
+        val map = getFahrzeugmultiplikatorenHashMap(ebenenZahl)
+        return map[klasse]?:1.0
+    }
+
 
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
