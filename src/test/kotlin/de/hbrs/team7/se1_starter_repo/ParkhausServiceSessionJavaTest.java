@@ -434,7 +434,7 @@ public class ParkhausServiceSessionJavaTest {
 
         Assertions.assertEquals("<h2>Ihr Parkplatz konnte leider nicht gefunden werden</h2>",parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),50));
         for (int i=1;i<iterationen;i++) {
-            Double multiplikator = 0.5 * parkhausServiceSession.getSpezifischeFahrzeugmultiplikatoren(0,parkhausServiceSession.findeTicketUeberParkplatz(ebene.getName(),i).getAuto().getKategorie());
+            Double multiplikator = parkhausServiceSession.errechneTicketPreis(ebene.getId(), ticket[i], ticket[i].getAuto())/100.0;
             String compareString1 = "<h3>Ihre Parkplatznummer: " + i + "</h3>\nIhre Parkgebühren : " + multiplikator + "€<br>Ihr Fahrzeugklassen-Multiplikator: 1.0<br>";
             Assertions.assertEquals(compareString1,parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i));
             parkhausServiceSession.ticketBezahlen(ebene.getName(),ticket[i],Date.from(Instant.now()));
