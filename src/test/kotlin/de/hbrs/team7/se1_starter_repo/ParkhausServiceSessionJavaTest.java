@@ -450,15 +450,16 @@ public class ParkhausServiceSessionJavaTest {
     @DisplayName("Test der getFahrzeugmultiplikatorenDTO()")
     public void testFahrzeugmultiplikatorenDTO() {
         generiereEbenen(1);
+        String pickup = "Pickup";
+        String pkw = "PKW";
+        String suv = "SUV";
         PreistabelleDTO tabelle = parkhausServiceSession.getFahrzeugmultiplikatorenDTO(0);
-        String[] fahrzeugtypen = {"PKW","Pickup","SUV"};
-        double[] preise = {1.0,1.2,1.5};
         String testFahrzeugKlasse = tabelle.getFahrzeugKlassen().get(0);
         testFahrzeugKlasse += tabelle.getFahrzeugKlassen().get(1);
         testFahrzeugKlasse += tabelle.getFahrzeugKlassen().get(2);
-        Assertions.assertTrue(testFahrzeugKlasse.contains("PKW"));
-        Assertions.assertTrue(testFahrzeugKlasse.contains("Pickup"));
-        Assertions.assertTrue(testFahrzeugKlasse.contains("SUV"));
+        Assertions.assertTrue(testFahrzeugKlasse.contains(pkw));
+        Assertions.assertTrue(testFahrzeugKlasse.contains(pickup));
+        Assertions.assertTrue(testFahrzeugKlasse.contains(suv));
         Assertions.assertEquals(0.5,tabelle.getFestpreis());
         Assertions.assertEquals("0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",tabelle.getFestpreisString());
         List<Double> testPreise = tabelle.getPreise();
