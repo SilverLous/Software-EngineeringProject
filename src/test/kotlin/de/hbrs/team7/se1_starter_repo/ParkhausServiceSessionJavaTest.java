@@ -436,7 +436,7 @@ public class ParkhausServiceSessionJavaTest {
         for (int i=1;i<iterationen;i++) {
             Double multiplikator = 0.5 * parkhausServiceSession.getPreisklasse() * parkhausServiceSession.getSpezifischeFahrzeugmultiplikatoren(0,parkhausServiceSession.findeTicketUeberParkplatz(ebene.getName(),i).getAuto().getKategorie());
             String compareString1 = "<h3>Ihre Parkplatznummer: " + i + "</h3>\nIhre Parkgebühren : " + multiplikator + "€<br>Ihr Fahrzeugklassen-Multiplikator: 1.0<br>";
-            Assertions.assertTrue(parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i).contains(compareString1));
+            Assertions.assertEquals(compareString1,parkhausServiceSession.generiereKassenAusgabe(ebene.getName(),i));
             parkhausServiceSession.ticketBezahlen(ebene.getName(),ticket[i],Date.from(Instant.now()));
         }
     }
@@ -462,9 +462,9 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(0.5,tabelle.getFestpreis());
         Assertions.assertEquals("0.50€ mal Fahrzeugmultiplikator mal (Preisklasse + 1)",tabelle.getFestpreisString());
         List<Double> testPreise = tabelle.getPreise();
-        Assertions.assertTrue(testPreise.contains(1.0));
-        Assertions.assertTrue(testPreise.contains(1.2));
-        Assertions.assertTrue(testPreise.contains(1.5));
+        Assertions.assertTrue(testPreise.contains(1.0f));
+        Assertions.assertTrue(testPreise.contains(1.2f));
+        Assertions.assertTrue(testPreise.contains(1.5f));
         Assertions.assertEquals(parkhausServiceSession.getPreisklasse()+1,tabelle.getOrtsmultiplikator());
 
     }
