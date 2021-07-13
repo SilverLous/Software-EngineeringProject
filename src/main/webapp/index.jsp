@@ -14,45 +14,19 @@
     <meta property="og:description" content="Bachelor Course Software Engineering 1 (SE1), Hochschule Bonn-Rhein-Sieg.">
     <link rel="shortcut icon" href="https://kaul.inf.h-brs.de/favicon.ico" />
     <title>Tomcat Parkhaus</title>
+
     <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.6.1.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
 
+    <link rel="stylesheet" type="text/css" href="css/main.css" />
 
 
 
-    <style>
-        * {
-            font-family: sans-serif, Helvetica, Arial;
-        }
-        .grey-background {
-            background-color: lightgrey;
-        }
-        .center {
-            text-align: center;
-        }
-        .box {
-            border: thin solid black;
-            margin: 0.5rem 0;
-            padding: 1rem;
-        }
-        .lightblue {
-            background-color: #d0ebf6;
-        }
-        .white {
-            background-color: white;
-        }
-        .lightyellow {
-            background-color: lightgoldenrodyellow;
-        }
-        .lightgreen {
-            background-color: #ccfdcc;
-        }
-    </style>
 </head>
 <body>
 <%!
@@ -122,18 +96,6 @@
 </div>
 
 
-
-<div id="main">
-    <h1> Vue.JS API Call Example</h1>
-    <div v-if="loaded">
-        <p>{{plotData}}</p>
-    </div>
-    <p v-else="loaded">Your Plot is being generated</p>
-
-</div>
-
-
-
 <div class="click-map" onClick="style.pointerEvents='none'"></div>
 <iframe id="googleMaps" title="Google Maps"
         src="https://maps.google.com/maps?q=${parkhausServiceSession.parkhaus.lat},${parkhausServiceSession.parkhaus.lng}+(Ihr%20Parkhaus%20in%20${parkhausServiceSession.parkhaus.stadtname})&z=15&output=embed"
@@ -182,20 +144,6 @@
                 }
             )
     }
-
-    const vm  = new Vue({
-        el: '#main',
-        data: {loaded: false, plotData: null},
-
-       mounted() {
-
-            axios.get('/team7Parkhaus/level1-servlet?cmd=chart')
-                .then(function (response) {
-                    vm.loaded = true;
-                    vm.plotData = response.data;
-                })
-        }
-    });
 
     document.addEventListener("DOMContentLoaded", function(event)
     {

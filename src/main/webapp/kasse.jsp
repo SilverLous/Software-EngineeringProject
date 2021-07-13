@@ -64,7 +64,6 @@
                     <div id="Kassenanzeige" class="box lightyellow" >
                         <form action = "PayServlet" method = "GET" id="bezahlForm">
                         <select id="ebenenNummerForm" name="ebenenNummer" class="form-select" aria-label="Default select example" form="bezahlForm">
-                            <!--<option selected value="Ebene_1">Ebene 1</option>-->
                             ${parkhausServiceSession.generiereKassenForm()}
                         </select>
                             <br />
