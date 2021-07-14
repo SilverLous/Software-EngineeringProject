@@ -71,8 +71,7 @@ public class ParkhausServiceSessionJavaTest {
 
     @AfterEach
     public void tearDown() {
-        List<Auto> x = parkhausServiceSession.getUndoList();
-        while (x != null && x.size() > 0) {
+        while (parkhausServiceSession.getUndoList().size() > 0) {
             parkhausServiceSession.undo();
         }
     }
@@ -293,7 +292,6 @@ public class ParkhausServiceSessionJavaTest {
 
     @Test
     @DisplayName("Test der redo Funktion")
-    @Disabled
     public void testRedo() {
         testUndo();
         String parkhausName = "Generierte Ebene Nr. 0";

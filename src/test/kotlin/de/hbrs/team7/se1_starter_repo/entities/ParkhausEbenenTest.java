@@ -2,6 +2,7 @@ package de.hbrs.team7.se1_starter_repo.entities;
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -22,18 +23,23 @@ public class ParkhausEbenenTest {
     static final int ZEITVERSCHUB = 0;
     static final HashMap<String, Double> FAHRZEUGPREISE = new HashMap<>();
 
-    @Test
-    @DisplayName("Teste Statischen Fabrikator")
-    public void testFabrikator() {
+    ParkhausEbeneConfigDTO testConfig;
 
+
+    @BeforeEach
+    public void setup() {
         FAHRZEUGPREISE.put("PKW", 1.0);
         FAHRZEUGPREISE.put("Pickup", 1.2);
         FAHRZEUGPREISE.put("SUV", 1.5);
 
-        ParkhausEbeneConfigDTO testConfig = new ParkhausEbeneConfigDTO(
+        testConfig = new ParkhausEbeneConfigDTO(
                 EBENENNAMEN, MAXPLAETZE, OEFFNUNGSZEIT,
                 LADENSCHLUSS, VERZOEGERUNG, ZEITVERSCHUB, SIMULATIONSGESCHWINDIGKEIT, FAHRZEUGPREISE, null);
+    }
 
+    @Test
+    @DisplayName("Teste Statischen Fabrikator")
+    public void testFabrikator() {
 
         ParkhausEbene pe = ParkhausEbene.Companion.ausEbenenConfig(testConfig);
 
@@ -46,5 +52,29 @@ public class ParkhausEbenenTest {
         Assertions.assertNull(pe.getParkhaus());
 
     }
+
+    @Test
+    @DisplayName("Teste Statischen Fabrikator")
+    public void testToConfigDTO() {
+        ParkhausEbene pe = ParkhausEbene.Companion.ausEbenenConfig(testConfig);
+        ParkhausEbeneConfigDTO testDTO = pe.toConfigDTO();
+
+        Assertions.assertEquals(EBENENNAMEN, testDTO.getEbenenNamen());
+        Assertions.assertEquals(MAXPLAETZE, testDTO.getMaxPlätze());
+        Assertions.assertEquals(OEFFNUNGSZEIT, testDTO.getöffnungszeit());
+        Assertions.assertEquals(LADENSCHLUSS, testDTO.getLadenschluss());
+        Assertions.assertEquals(VERZOEGERUNG, testDTO.getVerzögerung());
+        Assertions.assertEquals(SIMULATIONSGESCHWINDIGKEIT, testDTO.getSimulationsGeschwindigkeit());
+        Assertions.assertNull(testDTO.getParkhaus());
+    }
+
+    @Test
+    @DisplayName("Teste Statischen Fabrikator")
+    public void testToConfigCSV() {
+        ParkhausEbene pe = ParkhausEbene.Companion.ausEbenenConfig(testConfig);
+        String testCSV = pe.toConfigCSV();
+        Assertions.assertNotNull(testCSV);
+    }
+
 
 }
