@@ -47,15 +47,11 @@ Interfaces Ordner: [src/test/kotlin/de/hbrs/team7/se1_starter_repo](./src/test/k
 Siehe: [dokumentation/Eingesetzte_Patterns.md](./dokumentation/Eingesetzte_Patterns.md)
 
 
-- Zielkonflikte: 
-
-
 ###  Iterationsbericht: 
 
 Siehe: [dokumentation/Iterationsbericht.md](./dokumentation/Iterationsbericht.md)
   
 
-- Summarisches Projektprotokoll: 
 ###  Gesamt-Retrospektive
 
 Siehe: [dokumentation/Gesamt-Retrospektive.md](./dokumentation/Gesamt-Retrospektive.md)
