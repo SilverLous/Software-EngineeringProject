@@ -539,6 +539,8 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                 if (redoList.last().autonummer == toRedo.autonummer) {
                     redoList.removeLast()
                     redoList.add(auto!!)
+                    undoList[undoList.indexOf(toRedo)] = auto
+                    if (undoList.indexOf(toRedo)!=-1) undoList[undoList.indexOf(toRedo)] = auto
                 }
 
             }
