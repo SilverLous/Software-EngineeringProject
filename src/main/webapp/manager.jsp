@@ -993,52 +993,53 @@
     };
 
 
-
-
     const statistikUpdatews = new WebSocket(WebsocketsslEncripted + "://" + window.location.host + "/team7Parkhaus/manager");
 
-    const managerLogws = new WebSocket(WebsocketsslEncripted + "://"+ window.location.host + "/team7Parkhaus/log");
+    const managerLogws = new WebSocket(WebsocketsslEncripted + "://" + window.location.host + "/team7Parkhaus/log");
 
-    function plotTageseinnahmen(){
+    function plotTageseinnahmen() {
         axios.get('/team7Parkhaus/level1-servlet?cmd=tageseinnahmen')
             .then(function (response) {
                 tageseinnahmen = response.data
-                Plotly.newPlot('tagesEinnahmen',tageseinnahmen ,layout, {scrollZoom: true});
+                Plotly.newPlot('tagesEinnahmen', tageseinnahmen, layout, {scrollZoom: true});
             })
     }
 
-    function plotWocheneinnahmen(){
+    function plotWocheneinnahmen() {
         axios.get('/team7Parkhaus/level1-servlet?cmd=wocheneinnahmen')
             .then(function (response) {
                 wocheneinnahmen = response.data
-                Plotly.newPlot('wochenEinnahmen', wocheneinnahmen,layout, {scrollZoom: true});
+                Plotly.newPlot('wochenEinnahmen', wocheneinnahmen, layout, {scrollZoom: true});
             })
     }
 
 
-    function plotEinnahmenUeberAutoTyp(){
+    function plotEinnahmenUeberAutoTyp() {
         axios.get('/team7Parkhaus/level1-servlet?cmd=einnahmenueberautotyp')
             .then(function (response) {
                 EinnahmenUeberAutoTyp = response.data
-                Plotly.newPlot('EinnahmenUeberAutoTyp', EinnahmenUeberAutoTyp,layout, {scrollZoom: true});
+                Plotly.newPlot('EinnahmenUeberAutoTyp', EinnahmenUeberAutoTyp, layout, {scrollZoom: true});
             })
     }
 
 
-    function plotEinnahmenUeberBundesland(){
+    function plotEinnahmenUeberBundesland() {
         axios.get('/team7Parkhaus/level1-servlet?cmd=einnahmenueberbundesland')
             .then(function (response) {
                 EinnahmenUeberBundesland = response.data
-                Plotly.newPlot('EinnahmenUeberBundesland', EinnahmenUeberBundesland,layout, {scrollZoom: true, color:'EinnahmenUeberBundesland'});
+                Plotly.newPlot('EinnahmenUeberBundesland', EinnahmenUeberBundesland, layout, {
+                    scrollZoom: true,
+                    color: 'EinnahmenUeberBundesland'
+                });
             })
     }
 
 
-    function plotDauerUeberAutoTyp(){
+    function plotDauerUeberAutoTyp() {
         axios.get('/team7Parkhaus/level1-servlet?cmd=daueruebertyp')
             .then(function (response) {
                 DauerUeberTyp = response.data
-                Plotly.newPlot('DauerUeberTyp', DauerUeberTyp,layout, {scrollZoom: true, color:'DauerUeberTyp'});
+                Plotly.newPlot('DauerUeberTyp', DauerUeberTyp, layout, {scrollZoom: true, color: 'DauerUeberTyp'});
             })
     }
 
@@ -1049,7 +1050,7 @@
     plotDauerUeberAutoTyp()
 
     statistikUpdatews.onmessage = function (e) {
-        console.log("From Server:"+ e.data);
+        console.log("From Server:" + e.data);
         plotTageseinnahmen()
         plotWocheneinnahmen()
         plotEinnahmenUeberAutoTyp()
@@ -1060,11 +1061,11 @@
 
     managerLogws.onmessage = function (e) {
 
-        console.log("From Server:"+ e.data);
+        console.log("From Server:" + e.data);
 
         const data = JSON.parse(e.data);
         var neuerEintrag = (Array.isArray(data)) ?
-            data.map( log => JSON.stringify(log) + "\n" ).join("") :
+            data.map(log => JSON.stringify(log) + "\n").join("") :
             JSON.stringify(data) + "\n"
 
         var logTextArea = document.getElementById('log')

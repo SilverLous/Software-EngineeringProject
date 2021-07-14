@@ -3,7 +3,6 @@ package de.hbrs.team7.se1_starter_repo;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.dto.PreistabelleDTO;
-import de.hbrs.team7.se1_starter_repo.dto.StatisticsChartDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
@@ -463,7 +462,7 @@ public class ParkhausServiceSessionJavaTest {
         }
         String printString = parkhausServiceSession.getPrintStringAutos(ebene.getName());
         String[] splicedPrintString = printString.split(",");
-        Assertions.assertEquals(splicedPrintString.length,9);
+        Assertions.assertEquals(splicedPrintString.length, 9);
 
         for (int i = 1; i < iterationen; i++) {
             parkhausServiceSession.ticketBezahlen(ebene.getName(), ticket[i], Date.from(Instant.now()));
