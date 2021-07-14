@@ -4,7 +4,7 @@ import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import jakarta.persistence.*
 
 @Entity
-open class Parkhaus (
+open class Parkhaus(
     // Kombinierte Tabelle aus Stadt und Parkhaus
 
     @Column(nullable = false)
@@ -25,15 +25,19 @@ open class Parkhaus (
     @Column(nullable = false)
     var preisklasse: Int? = null,
 
-        ) {
+    ) {
 
     @Id
     @GeneratedValue
     open val id: Long = 0
 
 
-
-    @OneToMany(mappedBy="Parkhaus", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "Parkhaus",
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.ALL, CascadeType.PERSIST],
+        orphanRemoval = true
+    )
     var ebenen: MutableList<ParkhausEbene> = mutableListOf()
 
     fun parkhausEbeneHinzufügen(ebene: ParkhausEbene) {

@@ -4,7 +4,6 @@ import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 // maybe helpful later https://kotlinexpertise.com/hibernate-with-kotlin-spring-boot/
@@ -14,7 +13,8 @@ import kotlin.collections.ArrayList
 @Entity
 open class Ticket {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     open val Ticketnummer: Long = 0
 
     @OneToOne(cascade = [CascadeType.ALL])
@@ -44,11 +44,11 @@ open class Ticket {
             duration = 0,
             price = this.price.toDouble() / 100,
             hash = this.Auto!!.hash!!,
-            color = this.Auto!!.farbe !!,
-            space = this.Auto!!.platznummer !!,
+            color = this.Auto!!.farbe!!,
+            space = this.Auto!!.platznummer!!,
             clientCategory = this.Auto!!.kategorie,
             vehicleType = this.Auto!!.typ,
-            license = this.Auto!!.kennzeichen !!,
+            license = this.Auto!!.kennzeichen!!,
             begin = this.Ausstellungsdatum.time,
         )
     }

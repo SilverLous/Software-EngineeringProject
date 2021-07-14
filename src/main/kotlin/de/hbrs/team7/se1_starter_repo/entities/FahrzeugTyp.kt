@@ -1,6 +1,5 @@
 package de.hbrs.team7.se1_starter_repo.entities
 
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import jakarta.persistence.*
 
 @Entity
@@ -22,17 +21,15 @@ open class FahrzeugTyp(
     open val id: Long = 0
 
 
-
-
     companion object {
 
-        fun ausHashMapEintrag(mapEintrag: Map.Entry<String, Double>, parkhausEbene: ParkhausEbene ): FahrzeugTyp {
+        fun ausHashMapEintrag(mapEintrag: Map.Entry<String, Double>, parkhausEbene: ParkhausEbene): FahrzeugTyp {
 
             return FahrzeugTyp(
                 typ = mapEintrag.key,
                 multiplikator = mapEintrag.value,
                 parkhausEbene = parkhausEbene
-                )
+            )
         }
     }
 }

@@ -17,7 +17,7 @@ import kotlinx.serialization.json.Json
  * @author Thomas Gerlach
  */
 @ServerEndpoint("/log" )
-public open class LogServer : BasicWebsocketIF {
+open class LogServer : BasicWebsocketIF {
     override val sessions = mutableSetOf<Session>()
 
     // https://stackoverflow.com/questions/51175990/using-cdi-injection-in-tomcat-websocket-serverendpoint

@@ -4,8 +4,8 @@ import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import jakarta.inject.Inject
-import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.*;
+import jakarta.servlet.http.*
+import jakarta.servlet.annotation.*
 
 
 @WebServlet(name = "PayServlet", value = ["/PayServlet"])
@@ -40,7 +40,7 @@ class PayServlet : HttpServlet() {
 
 
     override fun destroy() {
-        println("Destroyed Pay Servlet");
+        println("Destroyed Pay Servlet")
         super.destroy()
     }
 }

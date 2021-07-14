@@ -4,7 +4,7 @@ package de.hbrs.team7.se1_starter_repo.services
 import de.hbrs.team7.se1_starter_repo.dto.LogEintragDTO
 import de.hbrs.team7.se1_starter_repo.dto.LogKategorieDTO
 import io.reactivex.rxjava3.subjects.ReplaySubject
-import java.util.logging.*;
+import java.util.logging.*
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
 

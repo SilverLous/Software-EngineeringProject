@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit
 
 
 @ServerEndpoint("/manager" )
-public open class ManagerServer : BasicWebsocketIF {
+open class ManagerServer : BasicWebsocketIF {
     override val sessions = mutableSetOf<Session>()
 
     // https://stackoverflow.com/questions/51175990/using-cdi-injection-in-tomcat-websocket-serverendpoint

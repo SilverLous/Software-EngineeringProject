@@ -18,7 +18,7 @@ import kotlinx.serialization.*
  * @author Thomas Gerlach
  *  */
 @Serializable
-public data class ParkhausServletPostDto(
+data class ParkhausServletPostDto(
     val nr : Int,
     val timer : Long,
     val duration : Long,

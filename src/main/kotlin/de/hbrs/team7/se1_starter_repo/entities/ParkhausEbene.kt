@@ -2,11 +2,9 @@ package de.hbrs.team7.se1_starter_repo.entities
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
 import jakarta.persistence.*
-import kotlinx.serialization.SerialName
-import kotlin.jvm.Transient
 
 @Entity
-open class ParkhausEbene (
+open class ParkhausEbene(
 
     @Column(nullable = false)
     var name: String? = null,
@@ -30,7 +28,7 @@ open class ParkhausEbene (
     @Column(nullable = false)
     var simulationsGeschwindigkeit: Int = 0,
 
-        ){
+    ) {
 
     @Id
     @GeneratedValue
@@ -43,7 +41,12 @@ open class ParkhausEbene (
     @ManyToMany
     var tickets: ArrayList<Ticket> = ArrayList()
 
-    @OneToMany(mappedBy="ParkhausEbene", fetch = FetchType.EAGER, cascade = [CascadeType.ALL, CascadeType.PERSIST], orphanRemoval = true)
+    @OneToMany(
+        mappedBy = "ParkhausEbene",
+        fetch = FetchType.EAGER,
+        cascade = [CascadeType.ALL, CascadeType.PERSIST],
+        orphanRemoval = true
+    )
     var fahrzeugTypen: MutableList<FahrzeugTyp> = mutableListOf()
 
 
@@ -59,13 +62,11 @@ open class ParkhausEbene (
             öffnungszeit = this.öffnungszeit,
             ladenschluss = this.ladenschluss,
             verzögerung = this.verzögerung,
-            zeitverschub =  0,
-            simulationsGeschwindigkeit =  simulationsGeschwindigkeit,
+            zeitverschub = 0,
+            simulationsGeschwindigkeit = simulationsGeschwindigkeit,
             FahrzeugPreise = hashMapOf(),
         )
     }
-
-
 
 
     private var freiePlaetze: Int = 0
@@ -120,7 +121,7 @@ open class ParkhausEbene (
     }
 
     fun parkhausZuweisen(parkhaus: Parkhaus) {
-        this.parkhaus = parkhaus;
+        this.parkhaus = parkhaus
 
     }
 

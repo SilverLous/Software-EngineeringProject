@@ -4,10 +4,9 @@ import jakarta.persistence.Entity
 
 @Entity
 open class ParkhausBetreiber(
-    name: String, password: String) : ParkhausPersonal(name, password) {
-    constructor() : this("", "") {
-
-    }
+    name: String, password: String
+) : ParkhausPersonal(name, password) {
+    constructor() : this("", "")
 
 
     fun preisfaktorAendern(parkhaus: Parkhaus, newValue: Float) {

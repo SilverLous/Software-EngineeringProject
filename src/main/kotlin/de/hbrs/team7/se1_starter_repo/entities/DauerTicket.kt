@@ -15,7 +15,7 @@ class DauerTicket(private var ablaufDatum: Date, private var kundennummer: Int) 
         return ablaufDatum
     }
 
-    fun getKundennummer():Int {
+    fun getKundennummer(): Int {
         return kundennummer
     }
 }

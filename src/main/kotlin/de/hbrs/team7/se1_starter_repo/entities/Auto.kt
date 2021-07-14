@@ -24,7 +24,6 @@ open class Auto(
     @Column(nullable = false)
     var kategorie: String = ""
 
-
 ) {
 
     @Id
@@ -38,8 +37,9 @@ open class Auto(
     @OneToOne(mappedBy = "Auto")
     var ticket: Ticket? = null
 
-    fun getParkdauer():Long{
-        return this.ticket!!.Ausfahrdatum?.time?.minus(this.ticket!!.Ausstellungsdatum.time) ?: Date.from(Instant.now()).time - this.ticket!!.Ausstellungsdatum.time
+    fun getParkdauer(): Long {
+        return this.ticket!!.Ausfahrdatum?.time?.minus(this.ticket!!.Ausstellungsdatum.time)
+            ?: Date.from(Instant.now()).time - this.ticket!!.Ausstellungsdatum.time
     }
 
 }
