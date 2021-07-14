@@ -44,6 +44,10 @@ open class Parkhaus(
         ebenen.add(ebene)
     }
 
+    /**
+     *
+     * Wird in der JSP Seite verwendet
+     */
     fun getUebersetztesBundesland(): String? {
 
         return if (this.bundesland in BundeslandÜbersetzung) {
@@ -51,18 +55,6 @@ open class Parkhaus(
         } else {
             bundesland
         }
-    }
-
-    fun parkhausEbeneEntfernen(ebene: ParkhausEbene): Boolean {
-        return ebenen.remove(ebene)
-    }
-
-    fun autoEinfahren(ebene: Int): Int {
-        return ebenen[ebene].autoEinfahren()
-    }
-
-    fun autoAusfahren(ebene: Int): Int {
-        return ebenen[ebene].autoAusfahren()
     }
 
     companion object {

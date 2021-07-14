@@ -19,6 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
+/**
+ * @author Thomas Gerlach
+ */
 @EnableAutoWeld
 @ActivateScopes({SessionScoped.class, ApplicationScoped.class})
 @AddBeanClasses({ParkhausServiceSession.class, ParkhausServiceGlobal.class, LoggerServiceGlobal.class})

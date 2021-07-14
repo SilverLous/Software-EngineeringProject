@@ -68,9 +68,6 @@ open class ParkhausEbene(
         )
     }
 
-
-    private var freiePlaetze: Int = 0
-
     /**
      * Wurde zur Typkonversion zwischen Java und Kotlin verwendet, wird für zukünftige eventuelle Probleme behalten
      *
@@ -78,46 +75,6 @@ open class ParkhausEbene(
      */
     fun getIdAlsString(): String {
         return id.toString()
-    }
-
-    fun getGesamtPlaetze(): Int {
-        return gesamtPlaetze
-    }
-
-    fun setGesamtPlaetze(neuePlaetze: Int): Int {
-        val differenz = gesamtPlaetze - neuePlaetze
-        if (differenz > freiePlaetze) {
-            return -1
-        } else {
-            gesamtPlaetze = neuePlaetze
-            return 0
-        }
-    }
-
-    fun getFreiePlaetze(): Int {
-        return freiePlaetze
-    }
-
-    fun getBelegtePlaetze(): Int {
-        return gesamtPlaetze - freiePlaetze
-    }
-
-    fun autoEinfahren(): Int {
-        if (freiePlaetze == 0) {
-            return -1
-        } else {
-            freiePlaetze--
-            return freiePlaetze
-        }
-    }
-
-    fun autoAusfahren(): Int {
-        if (getBelegtePlaetze() >= gesamtPlaetze) {
-            return -1
-        } else {
-            freiePlaetze++
-            return freiePlaetze
-        }
     }
 
     fun parkhausZuweisen(parkhaus: Parkhaus) {
