@@ -52,6 +52,7 @@ public class ParkhausServiceSessionJavaTest {
     String eingabeClientCategory = "Family";
     String eingabeType = "SUV";
     String eingabeKennzeichen = "Y-123 456";
+    String kategorie1 = "kategorie1";
 
 
     /**
@@ -131,7 +132,7 @@ public class ParkhausServiceSessionJavaTest {
         for (int i = 0; i < wieLange; i++) {
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                    0, eingabeHash + i, eingabeFarbe, 1, eingabeClientCategory, "kategorie1", eingabeKennzeichen, timeNow);
+                    0, eingabeHash + i, eingabeFarbe, 1, eingabeClientCategory, kategorie1, eingabeKennzeichen, timeNow);
             tTest = parkhausServiceSession.erstelleTicket(ebene.getName(), paramsErstesAuto);
             parkhausServiceSession.ticketBezahlen(ebene.getName(), tTest, new Date(timeNow));
             preis += tTest.getPrice();
@@ -399,7 +400,7 @@ public class ParkhausServiceSessionJavaTest {
         for (int i = 1; i < iterationen; i++) {
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                    0, eingabeHash + i, eingabeFarbe, i, eingabeClientCategory, "kategorie1", eingabeKennzeichen, timeNow);
+                    0, eingabeHash + i, eingabeFarbe, i, eingabeClientCategory, kategorie1, eingabeKennzeichen, timeNow);
             ticket[i] = parkhausServiceSession.erstelleTicket(ebene.getName(), paramsErstesAuto);
         }
 
@@ -457,7 +458,7 @@ public class ParkhausServiceSessionJavaTest {
         for (int i = 1; i < iterationen; i++) {
             Long timeNow = System.currentTimeMillis();
             ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
-                    0, eingabeHash + i, eingabeFarbe, i, eingabeClientCategory, "kategorie1", eingabeKennzeichen, timeNow);
+                    0, eingabeHash + i, eingabeFarbe, i, eingabeClientCategory, kategorie1, eingabeKennzeichen, timeNow);
             ticket[i] = parkhausServiceSession.erstelleTicket(ebene.getName(), paramsErstesAuto);
         }
         String printString = parkhausServiceSession.getPrintStringAutos(ebene.getName());
