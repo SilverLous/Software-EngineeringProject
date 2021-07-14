@@ -1,5 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.servlets
 
+import de.hbrs.team7.se1_starter_repo.dto.LogEintragDTO
 import de.hbrs.team7.se1_starter_repo.interfaces.BasicWebsocketIF
 import de.hbrs.team7.se1_starter_repo.services.LoggerServiceGlobal
 import jakarta.enterprise.inject.spi.CDI
@@ -28,8 +29,17 @@ public open class LogServer : BasicWebsocketIF {
     init {
         logService.logSubject.doOnNext { it -> println(Json.encodeToString(it)) }.
             subscribe { it -> broadcastMessage(Json.encodeToString(it)) }
+
     }
 
+    @OnOpen
+    override fun onOpen(session: Session) {
+        if( session !in sessions) {
+            val missedLogs = logService.logSubject.values.toList() as List<LogEintragDTO>
+            session.basicRemote.sendText(Json.encodeToString(missedLogs))
+            super.onOpen(session)
+        }
 
+    }
 
 }

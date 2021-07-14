@@ -36,9 +36,7 @@
 <div class="p-5 mb-4 bg-light rounded-3">
     <div class="container-fluid py-5">
         <h2 class="display-5 fw-bold">Log</h2>
-        <textarea readonly="readonly" id="log"  style="width: 100%; height: 30vh;">
-
-                </textarea>
+        <textarea readonly="readonly" id="log"  style="width: 100%; height: 30vh;"></textarea>
     </div>
 </div>
 
@@ -1063,15 +1061,23 @@
     managerLogws.onmessage = function (e) {
 
         console.log("From Server:"+ e.data);
-        var neuerEintrag = e.data + "\n"
+
+        const data = JSON.parse(e.data);
+        var neuerEintrag = (Array.isArray(data)) ?
+            data.map( log => JSON.stringify(log) + "\n" ).join("") :
+            JSON.stringify(data) + "\n"
 
         var logTextArea = document.getElementById('log')
 
-        logTextArea.value = logTextArea.value + neuerEintrag;
+        logTextArea.value = logTextArea.value + neuerEintrag.trim();
         logTextArea.scrollTop = logTextArea.scrollHeight;
     };
 
+    managerLogws.onclose = function (e) {
+        var logTextArea = document.getElementById('log')
 
+        logTextArea.value = ""
+    }
 
 </script>
 </html>
