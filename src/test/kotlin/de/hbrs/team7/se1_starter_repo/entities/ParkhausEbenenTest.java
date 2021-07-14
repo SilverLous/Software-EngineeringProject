@@ -1,6 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.entities;
 
-import de.hbrs.team7.se1_starter_repo.dto.parkhausEbeneConfigDTO;
+import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,7 @@ public class ParkhausEbenenTest {
     static final int ZEITVERSCHUB = 0;
     static final HashMap<String, Double> FAHRZEUGPREISE = new HashMap<>();
 
-    parkhausEbeneConfigDTO testConfig;
+    ParkhausEbeneConfigDTO testConfig;
 
 
     @BeforeEach
@@ -32,7 +32,7 @@ public class ParkhausEbenenTest {
         FAHRZEUGPREISE.put("Pickup", 1.2);
         FAHRZEUGPREISE.put("SUV", 1.5);
 
-        testConfig = new parkhausEbeneConfigDTO(
+        testConfig = new ParkhausEbeneConfigDTO(
                 EBENENNAMEN, MAXPLAETZE, OEFFNUNGSZEIT,
                 LADENSCHLUSS, VERZOEGERUNG, ZEITVERSCHUB, SIMULATIONSGESCHWINDIGKEIT, FAHRZEUGPREISE, null);
     }
@@ -57,7 +57,7 @@ public class ParkhausEbenenTest {
     @DisplayName("Teste Statischen Fabrikator")
     public void testToConfigDTO() {
         ParkhausEbene pe = ParkhausEbene.Companion.ausEbenenConfig(testConfig);
-        parkhausEbeneConfigDTO testDTO = pe.toConfigDTO();
+        ParkhausEbeneConfigDTO testDTO = pe.toConfigDTO();
 
         Assertions.assertEquals(EBENENNAMEN, testDTO.getEbenenNamen());
         Assertions.assertEquals(MAXPLAETZE, testDTO.getMaxPlätze());
