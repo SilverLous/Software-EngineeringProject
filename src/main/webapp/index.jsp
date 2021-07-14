@@ -29,10 +29,6 @@
 
 </head>
 <body>
-<%!
-    @Inject
-    private ParkhausServiceSession parkhausServiceSession;
-%>
 <div class="box center grey-background">
     <h1>Parkhaus Team 7 in ${parkhausServiceSession.parkhaus.stadtname}, ${parkhausServiceSession.parkhaus.getUebersetztesBundesland()}, Preisklasse: ${parkhausServiceSession.parkhaus.getPreisklasse()}</h1>
 </div>

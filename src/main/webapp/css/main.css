@@ -1,26 +1,33 @@
 * {
     font-family: sans-serif, Helvetica, Arial;
 }
+
 .grey-background {
     background-color: lightgrey;
 }
+
 .center {
     text-align: center;
 }
+
 .box {
     border: thin solid black;
     margin: 0.5rem 0;
     padding: 1rem;
 }
+
 .lightblue {
     background-color: #d0ebf6;
 }
+
 .white {
     background-color: white;
 }
+
 .lightyellow {
     background-color: lightgoldenrodyellow;
 }
+
 .lightgreen {
     background-color: #ccfdcc;
 }
