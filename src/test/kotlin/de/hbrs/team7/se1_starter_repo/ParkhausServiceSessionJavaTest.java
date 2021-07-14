@@ -3,6 +3,7 @@ package de.hbrs.team7.se1_starter_repo;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO;
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto;
 import de.hbrs.team7.se1_starter_repo.dto.PreistabelleDTO;
+import de.hbrs.team7.se1_starter_repo.dto.StatisticsChartDto;
 import de.hbrs.team7.se1_starter_repo.entities.Auto;
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene;
 import de.hbrs.team7.se1_starter_repo.entities.Ticket;
@@ -441,6 +442,36 @@ public class ParkhausServiceSessionJavaTest {
         Assertions.assertEquals(parkhausServiceSession.getPreisklasse() + 1, tabelle.getOrtsmultiplikator());
 
     }
+
+    @Test
+    @DisplayName("Test der zeigeHTMLParkhausListe-Funktion")
+    public void testZeigeHTMLParkhausListe() {
+        String liste = parkhausServiceSession.zeigeHTMLParkhausListe();
+        Assertions.assertTrue(liste.contains("<button type=\"button\"") || liste.contentEquals("<h3>Wir sind bald an weiteren Standorten für Sie verfügbar!</h3>"));
+    }
+
+    @Test
+    @DisplayName("Not Null Test der getPrintStringAutos-Funktion")
+    public void testGetPrintStringAutos() {
+        ParkhausEbene ebene = generiereEbenen(1)[0];
+        int iterationen = 10;
+        Ticket[] ticket = new Ticket[12];
+
+        for (int i = 1; i < iterationen; i++) {
+            Long timeNow = System.currentTimeMillis();
+            ParkhausServletPostDto paramsErstesAuto = new ParkhausServletPostDto(2, timeNow, 0,
+                    0, eingabeHash + i, eingabeFarbe, i, eingabeClientCategory, "kategorie1", eingabeKennzeichen, timeNow);
+            ticket[i] = parkhausServiceSession.erstelleTicket(ebene.getName(), paramsErstesAuto);
+        }
+        String printString = parkhausServiceSession.getPrintStringAutos(ebene.getName());
+        String[] splicedPrintString = printString.split(",");
+        Assertions.assertEquals(splicedPrintString.length,9);
+
+        for (int i = 1; i < iterationen; i++) {
+            parkhausServiceSession.ticketBezahlen(ebene.getName(), ticket[i], Date.from(Instant.now()));
+        }
+    }
+
 
     /**
      * Erzeugt im aktuellen Parkhaus eine variable Anzahl an Ebenen mit Default-Parametern. Die Ebenen werden
