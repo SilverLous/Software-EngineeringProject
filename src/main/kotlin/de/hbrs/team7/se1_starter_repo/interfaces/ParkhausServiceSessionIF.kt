@@ -1,9 +1,6 @@
 package de.hbrs.team7.se1_starter_repo.interfaces
 
 import de.hbrs.team7.se1_starter_repo.dto.*
-import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
-import de.hbrs.team7.se1_starter_repo.dto.EinnahmenBarDTO
-import de.hbrs.team7.se1_starter_repo.dto.StatisticsChartDto
 import de.hbrs.team7.se1_starter_repo.entities.Auto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.entities.Ticket
@@ -32,9 +29,9 @@ interface ParkhausServiceSessionIF {
 
     fun getAktuelleUser(parkhausEbeneName: String): Int
 
-    fun getParkhausEbenen():List<ParkhausEbene>
+    fun getParkhausEbenen(): List<ParkhausEbene>
 
-    fun getIdUeberName(parkhausEbeneName: String):Long
+    fun getIdUeberName(parkhausEbeneName: String): Long
 
     fun getAutosInParkEbene(parkhausEbeneName: String, imParkhaus: Boolean): List<Auto>
 
@@ -56,6 +53,6 @@ interface ParkhausServiceSessionIF {
 
     fun setzeFarben(values: List<Double>): Marker
 
-    fun setzeTitel(xAchse:String,yAchse:String):Layout
+    fun setzeTitel(xAchse: String, yAchse: String): Layout
     fun erstelleDauerUeberFahrzeugTyp(parkhausEbeneName: String): StatisticsChartDto?
 }

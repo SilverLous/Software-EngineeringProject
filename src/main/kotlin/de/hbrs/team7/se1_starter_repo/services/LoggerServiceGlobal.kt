@@ -4,9 +4,10 @@ package de.hbrs.team7.se1_starter_repo.services
 import de.hbrs.team7.se1_starter_repo.dto.LogEintragDTO
 import de.hbrs.team7.se1_starter_repo.dto.LogKategorieDTO
 import io.reactivex.rxjava3.subjects.ReplaySubject
-import java.util.logging.*
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
+import java.util.logging.Level
+import java.util.logging.Logger
 
 
 /*
@@ -59,8 +60,14 @@ open class LoggerServiceGlobal { // : ParkhausServiceIF {
     }
 
     open fun schreibeNachricht(kategorie: LogKategorieDTO, nachricht: String) {
-        logger.log(logMapper[kategorie],nachricht)
-        logSubject.onNext(LogEintragDTO( kategorie = kategorie, nachricht = nachricht, zeitstempel = System.currentTimeMillis() ))
+        logger.log(logMapper[kategorie], nachricht)
+        logSubject.onNext(
+            LogEintragDTO(
+                kategorie = kategorie,
+                nachricht = nachricht,
+                zeitstempel = System.currentTimeMillis()
+            )
+        )
 
     }
 

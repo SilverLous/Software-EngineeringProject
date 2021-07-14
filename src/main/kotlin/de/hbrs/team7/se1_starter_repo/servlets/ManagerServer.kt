@@ -1,10 +1,10 @@
 package de.hbrs.team7.se1_starter_repo.servlets
 
-import de.hbrs.team7.se1_starter_repo.interfaces.BasicWebsocketIF
 import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
+import de.hbrs.team7.se1_starter_repo.interfaces.BasicWebsocketIF
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import jakarta.enterprise.inject.spi.CDI
-import jakarta.websocket.*
+import jakarta.websocket.Session
 import jakarta.websocket.server.ServerEndpoint
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
@@ -12,7 +12,7 @@ import kotlinx.serialization.json.Json
 import java.util.concurrent.TimeUnit
 
 
-@ServerEndpoint("/manager" )
+@ServerEndpoint("/manager")
 open class ManagerServer : BasicWebsocketIF {
     override val sessions = mutableSetOf<Session>()
 
@@ -40,12 +40,11 @@ open class ManagerServer : BasicWebsocketIF {
 
         parkhausServiceGlobal.statisticUpdateSubj
             .buffer(1, TimeUnit.SECONDS)
-            .map { it:  List<List<ManagerStatistikUpdateDTO>> -> it.flatten().toSet().toList() }
-            .map { it:  List<ManagerStatistikUpdateDTO> -> it.map { ev -> ev.event } }
-            .filter { it -> it.isNotEmpty() }.
-            subscribe { it -> val ret = UpdatedList(it); broadcastMessage(Json.encodeToString(ret)) }
+            .map { it: List<List<ManagerStatistikUpdateDTO>> -> it.flatten().toSet().toList() }
+            .map { it: List<ManagerStatistikUpdateDTO> -> it.map { ev -> ev.event } }
+            .filter { it -> it.isNotEmpty() }
+            .subscribe { it -> val ret = UpdatedList(it); broadcastMessage(Json.encodeToString(ret)) }
     }
-
 
 
 }

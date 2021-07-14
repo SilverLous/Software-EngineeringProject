@@ -9,8 +9,6 @@ import java.util.HashMap;
 
 
 /**
- *
- *
  * @author Thomas Gerlach
  */
 public class ParkhausEbenenTest {

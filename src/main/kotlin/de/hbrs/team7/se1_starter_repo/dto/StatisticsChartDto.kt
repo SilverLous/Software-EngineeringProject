@@ -1,4 +1,5 @@
 package de.hbrs.team7.se1_starter_repo.dto
+
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -9,6 +10,7 @@ data class StatisticsChartDto(
     @SerialName("layout")
     val Layout: Layout
 )
+
 @Serializable
 data class CarData(
     @SerialName("type")

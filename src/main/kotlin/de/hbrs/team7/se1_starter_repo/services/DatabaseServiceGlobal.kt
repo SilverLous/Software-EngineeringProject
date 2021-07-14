@@ -54,14 +54,14 @@ open class DatabaseServiceGlobal {
 
     open fun <T> persistEntity(e: T): T? {
         val tx = em.transaction
-        for (i in 1..3){
-            if(!tx.isActive) {
+        for (i in 1..3) {
+            if (!tx.isActive) {
                 tx.begin()
                 em.persist(e)
                 tx.commit()
                 return e
             }
-            Thread.sleep((10..99).random()*100L)
+            Thread.sleep((10..99).random() * 100L)
         }
         return null
     }
@@ -69,14 +69,14 @@ open class DatabaseServiceGlobal {
 
     open fun <T> mergeUpdatedEntity(e: T): T? {
         val tx = em.transaction
-        for (i in 1..3){
-            if(!tx.isActive) {
+        for (i in 1..3) {
+            if (!tx.isActive) {
                 tx.begin()
                 val newE = em.merge(e)
                 tx.commit()
                 return newE
             }
-            Thread.sleep((10..99).random()*100L)
+            Thread.sleep((10..99).random() * 100L)
         }
         return null
     }
@@ -431,29 +431,27 @@ open class DatabaseServiceGlobal {
         ddrValuesList.map { it ->
             val lst = it as Array<out Any>
 
-            resMap.put(lst[1] as String , (lst[0] as Long).toInt())
+            resMap.put(lst[1] as String, (lst[0] as Long).toInt())
 
         }
 
         return resMap
     }
 
-    open fun bobbyTruncateTables(){
+    open fun bobbyTruncateTables() {
 
         val tx = em.transaction
         tx.begin()
         em.createNativeQuery(
-            "truncate SCHEMA PUBLIC and commit" ).executeUpdate()
+            "truncate SCHEMA PUBLIC and commit"
+        ).executeUpdate()
         tx.commit()
         print(tx.isActive)
-
 
 
         //query.executeUpdate()
         //https://xkcd.com/327/
     }
-
-
 
 
 }

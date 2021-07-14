@@ -2,11 +2,11 @@ package de.hbrs.team7.se1_starter_repo.servlets
 
 
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
-import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausServletPostDto
 import de.hbrs.team7.se1_starter_repo.entities.ParkhausEbene
 import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
+import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import jakarta.inject.Inject
 import jakarta.servlet.ServletConfig
 import jakarta.servlet.ServletException
@@ -41,9 +41,11 @@ abstract class ParkhausServlet : HttpServlet() {
     @Inject
     private lateinit var parkhausServiceGlobal: ParkhausServiceGlobal
 
-    @Inject private lateinit var DatabaseGlobal: DatabaseServiceGlobal
+    @Inject
+    private lateinit var DatabaseGlobal: DatabaseServiceGlobal
 
-    @Inject private lateinit var parkhausServiceSession: ParkhausServiceSession
+    @Inject
+    private lateinit var parkhausServiceSession: ParkhausServiceSession
 
 
     @Throws(ServletException::class)
@@ -84,13 +86,15 @@ abstract class ParkhausServlet : HttpServlet() {
 
                 response.contentType = charset
 
-                val ebeneDTO: ParkhausEbeneConfigDTO = parkhausServiceSession.getParkhausEbenen().find { pe -> pe.name == config.ebenenNamen }!!.toConfigDTO()
-                val jsonData = Json.encodeToJsonElement( ebeneDTO )
+                val ebeneDTO: ParkhausEbeneConfigDTO =
+                    parkhausServiceSession.getParkhausEbenen().find { pe -> pe.name == config.ebenenNamen }!!
+                        .toConfigDTO()
+                val jsonData = Json.encodeToJsonElement(ebeneDTO)
                 out.print(jsonData)
 
             }
             "sum" -> {
-                out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(config.ebenenNamen)/100} € insgesamt")
+                out.print("${parkhausServiceSession.getSummeTicketpreiseUeberAutos(config.ebenenNamen) / 100} € insgesamt")
             }
 
             "cars" -> {
@@ -110,16 +114,17 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = charset
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(config.ebenenNamen))
+                val jsonData =
+                    Json.encodeToJsonElement(parkhausServiceSession.erstelleStatistikenUeberFahrzeuge(config.ebenenNamen))
                 out.print(jsonData)
             }
-            "tageseinnahmen"-> {
+            "tageseinnahmen" -> {
                 response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getTageseinnahmen(config.ebenenNamen))
                 out.print(jsonData)
             }
-            "wocheneinnahmen"-> {
+            "wocheneinnahmen" -> {
                 response.contentType = charset
 
                 val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getWocheneinnahmen(config.ebenenNamen))
@@ -140,11 +145,12 @@ abstract class ParkhausServlet : HttpServlet() {
                 // https://github.com/Kotlin/kotlinx.serialization
                 response.contentType = charset
 
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.erstelleDauerUeberFahrzeugTyp(config.ebenenNamen))
+                val jsonData =
+                    Json.encodeToJsonElement(parkhausServiceSession.erstelleDauerUeberFahrzeugTyp(config.ebenenNamen))
                 out.print(jsonData)
             }
 
-            "average" ->  out.println("${parkhausServiceSession.getDurchschnittUeberAutos(config.ebenenNamen)/100} € per car")
+            "average" -> out.println("${parkhausServiceSession.getDurchschnittUeberAutos(config.ebenenNamen) / 100} € per car")
 
 
             "total users" -> out.println("${parkhausServiceSession.getAlleUser(config.ebenenNamen)} Users")
@@ -165,7 +171,8 @@ abstract class ParkhausServlet : HttpServlet() {
             "preistabelle" -> {
                 response.contentType = charset
                 val ebenenZahl = Integer.parseInt(request.getParameter("ebene"))
-                val jsonData = Json.encodeToJsonElement(parkhausServiceSession.getFahrzeugmultiplikatorenDTO(ebenenZahl))
+                val jsonData =
+                    Json.encodeToJsonElement(parkhausServiceSession.getFahrzeugmultiplikatorenDTO(ebenenZahl))
                 out.print(jsonData)
             }
 
@@ -191,31 +198,48 @@ abstract class ParkhausServlet : HttpServlet() {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
                 val ticket = parkhausServiceSession.erstelleTicket(config.ebenenNamen, data)
                 parkhausServiceSession.loescheRedoList()
-                out.write( Json.encodeToString(ticket.zuParkhausServletPostDto())  )
+                out.write(Json.encodeToString(ticket.zuParkhausServletPostDto()))
 
             }
             "leave" -> {
                 val data = Json.decodeFromString<ParkhausServletPostDto>(paramJson[1])
-                val zustaendigesTicket = parkhausServiceSession.findeTicketUeberParkplatz(config.ebenenNamen,data.space) !!
+                val zustaendigesTicket =
+                    parkhausServiceSession.findeTicketUeberParkplatz(config.ebenenNamen, data.space)!!
                 parkhausServiceSession.loescheRedoList()
-                val ticketPreis = parkhausServiceSession.ticketBezahlen(config.ebenenNamen,zustaendigesTicket, Date.from(Instant.now()))
+                val ticketPreis = parkhausServiceSession.ticketBezahlen(
+                    config.ebenenNamen,
+                    zustaendigesTicket,
+                    Date.from(Instant.now())
+                )
                 out.write(ticketPreis.toString())
             }
 
             "change_max" -> {
-                parkhausServiceSession.wechsleEbeneMaxParkplaetze(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.wechsleEbeneMaxParkplaetze(
+                    config.ebenenNamen,
+                    aktuell = paramsCSV[1].toInt(),
+                    neu = paramsCSV[2].toInt()
+                )
                 parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
             "change_open_from" -> {
-                parkhausServiceSession.wechsleEbeneOeffnungszeit(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.wechsleEbeneOeffnungszeit(
+                    config.ebenenNamen,
+                    aktuell = paramsCSV[1].toInt(),
+                    neu = paramsCSV[2].toInt()
+                )
                 parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }
 
             "change_open_to" -> {
-                parkhausServiceSession.wechsleEbeneLadenschluss(config.ebenenNamen, aktuell = paramsCSV[1].toInt(), neu = paramsCSV[2].toInt())
+                parkhausServiceSession.wechsleEbeneLadenschluss(
+                    config.ebenenNamen,
+                    aktuell = paramsCSV[1].toInt(),
+                    neu = paramsCSV[2].toInt()
+                )
                 parkhausServiceSession.loescheRedoList()
                 println(paramJson)
             }

@@ -1,9 +1,9 @@
 package de.hbrs.team7.se1_starter_repo.services
 
 
+import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import de.hbrs.team7.se1_starter_repo.dto.ManagerStatistikUpdateDTO
 import de.hbrs.team7.se1_starter_repo.dto.ParkhausEbeneConfigDTO
-import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import io.reactivex.rxjava3.subjects.PublishSubject
 import jakarta.annotation.PostConstruct
 import jakarta.enterprise.context.ApplicationScoped
@@ -49,17 +49,18 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
         print("Hello from Singleton Service")
     }
 
-    open fun getAlteDeutschlandDaten() : Pair<String,String> {
+    open fun getAlteDeutschlandDaten(): Pair<String, String> {
         val data = databaseGlobal.getAlteDeutschlandDaten()
         val brdString = "Autos: ${data.brd.first} Einnahmen: ${data.brd.second / 100} €"
         val ddrString = "Autos: ${data.ddr.first} Einnahmen: ${data.ddr.second / 100} €"
 
-        return Pair( brdString, ddrString )
+        return Pair(brdString, ddrString)
 
     }
 
 
-    open var cities = Json.decodeFromString<List<CitiesDTO>>("""
+    open var cities = Json.decodeFromString<List<CitiesDTO>>(
+        """
         [
         {"ct":"Berlin","lat":52.5167,"lng":13.3833,"an":"Berlin","po":3644826,"id":1276451290,"pt":5},
         {"ct":"Hamburg","lat":53.55,"lng":10,"an":"Hamburg","po":1841179,"id":1276041799,"pt":5},
@@ -1668,7 +1669,8 @@ open class ParkhausServiceGlobal { // : ParkhausServiceIF {
         {"ct":"Naumburg","lat":51.25,"lng":9.1667,"an":"Hesse","po":5028,"id":1276277559,"pt":0},
         {"ct":"Saal","lat":48.9011,"lng":11.9319,"an":"Bavaria","po":5626,"id":1276401122,"pt":0}
         ]
-    """.trimIndent())
+    """.trimIndent()
+    )
 
 
 }

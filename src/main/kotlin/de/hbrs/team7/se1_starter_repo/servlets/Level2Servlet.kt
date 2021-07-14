@@ -27,7 +27,7 @@ class Level2Servlet : ParkhausServlet() {
         )
     )
 
-        @Throws(ServletException::class)
+    @Throws(ServletException::class)
     override fun init(config: ServletConfig) {
         super.init(config)
 

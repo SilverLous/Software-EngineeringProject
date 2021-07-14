@@ -14,8 +14,8 @@ import org.junit.jupiter.api.Test;
 
 // https://github.com/weld/weld-junit/blob/master/junit5/README.md
 @EnableAutoWeld
-@ActivateScopes({ SessionScoped.class, ApplicationScoped.class })
-@AddBeanClasses({ ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
+@ActivateScopes({SessionScoped.class, ApplicationScoped.class})
+@AddBeanClasses({ParkhausServiceSession.class, ParkhausServiceGlobal.class, DatabaseServiceGlobal.class})
 public class ParkhausServiceGlobalJavaTest {
 
     @Inject

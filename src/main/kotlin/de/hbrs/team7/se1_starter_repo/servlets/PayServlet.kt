@@ -4,8 +4,10 @@ import de.hbrs.team7.se1_starter_repo.services.DatabaseServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceGlobal
 import de.hbrs.team7.se1_starter_repo.services.ParkhausServiceSession
 import jakarta.inject.Inject
-import jakarta.servlet.http.*
-import jakarta.servlet.annotation.*
+import jakarta.servlet.annotation.WebServlet
+import jakarta.servlet.http.HttpServlet
+import jakarta.servlet.http.HttpServletRequest
+import jakarta.servlet.http.HttpServletResponse
 
 
 @WebServlet(name = "PayServlet", value = ["/PayServlet"])
@@ -30,13 +32,12 @@ class PayServlet : HttpServlet() {
 
         // Hello
         val out = response.writer
-        val ebene = request.getParameter("ebenenNummer").replace("_"," ")
+        val ebene = request.getParameter("ebenenNummer").replace("_", " ")
         val parkplatzNummer = request.getParameter("parkplatzNummer").toInt()
-        val data = parkhausServiceSession.generiereKassenAusgabe(ebene,parkplatzNummer)
+        val data = parkhausServiceSession.generiereKassenAusgabe(ebene, parkplatzNummer)
         out.println("<div >$data</div>")
 
     }
-
 
 
     override fun destroy() {
