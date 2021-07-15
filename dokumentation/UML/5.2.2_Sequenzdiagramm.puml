@@ -19,6 +19,4 @@ end
 
 DatenbankController --> ParkhausController : generiertes Ticket zurueckgeben
 ParkhausController --> WebsiteController : generiertes Ticket zurueckgeben
-WebsiteController --> TicketMaske : generiertes Ticket zurueckgeben
-TicketMaske --> Kunde : Ticket ausgeben
 @enduml
