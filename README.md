@@ -27,11 +27,14 @@ Siehe: [dokumentation/Minimum_Viable_Product.md](./dokumentation/Minimum_Viable_
 ### UML Use Case-Diagramm
 
 Eine sinnvolle Zusammenstellung von:
-Robustheitsdiagramm
-UML Klassendiagramme
-UML Sequenzdiagramme
-UML Aktivitätsdiagramme
-UML Verteilungsdiagramm (deployment diagram)
+- [Robustheitsdiagramm](./dokumentation/UML/5.2.1_Robustheitsanalyse.puml)
+- [UML Klassendiagramme](./dokumentation/UML/KlassenDiagramm.puml)
+- [UML Sequenzdiagramme](./dokumentation/UML/5.2.2_Sequenzdiagramm.puml)
+- [UML Sequenzdiagramm Zu Klassen Diagramm](./dokumentation/UML/5.2.3_SequenzdiagrammZuKlassenDiagramm.puml)
+- [UML Zustandsdiagramm Ticket](./dokumentation/UML/6.5_Zustandsdiagramm-Ticket.puml)
+- [UML Datenbankstruktur](./dokumentation/UML/Datenbankstruktur.puml)
+- [UML UseCasediagramm](./dokumentation/UML/UseCaseDiagramm.puml)
+- [UML Verteilungsdiagramm (deployment diagram)](./dokumentation/UML/deployment.png)
 
 
 ### Java-Interfaces
