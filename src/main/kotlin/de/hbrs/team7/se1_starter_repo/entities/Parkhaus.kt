@@ -3,6 +3,9 @@ package de.hbrs.team7.se1_starter_repo.entities
 import de.hbrs.team7.se1_starter_repo.dto.CitiesDTO
 import jakarta.persistence.*
 
+/**
+ * @author Thomas Gerlach
+ */
 @Entity
 open class Parkhaus(
     // Kombinierte Tabelle aus Stadt und Parkhaus

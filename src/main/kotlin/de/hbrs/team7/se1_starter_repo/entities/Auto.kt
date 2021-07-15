@@ -4,6 +4,9 @@ import jakarta.persistence.*
 import java.time.Instant
 import java.util.*
 
+/**
+ * @author Thomas Gerlach
+ */
 @Entity
 open class Auto(
     @Column(nullable = false)

@@ -11,7 +11,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.concurrent.TimeUnit
 
-
+/**
+ *
+ * Das Websocket für die Aktualisierungen der Plots
+ *
+ * @author Thomas Gerlach
+ */
 @ServerEndpoint("/manager")
 open class ManagerServer : BasicWebsocketIF {
     override val sessions = mutableSetOf<Session>()
@@ -24,25 +29,12 @@ open class ManagerServer : BasicWebsocketIF {
     data class UpdatedList(val updated: List<String>)
 
     init {
-        /*
-        val timer = Timer()
-        timer.schedule(object : TimerTask() {
-            override fun run() {
-
-                // val ret = Test("Test", "de")
-                // broadcastMessage(Json.encodeToString(ret))
-
-                parkhausServiceGlobal.StatisticUpdateSubj
-                    .onNext(listOf(ManagerStatistikUpdateDTO.TAGESEINNAHMEN, ManagerStatistikUpdateDTO.WOCHENEINNAHMEN,))
-
-            }
-        }, 0, 10000) */
 
         parkhausServiceGlobal.statisticUpdateSubj
             .buffer(1, TimeUnit.SECONDS)
             .map { it: List<List<ManagerStatistikUpdateDTO>> -> it.flatten().toSet().toList() }
             .map { it: List<ManagerStatistikUpdateDTO> -> it.map { ev -> ev.event } }
-            .filter { it -> it.isNotEmpty() }
+            .filter { it.isNotEmpty() }
             .subscribe { it -> val ret = UpdatedList(it); broadcastMessage(Json.encodeToString(ret)) }
     }
 

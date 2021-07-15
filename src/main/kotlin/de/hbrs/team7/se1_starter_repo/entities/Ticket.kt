@@ -10,6 +10,10 @@ import java.util.*
 // https://blog.jetbrains.com/idea/2018/10/kotlin-jpa-and-spring-data/
 
 // https://thorben-janssen.com/complete-guide-inheritance-strategies-jpa-hibernate/
+
+/**
+ * @author Thomas Gerlach
+ */
 @Entity
 open class Ticket {
 

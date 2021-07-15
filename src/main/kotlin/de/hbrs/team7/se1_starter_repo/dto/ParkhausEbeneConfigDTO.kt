@@ -5,6 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.Transient
 
+/**
+ *
+ * Eine Datenklasse um eine Konfiguration einfach an die CCM-Komponente zu senden
+ *
+ * @author Thomas Gerlach
+ */
 @Serializable
 class ParkhausEbeneConfigDTO(
 

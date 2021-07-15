@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 
 /**
  *
- *
+ * Das Websocket für die Aktualisierungen des Logs im Klienten
  *
  * @author Thomas Gerlach
  */
