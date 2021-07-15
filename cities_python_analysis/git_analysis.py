@@ -25,7 +25,7 @@ Total loc: 5210
 
 git_surviving_data = {
   "Author": ["Thomas Gerlach", "Lukas Gerlach", "Alexander", "Eileen Hanz"],
-  "loc": [2640, 1661, 896, 13],
+  "loc": [2674, 1659, 843, 13],
   "coms": [133, 101, 120, 8],
   "fils": [36, 27, 24, 3]
 }
