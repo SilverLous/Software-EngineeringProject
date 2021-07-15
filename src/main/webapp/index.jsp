@@ -15,7 +15,7 @@
     <link rel="shortcut icon" href="https://kaul.inf.h-brs.de/favicon.ico"/>
     <title>Tomcat Parkhaus</title>
 
-    <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.6.1.js"></script>
+    <script src="https://kaul.inf.h-brs.de/ccmjs/mkaul-components/parkhaus/versions/ccm.parkhaus-10.6.3.js"></script>
 
 
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -48,7 +48,7 @@
     <div class="row">
         <div class="col">
             <h1>Parkhaus Etage 1</h1>
-            <ccm-parkhaus-10-6-1 server_url="./level1-servlet"
+            <ccm-parkhaus-10-6-3 server_url="./level1-servlet"
                                  hide_table="false"
                                  simulation.delay="6"
                                  simulation_speed="1"
@@ -61,7 +61,7 @@
                                  max="11"
                                  extra_buttons='["Average","Sum","Total Users","Cars",{"extra_class":"undo start","extra_inner":"Undo","extra_popup_title":"Undo and Restart"},{"extra_class":"redo start","extra_inner":"Redo","extra_popup_title":"Redo and Restart"}]'
                                  extra_charts='["EinnahmenUeberAutotyp","TagesEinnahmen","WochenEinnahmen"]'>
-            </ccm-parkhaus-10-6-1>
+            </ccm-parkhaus-10-6-3>
         </div>
         <div class="col-md-auto">
             <div class="white" id="preiseebeneeins">
@@ -73,7 +73,7 @@
     <div class="row">
         <div class="col">
             <h1>Parkhaus Etage 2</h1>
-            <ccm-parkhaus-10-6-1 server_url="./level2-servlet"
+            <ccm-parkhaus-10-6-3 server_url="./level2-servlet"
                                  name="Etage2"
                                  license_max="14"
                                  simulation.delay="6"
@@ -86,7 +86,7 @@
                                  debug="true"
                                  max="12"
                                  extra_buttons='["Average","Sum"]'>
-            </ccm-parkhaus-10-6-1>
+            </ccm-parkhaus-10-6-3>
         </div>
         <div class="col-md-auto">
             <div class="white" id="preiseebenezwei">
