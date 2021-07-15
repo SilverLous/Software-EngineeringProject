@@ -60,18 +60,18 @@ Für alle Parkhäuser gibt es eine einheitliche Managerseite, in der man Statist
 # Lines of Code
 
 Alle Kotlin, Java und JSP Dateien seit 2021-04-30 (herausgerechnet starter repo code)
-stand: 15.07.2021 14:35
+stand: 15.07.2021 15:45
 
 Total commits: 367 <br>
 Total ctimes: 1970 <br>
 Total files: 91 <br>
-Total loc: 4302 <br>
+Total loc: 3415 <br>
 
 | Author         |   loc |   coms |   fils |  distribution   |
 |:---------------|------:|-------:|-------:|:----------------|
-| Thomas Gerlach |  1787 |    137 |     37 | 41.53/36.74  |
-| Lukas Gerlach  |  1659 |    101 |     27 | 38.56/27.90  |
-| Alexander      |   843 |    121 |     24 | 19.59/33.14  |
-| Eileen Hanz    |    13 |      8 |      3 | 0.30/2.20   |
+| Thomas Gerlach |  1801 |    139 |     37  | 41.07/37.26  |
+| Lukas Gerlach  |  1666 |    102 |     22  | 37.99/27.34  |
+| Alexander      |   905 |    124 |     22  | 20.63/33.24  |
+| Eileen Hanz    |    13 |      8 |      3 | 0.30/2.14   |
 
 

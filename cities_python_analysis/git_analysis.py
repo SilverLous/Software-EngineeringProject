@@ -11,46 +11,46 @@ import pandas as pd
 # git-fame --since=2021-04-30 --incl ".kt|.java|.jsp" --excl='src/main/kotlin/de/hbrs/team7/se1_starter_repo/services/ParkhausServiceGlobal.kt'
 
 """
-Total commits: 362
-Total ctimes: 1942
-Total files: 90
-Total loc: 5210
+Total commits: 373
+Total ctimes: 1993
+Total files: 91
+Total loc: 5272
 | Author         |   loc |   coms |   fils |  distribution   |
 |:---------------|------:|-------:|-------:|:----------------|
-| Thomas Gerlach |  2640 |    133 |     36 | 50.7/36.7/40.0  |
-| Lukas Gerlach  |  1661 |    101 |     27 | 31.9/27.9/30.0  |
-| Alexander      |   896 |    120 |     24 | 17.2/33.1/26.7  |
-| Eileen Hanz    |    13 |      8 |      3 | 0.2/ 2.2/ 3.3   |
+| Thomas Gerlach |  2688 |    139 |     37 | 51.0/37.3/40.7  |
+| Lukas Gerlach  |  1666 |    102 |     27 | 31.6/27.3/29.7  |
+| Alexander      |   905 |    124 |     24 | 17.2/33.2/26.4  |
+| Eileen Hanz    |    13 |      8 |      3 | 0.2/ 2.1/ 3.3   |
 """
 
 git_surviving_data = {
   "Author": ["Thomas Gerlach", "Lukas Gerlach", "Alexander", "Eileen Hanz"],
-  "loc": [2674, 1659, 843, 13],
-  "coms": [133, 101, 120, 8],
-  "fils": [36, 27, 24, 3]
+  "loc": [2688, 1666, 905, 13],
+  "coms": [139, 102, 124, 8],
+  "fils": [37, 27, 24, 3]
 }
 
 
 # git-fame --loc=ins --excl='src/main/kotlin/de/hbrs/team7/se1_starter_repo/services/ParkhausServiceGlobal.kt|cities_python_analysis|.*'
 
 """
-Total commits: 365
-Total ctimes: 954
-Total files: 279
-Total loc: 46260
+Total commits: 376
+Total ctimes: 986
+Total files: 285
+Total loc: 46464
 | Author         |   loc |   coms |   fils |  distribution   |
 |:---------------|------:|-------:|-------:|:----------------|
-| Thomas Gerlach | 38970 |    136 |    119 | 84.2/37.3/42.7  |
-| Lukas Gerlach  |  4369 |    101 |     74 | 9.4/27.7/26.5   |
-| Alexander      |  2685 |    120 |     69 | 5.8/32.9/24.7   |
-| Eileen Hanz    |   236 |      8 |     17 | 0.5/ 2.2/ 6.1   |
+| Thomas Gerlach | 39084 |    142 |    122 | 84.1/37.8/42.8  |
+| Lukas Gerlach  |  4389 |    102 |     75 | 9.4/27.1/26.3   |
+| Alexander      |  2755 |    124 |     71 | 5.9/33.0/24.9   |
+| Eileen Hanz    |   236 |      8 |     17 | 0.5/ 2.1/ 6.0   |
 """
 
 git_ins_data = {
   "Author": ["Thomas Gerlach", "Lukas Gerlach", "Alexander", "Eileen Hanz"],
-  "loc": [38970, 4369, 2685, 236],
-  "coms": [136, 101, 120, 8],
-  "fils": [119, 74, 69, 17]
+  "loc": [39084, 4389, 2755, 236],
+  "coms": [142, 102, 124, 8],
+  "fils": [122, 75, 71, 17]
 }
 
 df_surv = pd.DataFrame(git_surviving_data)
