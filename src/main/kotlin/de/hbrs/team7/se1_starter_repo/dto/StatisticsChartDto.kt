@@ -3,6 +3,12 @@ package de.hbrs.team7.se1_starter_repo.dto
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * Ein DTO dass Daten für charts speichert und die Achsen beschriftbar macht
+ *
+ * @author Lukas Gerlach
+ *  */
+
 @Serializable
 data class StatisticsChartDto(
     @SerialName("data")
