@@ -69,6 +69,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
 
     }
 
+    /**
+     *
+     * Die Datenbank lädt nur, was sie auch laden muss. Auf diese Weise wird zu jeder Stadt auch das Parkhaus und die
+     * dazugehörigen Ebenen geladen.
+     */
+
     open fun ladeParkhausStadt(id: Long) {
 
         val pa = databaseGlobal.findeParkhausMitEbeneUeberId(id)
@@ -77,6 +83,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
             this.parkhausEbenen = pa.ebenen
         }
     }
+
+    /**
+     *
+     * Eine Ebene aus einer gegebenen Config erstellen und dem aktuellen Parkhaus hinzufügen.
+     */
 
     override fun initEbene(config: ParkhausEbeneConfigDTO): ParkhausEbene {
         val parkhaus = databaseGlobal.findeUeberID(parkhaus.id, Parkhaus::class.java)!!
@@ -177,6 +188,12 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return ticket.price.toLong()
     }
 
+    /**
+     *
+     * Wir wollten unsere eigene Preisgestaltung einbinden, da wir die Preise aus der Webkomponente zu unrealistisch fanden.
+     * So können wir auch einen Grundpreis einbauen.
+     * Berechnungsformel: FahrzeugMultiplikator mal Parkhaus-Multiplikator mal Anzahl der angebrochenen halben Stunden mal 50 cent.
+     */
     open fun errechneTicketPreis(parkhausEbeneID: Long, ticket: Ticket, auto: Auto): Int {
         val ebene = databaseGlobal.findeUeberID(parkhausEbeneID, ParkhausEbene::class.java)
         val duration = (ticket.Auto?.getParkdauer())
@@ -261,6 +278,10 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
     }
 
 
+    /**
+     *
+     * summiert die Preise aller bereits ausgefahrener Autos.
+     */
     override fun getSummeTicketpreiseUeberAutos(parkhausEbeneName: String): Int {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getSummeDerTicketpreise(parkhausEbeneID)
@@ -280,6 +301,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return databaseGlobal.getautosInParkEbene(parkhausEbeneID).size
     }
 
+    /**
+     *
+     * Gibt den Durchschnitt aller Ticketpreise einer ParkhausEbene an. Autos, die noch im Parkhaus stehen, werden nicht
+     * mit einbezogen.
+     */
     override fun getDurchschnittUeberAutos(parkhausEbeneName: String): Int {
         val divisor = (getAlleUser(parkhausEbeneName) - getAktuelleUser(parkhausEbeneName))
         return if (divisor == 0) {
@@ -301,11 +327,18 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         return parkhausEbenen
     }
 
+    /**
+     * gibt eine Liste der Autos zurück, die sich abhängig von imParkhaus im Parkhaus befinden oder nicht.
+     */
     override fun getAutosInParkEbene(parkhausEbeneName: String, imParkhaus: Boolean): List<Auto> {
         val parkhausEbeneId = getIdUeberName(parkhausEbeneName)
         return databaseGlobal.getautosInParkEbene(parkhausEbeneId, imParkhaus)
     }
 
+    /**
+     *
+     * erstellt die Statistik über die Fahrzeuge und gibt sie als StatisticsCharDto zurück.
+     */
     override fun erstelleStatistikenUeberFahrzeuge(parkhausEbeneName: String): StatisticsChartDto {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         val allCarsThatLeft = databaseGlobal.getautosInParkEbene(parkhausEbeneID, false)
@@ -419,21 +452,31 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         //"""<button type="button" class="btn btn-outline-primary" data-cityid="${}">Primary</button>"""
     }
 
+    /**
+     *
+     * Erstellt eine Statistik über die bisherigen Einnahmen, aufgeteilt nach Bundesländern.
+     */
     override fun erstellePreiseFuerBundeslaender(): StatisticsChartDto? {
         val carMap = databaseGlobal.getTicketpreiseProBundesland()
         val uebersetzteNamen = carMap?.keys?.map { it -> Parkhaus.BundeslandÜbersetzung[it] ?: it }
         val farben = setzeFarben(carMap)
         if (carMap != null) {
             return StatisticsChartDto(
-                data = listOf(CarData("bar",
-                    uebersetzteNamen as List<String>, carMap.values.map { a -> a.toDouble() / 100 }, farben
-                )
+                data = listOf(
+                    CarData(
+                        "bar",
+                        uebersetzteNamen as List<String>, carMap.values.map { a -> a.toDouble() / 100 }, farben
+                    )
                 ), Layout = setzeTitel("Bundesländer", "Preis in Euro")
             )
         }
         return null
     }
 
+    /**
+     *
+     * Erstellt eine Statistik über die durchschnittliche Parkdauer in einer Parkebene, aufgeteilt nach Fahrzeugtypen.
+     */
     override fun erstelleDauerUeberFahrzeugTyp(parkhausEbeneName: String): StatisticsChartDto? {
         val parkhausEbeneID = getIdUeberName(parkhausEbeneName)
         val allCarsThatLeft = databaseGlobal.getautosInParkEbene(parkhausEbeneID, false)
@@ -540,7 +583,7 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
                     redoList.removeLast()
                     redoList.add(auto!!)
                     undoList[undoList.indexOf(toRedo)] = auto
-                    if (undoList.indexOf(toRedo)!=-1) undoList[undoList.indexOf(toRedo)] = auto
+                    if (undoList.indexOf(toRedo) != -1) undoList[undoList.indexOf(toRedo)] = auto
                 }
 
             }
@@ -613,6 +656,11 @@ open class ParkhausServiceSession : Serializable, ParkhausServiceSessionIF {
         }
     }
 
+    /**
+     *
+     * Generiert den Inhalt der Kasse, wird in Kasse.jsp aufgerufen (auch wenn es IntelliJ nicht erkennt)
+     * @author Alexander Bohl
+     */
     open fun generiereKassenForm(): String {
         return parkhausServiceGlobal.ebenenSet.joinToString { "<option value=\"${it.ebenenNamen}\">${it.ebenenNamen}</option>" }
     }

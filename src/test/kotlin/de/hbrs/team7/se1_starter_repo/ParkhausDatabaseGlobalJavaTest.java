@@ -72,6 +72,10 @@ public class ParkhausDatabaseGlobalJavaTest {
 
     }
 
+    /**
+     *
+     * @author Alexander Bohl
+     */
     @Test
     @DisplayName("Test 1-n Relation")
     public void oneToManyTest() {
@@ -97,10 +101,14 @@ public class ParkhausDatabaseGlobalJavaTest {
 
         Assertions.assertNotNull(savedParkhaus.getEbenen(), "Dem Parkhaus wurden die Ebenen nicht zugewiesen");
         Assertions.assertNotNull(savedEbene1.getParkhaus(), "Ebene 1 hat kein Parkhaus erhalten");
-        Assertions.assertNotNull(savedEbene2.getParkhaus(), "Ebene 2 hat kein parkhaus erhalten");
+        Assertions.assertNotNull(savedEbene2.getParkhaus(), "Ebene 2 hat kein Parkhaus erhalten");
 
     }
 
+    /**
+     *
+     * @author Alexander Bohl
+     */
     @Test
     @DisplayName("Test n-n Relation")
     public void manyToManyTest() {
@@ -153,6 +161,7 @@ public class ParkhausDatabaseGlobalJavaTest {
         Assertions.assertTrue(ebene2.getTickets().contains(ticket3));
         Assertions.assertTrue(ebene2.getTickets().contains(ticket4));
     }
+
 
     @Test
     @DisplayName("Testen der Ticket Create funktion")

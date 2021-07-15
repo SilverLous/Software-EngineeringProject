@@ -44,7 +44,7 @@ rectangle ParkhausSystem {
 
 
   ParkhausController ..> Kartenzahlung
-  Kartenzahlung ..> Bank: "rob >"
+  Kartenzahlung ..> Bank
   WebsiteController ..> ParkhausController
   DatenbankController ..> DatenbankSchnittstelle
 
