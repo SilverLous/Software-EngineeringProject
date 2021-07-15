@@ -19,10 +19,15 @@ Issues Schreiben und Sprint Meetings halten, um jeden auf dem Laufenden zu halte
 Nicht zeitlich eingehaltene bzw. überhaupt angefangene TODOS geduldet, um alle mitzunehmen,
 hat dem Projekt insbesondere am Anfang mehr geschadet als geholfen.
 
+Mit der Zeit sind wir von den User Stories abgewichen, weil wir festgestellt haben, dass viele zwar für ein echtes Parkhaus Relevanz haben, 
+aber nicht für unsere ParkhausSimulation.
+
 Wir haben versucht, Servlet Tests zu erstellen, aber weder Arquillian noch Mockito haben zu einem verwertbaren Ergebnis geführt,
 weil die Dependency Injection in den Tests nicht funktionierte.
 
 ## Was würde man anders machen, wenn man noch einmal neu anfangen könnte?
+
+Sich voher klarmachen, was der Rahmen des Projektes ist; was mit den zur Verfügung stehenden Mitteln überhaupt umsetzbar ist und was nicht.
 
 Spring verwenden, der durchschnittliche Stack Overflow Artikel war 5 bis 10 Jahre alt und fast nie mit Jakarta kompatibel.
 Zudem gab es für die Datenbank bei Spring auf den ersten Blick Build-in Funktionen, um Repositorys zu erstellen, was das ganze Projekt einfacher gemacht hätte.
