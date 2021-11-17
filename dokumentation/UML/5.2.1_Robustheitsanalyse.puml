@@ -1,0 +1,57 @@
+@startuml
+
+actor Kunde
+actor Mitarbeiter
+rectangle Bank
+database Datenbank
+
+rectangle ParkhausSystem {
+
+  agent Ticket <<DataType>>
+  agent KundenInfo <<DataType>>
+  agent Statistik <<DataType>>
+
+  boundary TicketMaske
+  boundary SprachAuswahlMaske
+  boundary DatenbankSchnittstelle
+  boundary Kartenzahlung
+  boundary LoginMaske
+  boundary StatistikMaske
+
+
+  control ParkhausController
+  control DatenbankController
+  control WebsiteController
+
+  LoginMaske -left- Mitarbeiter
+  StatistikMaske -left- Mitarbeiter
+
+  SprachAuswahlMaske -left- Kunde
+
+  TicketMaske -left- Kunde
+
+
+
+  Datenbank  -left- DatenbankSchnittstelle
+
+
+  ParkhausController ..> KundenInfo
+  KundenInfo <.. DatenbankController
+  ParkhausController ..> Ticket
+  Ticket <.. DatenbankController
+  Statistik <.. DatenbankController
+  ParkhausController ..> Statistik
+
+
+  ParkhausController ..> Kartenzahlung
+  Kartenzahlung ..> Bank: "rob >"
+  WebsiteController ..> ParkhausController
+  DatenbankController ..> DatenbankSchnittstelle
+
+
+  WebsiteController ..> LoginMaske
+  WebsiteController ..>SprachAuswahlMaske
+  WebsiteController ..> TicketMaske
+  StatistikMaske <.. WebsiteController
+}
+@enduml
