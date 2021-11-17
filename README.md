@@ -22,3 +22,8 @@ UML Verteilungsdiagramm (deployment diagram)
 - Gesamt-Retrospektive:
 - 3 Min. Video Team-Präsentation und Demo des Produkts
 - 10 Min. Video Team-Präsentation des Projekts mit Schwerpunkt "Professionelles Software Engineering"
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+Uni Projekt zu dritt
